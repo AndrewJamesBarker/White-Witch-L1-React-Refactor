@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import ItemsAndLives from './components/Items&Lives'
+import ChapterBox from './components/ChapterBox'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -9,6 +10,7 @@ function App() {
     <>
       <div className="App">
         White Witch
+        <ChapterBox />
         <ItemsAndLives />
       </div>  
     </>
