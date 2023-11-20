@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import './App.css'
 import ItemsAndLives from './components/Items&Lives'
 import ChapterBox from './components/ChapterBox'
@@ -9,7 +9,6 @@ function App() {
   return (
     <>
       <div className="App">
-        White Witch
         <ChapterBox />
         <ItemsAndLives />
       </div>  
