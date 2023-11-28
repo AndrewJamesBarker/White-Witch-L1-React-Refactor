@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import '../assets/CSS/layout.css';
 
-function ChapterBox() {
+function ChapterTwo() {
   const handleKeyDown = (event) => {
     console.log("Key pressed:", event.key);
     if (event.key === "Enter") {
@@ -24,8 +24,8 @@ function ChapterBox() {
   }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
-    <div id="ChapOneTitlePage">
-      <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
+    <div id="ChapterOnePage">
+      <h2 id="headLine">Chapter Two: The Fields</h2>
       <div className="cursorBox">
         <h3 id="displayBlock">Press C to continue</h3>
         <p id="bodyText"></p>
@@ -34,4 +34,4 @@ function ChapterBox() {
   );
 }
 
-export default ChapterBox;
+export default ChapterTwo;

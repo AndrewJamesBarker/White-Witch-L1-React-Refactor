@@ -1,16 +1,21 @@
-// import { useState } from 'react'
+import { useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
-import ItemsAndLives from './components/Items&Lives'
-import ChapterBox from './components/ChapterBox'
+// import ChapterOne from './components/ChapterOne'
+import Game from './components/Game'
+import StartPage from './components/StartPage'
 
 function App() {
-  // const [count, setCount] = useState(0)
+  const [startGame, setStartGame] = useState(false);
 
   return (
     <>
       <div className="App">
-        <ChapterBox />
-        <ItemsAndLives />
+        {
+          !startGame ? 
+          <StartPage onStartGame={setStartGame} /> : 
+          <Game />
+        }
       </div>  
     </>
   )
