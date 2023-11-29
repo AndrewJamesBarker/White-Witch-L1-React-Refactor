@@ -1,19 +1,33 @@
-// Game.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ItemsAndLives from './Items&Lives'
 import ChapterOne from './ChapterOne';
 import ChapterTwo from './ChapterTwo';
-// Import other chapters...
+import HelpScreen from './HelpScreen';
 
 const Game = () => {
 
   // const [lives, setLives] = useState(initialLives);
   // const [items, setItems] = useState(initialItems);
   const [currentChapter, setCurrentChapter] = useState(1);
+  const [showHelp, setShowHelp] = useState(false);
 
   const goToNextChapter = () => {
     setCurrentChapter(currentChapter + 1);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key.toLowerCase() === 'h') {
+        setShowHelp(prev => !prev); // toggle showHelp
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const renderChapter = () => {
     switch(currentChapter) {
@@ -29,9 +43,11 @@ const Game = () => {
   return (
     <div>
       {renderChapter()}
-      <ItemsAndLives  />
+      {showHelp && <HelpScreen />}
+      <ItemsAndLives />
     </div>
   );
+  
 };
 
 export default Game;

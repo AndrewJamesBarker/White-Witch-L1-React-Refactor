@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import '../assets/CSS/layout.css';
+import React, { useEffect } from "react";
+import "../assets/CSS/layout.css";
 
 function ChapterOne() {
   const handleKeyDown = (event) => {
@@ -14,12 +14,9 @@ function ChapterOne() {
   };
 
   useEffect(() => {
-    // Attach the event listener to the window object
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup function to remove the event listener
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []); // Empty dependency array ensures this runs only once on mount
 
