@@ -25,6 +25,7 @@ function ChapterOne() {
       <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
       <div className="cursorBox">
         <h3 id="displayBlock">Press C to continue</h3>
+        <h4 id="displayBlock">You can also press H at anytime for help</h4>
         <p id="bodyText"></p>
       </div>
     </div>

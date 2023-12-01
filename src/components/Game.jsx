@@ -6,10 +6,31 @@ import HelpScreen from './HelpScreen';
 
 const Game = () => {
 
-  // const [lives, setLives] = useState(initialLives);
-  // const [items, setItems] = useState(initialItems);
+  const [livesLeft, setLivesLeft] = useState(3);
+  const [skullFlag, setSkullFlag] = useState(false);
+  const [backButtonFlag, setBackButtonFlag] = useState(true);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
+
+  const loseLife = () => {
+    if (livesLeft > 0) {
+      setLivesLeft(livesLeft - 1);
+    }
+
+    // Check if all lives are lost
+    if (livesLeft === 1) {
+      setSkullFlag(true);
+      setBackButtonFlag(false);
+      // Additional logic for game over...
+    }
+  };
+
+  const resetGame = () => {
+    setLivesLeft(3);
+    setSkullFlag(false);
+    setBackButtonFlag(true);
+    // Reset other game states as needed
+  };
 
   const goToNextChapter = () => {
     setCurrentChapter(currentChapter + 1);
@@ -44,7 +65,7 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
-      <ItemsAndLives />
+      <ItemsAndLives livesLeft={livesLeft} />
     </div>
   );
   

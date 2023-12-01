@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-
-const StartPage = ({ onStartGame }) => {  
-  
+const StartPage = ({ onStartGame }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === 'y') {
         onStartGame(true);
+      } else if (e.key.toLowerCase() === 'n') {
+        onStartGame(false);
       }
     };
 
@@ -24,7 +24,6 @@ const StartPage = ({ onStartGame }) => {
       </div>
     </div>
   );
-
 }
 
 export default StartPage;
