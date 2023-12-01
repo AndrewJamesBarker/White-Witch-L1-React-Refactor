@@ -15,7 +15,12 @@ const HelpScreen = ({ onHelpScreen }) => {
             <li>Keystroke commands</li>
             <li>Multiple choice buttons</li>
             <li>Interactive elements (Hint: Drag & Drop).</li>
-          </ul>   
+          </ul>
+          <div id="helpLivesItems">
+            <p>There are 3 lives. Each one represented by a knight in the lower right corner. If you lose all 3, you will have to start over.</p>
+            <p>You can also accumulate items. They are stored in the satchel (lower right screen) and you check your item inventory either by typing I, or by clicking on the satchel</p>
+          </div>   
+          <p>Good luck!</p>
     </div>
   );
 }
