@@ -3,6 +3,7 @@ import ItemsAndLives from './Items&Lives'
 import ChapterOne from './ChapterOne';
 import ChapterTwo from './ChapterTwo';
 import HelpScreen from './HelpScreen';
+import LifeLostPage from './LifeLostPage';
 
 const Game = () => {
 
@@ -11,6 +12,7 @@ const Game = () => {
   const [backButtonFlag, setBackButtonFlag] = useState(true);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
+  const [showLifeLost, setShowLifeLost] = useState(true);
 
   const loseLife = () => {
     if (livesLeft > 0) {
@@ -23,6 +25,11 @@ const Game = () => {
       setBackButtonFlag(false);
       // Additional logic for game over...
     }
+  };
+
+  const handleCloseLifeLostPage = () => {
+    setShowLifeLost(false);
+  
   };
 
   const resetGame = () => {
@@ -65,6 +72,12 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
+      {showLifeLost && (
+        <LifeLostPage
+          livesLeft={livesLeft}
+          onClose={handleCloseLifeLostPage} 
+        />
+      )}
       <ItemsAndLives livesLeft={livesLeft} />
     </div>
   );
