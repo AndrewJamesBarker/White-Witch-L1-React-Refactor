@@ -12,7 +12,7 @@ const Game = () => {
   const [backButtonFlag, setBackButtonFlag] = useState(true);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
-  const [showLifeLost, setShowLifeLost] = useState(true);
+  const [showLifeLost, setShowLifeLost] = useState(false);
 
   const loseLife = () => {
     if (livesLeft > 0) {
