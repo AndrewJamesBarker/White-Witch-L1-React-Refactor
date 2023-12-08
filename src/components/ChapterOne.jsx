@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/CSS/layout.css";
+import sirenCove from "../assets/images/environment/siren_cove.png";
 
 function ChapterOne() {
 
@@ -36,6 +37,7 @@ function ChapterOne() {
         <div>
           <p>You are standing on the beach of a foggy cove. Ten feet out from shore, a beautiful woman sits on a protruding rock. She smiles at you seductively and begins singing a song. Strangely, you hear nothing but the waves lapping at your feet.</p>
           <p className="boldText">Press C to continue.</p>
+          <img src={sirenCove} alt="Siren on a rock, in a cove."></img>
         </div>
       )}
       {showThirdPart && (

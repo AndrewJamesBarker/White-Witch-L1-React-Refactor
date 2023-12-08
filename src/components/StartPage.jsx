@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import trident from '../assets/images/environment/trident.png';
 
 const StartPage = ({ onStartGame }) => {
   useEffect(() => {
@@ -20,7 +21,8 @@ const StartPage = ({ onStartGame }) => {
   return (
     <div id="startBox">
       <div className="cursorBox">
-        <h3 id="startPrompt">Want to play a game? Type Y/N</h3>
+        <h3 id="startPrompt">Want to play a game? Type Y/N.</h3>
+        <img src={trident} alt="A beautiful shimering trident" />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-import skullCrossBones from '../assets/images/skull_crossbonesWhite.png';
+import skullCrossBones from '../assets/images/ui-elements/skull_crossbones.png';
 
 
 const LifeLostPage = ({ livesLeft, onClose }) => {
@@ -23,7 +23,6 @@ const LifeLostPage = ({ livesLeft, onClose }) => {
 
   return (
     <div id="lifeLostBox">
-      {/* <h3 id="lifeLostPrompt">Life Lost!!!</h3> */}
       <img alt="skull and crossbones" src={skullCrossBones} width="100" height="100" />
       <p className="boldText">Oh no! You lost a life!</p>
       <p>Don't worry, you can keep playing, but you only have {livesLeft} lives left.</p>
