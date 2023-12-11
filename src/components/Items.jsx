@@ -1,3 +1,6 @@
+
+
+
 {/* <div id="items">
     <img id="skullXBones" alt="a drawing of a skull and cross bones" src="Images/skull_crossbonesWhite.png" width="150" height="150">
    <img id="conch" alt="a drawing of a conch shell" src="Images/conch4.png" width="150" height="150">

@@ -6,16 +6,21 @@ const HelpScreen = ({ onHelpScreen }) => {
   return (
     <div id="helpBox">
         <span>
-          <h3 id="helpPrompt">Help</h3>
+          <h2>White Witch - Help</h2>
           <p>Press <span className="boldText">'H'</span> at any time to open or close this screen.</p>
           </span>
-        <h4 id="helpText"></h4>
-          This is a text based game comprised of:
-          <ul id="helpList">
-            <li>Keystroke commands</li>
+        <h4 id="helpText">This is a text based game involving: </h4>
+          <ol id="helpList">
+            <li>
+                Keystroke commands
+                <ul>
+                    <li>c : Continue</li>
+                    <li>b : Back</li>
+                </ul>
+            </li>
             <li>Multiple choice buttons</li>
-            <li>Interactive elements (Hint: Drag & Drop).</li>
-          </ul>
+            <li>Interactive elements (Hint: Drag & Drop)</li>
+          </ol>
           <div id="helpLivesItems">
             <h3 className="centerText">Lives And Items</h3>
             <p>There are 3 lives. Each one represented by a knight in the lower right corner. If you lose all 3, you will have to start over.</p>

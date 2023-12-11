@@ -6,3 +6,23 @@
   margin-right: auto;
   border-radius: 1rem;
 }
+
+
+.image-cropper {
+  width: 500px; /* Width of your image */
+  height: 250px; /* Half of the height of your image */
+  overflow: hidden;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+}
+
+.image-cropper img {
+  width: 31.32rem;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1rem;
+  /* position: absolute; */
+}

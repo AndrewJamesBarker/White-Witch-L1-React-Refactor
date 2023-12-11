@@ -11,8 +11,8 @@
   display: block;
   text-align: left; 
   margin: auto;
-  max-width: 300px;
-  padding-top: 2rem;
+  max-width: 600px;
+  padding-top: .5rem;
 }
 
 #helpLivesItems {
