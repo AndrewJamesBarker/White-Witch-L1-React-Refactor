@@ -14,8 +14,8 @@ const HelpScreen = ({ onHelpScreen }) => {
             <li>
                 Keystroke commands
                 <ul>
-                    <li>c : Continue</li>
-                    <li>b : Back</li>
+                    <li>C - Continue</li>
+                    <li>B - Back</li>
                 </ul>
             </li>
             <li>Multiple choice buttons</li>
