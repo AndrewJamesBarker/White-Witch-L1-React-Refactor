@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import trident from '../assets/images/environment/trident.png';
+import CoverArt from '../assets/images/Poster/White-Witch-Poster-Good.png';
 
 const StartPage = ({ onStartGame }) => {
   useEffect(() => {
@@ -22,7 +22,7 @@ const StartPage = ({ onStartGame }) => {
     <div id="startBox">
       <div className="cursorBox">
         <h3 id="startPrompt">Want to play a game? Type Y/N.</h3>
-        <img src={trident} alt="A beautiful shimering trident" />
+        <img className="center" src={CoverArt} alt="a rugged hero named Caballero in a dystopian world, with a mysterious sun emitting new light above and ominous figures looming in the background. Ethereal and ghostly, a Siren appears in the sky, adding a mystical element." />
       </div>
     </div>
   );

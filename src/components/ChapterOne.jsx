@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../assets/CSS/layout.css";
 import "../assets/CSS/images.css";
 
+import trident from '../assets/images/environment/trident.png';
 import sirenCove from '../assets/images/environment/Siren-NoConch.png';
 import ConchShore from '../assets/images/environment/Conch-Shore.png';
+import Conch from '../assets/images/inventory-items/Conch-Good.png';
 
 
 function ChapterOne() {
@@ -30,27 +32,37 @@ function ChapterOne() {
 
   return (
     <div id="ChapterOnePage" className="widthControl">
-      <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
+      {currentStep === 0 && (
+          <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
+      )} 
       {currentStep === 0 &&  (
         <div>
           <h3>Press C to continue</h3>
           <h4>You can also press H at anytime for help</h4>
+          <img id='trident' src={trident} alt="A beautiful shimering trident" />
         </div>
       )}
       {currentStep === 1 &&  (
         <div>
-          <p>You are standing on the beach of a foggy cove. Ten feet out from shore, a beautiful woman sits on a protruding rock. She smiles at you seductively and begins singing a song. Strangely, you hear nothing but the waves lapping at your feet.</p>
-          <p className="boldText">Press C to continue.</p>
+          <p>You are standing on the beach of a foggy cove. Ten feet out from shore, a beautiful siren sits on a protruding rock. She smiles and her lips move as if singing. Strangely, you hear nothing but the waves lapping at your feet.</p>
           <div className="image-cropper">
             <img className="environ-image" src={sirenCove} alt="Siren on a rock, in a cove." width="500" height="250"></img>
           </div>
+          <p className="boldText">C to continue (last reminder).</p>
+          {/* <p className="boldText">B for back.</p> */}
         </div>
       )}
       {currentStep === 2 && (
         <div>
           <p>As you struggle to understand the Siren’s song, a conch shell washes up on the beach.</p>
+          <p></p>
           <img className="environ-image" src={ConchShore} alt="Siren on a rock, in a cove." width="500" height="500"></img>
-
+        </div>
+      )}
+      {currentStep === 3 && (
+        <div>
+          <p>Choose wisely.</p>
+          <img className="environ-item" src={Conch} alt="A mystifyingly beautiful conch shell." width="260" height="250"></img>
         </div>
       )}
     </div>

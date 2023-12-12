@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import ItemsAndLives from './Items&Lives'
+import ItemsAndLives from './Items&Lives';
 import ChapterOne from './ChapterOne';
 import ChapterTwo from './ChapterTwo';
 import HelpScreen from './HelpScreen';
 import LifeLostPage from './LifeLostPage';
 
 const Game = () => {
-
   const [livesLeft, setLivesLeft] = useState(3);
   const [skullFlag, setSkullFlag] = useState(false);
   const [backButtonFlag, setBackButtonFlag] = useState(true);
@@ -14,12 +13,17 @@ const Game = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
 
+  // Mapping of chapter numbers to names
+  const chapterNames = {
+    1: 'The Cove',
+    2: 'The Enchanted Forest',
+    // ... other chapter names
+  };
+
   const loseLife = () => {
     if (livesLeft > 0) {
       setLivesLeft(livesLeft - 1);
     }
-
-    // Check if all lives are lost
     if (livesLeft === 1) {
       setSkullFlag(true);
       setBackButtonFlag(false);
@@ -29,7 +33,6 @@ const Game = () => {
 
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
-  
   };
 
   const resetGame = () => {
@@ -58,11 +61,12 @@ const Game = () => {
   }, []);
 
   const renderChapter = () => {
-    switch(currentChapter) {
+    switch (currentChapter) {
       case 1:
         return <ChapterOne onComplete={goToNextChapter} />;
       case 2:
         return <ChapterTwo onComplete={goToNextChapter} />;
+      // ... other cases
       default:
         return <div>Game Completed!</div>;
     }
@@ -72,16 +76,14 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
-      {showLifeLost && (
-        <LifeLostPage
-          livesLeft={livesLeft}
-          onClose={handleCloseLifeLostPage} 
-        />
-      )}
+      {showLifeLost && <LifeLostPage livesLeft={livesLeft} onClose={handleCloseLifeLostPage} />}
       <ItemsAndLives livesLeft={livesLeft} />
+      
+      <div className="chapter-info">
+        {chapterNames[currentChapter] || 'Unknown'}
+      </div>
     </div>
   );
-  
 };
 
 export default Game;
