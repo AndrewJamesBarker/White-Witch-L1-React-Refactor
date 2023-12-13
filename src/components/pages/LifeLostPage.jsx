@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-import skullCrossBones from '../assets/images/ui-elements/skull_crossbones.png';
+import skullCrossBones from '../../assets/images/ui-elements/skull_crossbones.png';
 
 
 const LifeLostPage = ({ livesLeft, onClose }) => {

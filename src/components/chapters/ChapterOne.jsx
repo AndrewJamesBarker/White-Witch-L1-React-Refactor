@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../assets/CSS/layout.css";
-import "../assets/CSS/images.css";
+import "../../assets/CSS/layout.css";
+import "../../assets/CSS/images.css";
 
-import trident from '../assets/images/environment/trident.png';
-import sirenCove from '../assets/images/environment/Siren-NoConch.png';
-import ConchShore from '../assets/images/environment/Conch-Shore.png';
-import Conch from '../assets/images/inventory-items/Conch-Good.png';
+import trident from '../../assets/images/environment/trident.png';
+import sirenCove from '../../assets/images/environment/Siren-NoConch.png';
+import ConchShore from '../../assets/images/environment/Conch-Shore.png';
+import Conch from '../../assets/images/inventory-items/Conch-Good.png';
 
 
 function ChapterOne() {

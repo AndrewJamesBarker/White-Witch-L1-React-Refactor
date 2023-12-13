@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import './App.css'
 // import ChapterOne from './components/ChapterOne'
-import Game from './components/Game'
-import StartPage from './components/StartPage'
-import NoPlayOverlay from './components/NoPlayOverlay'
+import Game from './components/core/Game'
+import StartPage from './components/pages/StartPage'
+import NoPlayOverlay from './components/utilities/NoPlayOverlay'
 
 function App() {
   const [startGame, setStartGame] = useState(null);

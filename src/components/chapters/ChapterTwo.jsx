@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../assets/CSS/layout.css';
+import '../../assets/CSS/layout.css';
 
 function ChapterTwo() {
   const handleKeyDown = (event) => {

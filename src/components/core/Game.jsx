@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ItemsAndLives from './Items&Lives';
-import ChapterOne from './ChapterOne';
-import ChapterTwo from './ChapterTwo';
-import HelpScreen from './HelpScreen';
-import LifeLostPage from './LifeLostPage';
+import ItemsAndLives from '../ui/ItemsAndLives';
+import ChapterOne from '../chapters/ChapterOne';
+import ChapterTwo from '../chapters/ChapterTwo';
+import HelpScreen from '../utilities/HelpScreen';
+import LifeLostPage from '../pages/LifeLostPage';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);

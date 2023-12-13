@@ -1,7 +1,7 @@
 import React from 'react';
-import satchel from '../assets/images/ui-elements/satchel.png';
-import caballero from '../assets/images/ui-elements/caballero.png';
-import '../assets/CSS/layout.css';
+import satchel from '../../assets/images/ui-elements/satchel.png';
+import caballero from '../../assets/images/ui-elements/caballero.png';
+import '../../assets/CSS/layout.css';
 
 function ItemsAndLives({ livesLeft }) {
     return (
