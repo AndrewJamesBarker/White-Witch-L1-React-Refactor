@@ -16,7 +16,7 @@ const Game = () => {
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
-    2: 'The Enchanted Forest',
+    2: 'The Fields',
     // ... other chapter names
   };
 
