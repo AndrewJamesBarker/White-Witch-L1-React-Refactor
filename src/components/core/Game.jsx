@@ -33,13 +33,14 @@ const Game = () => {
 
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
+    livesLeft === 0 && resetGame();
   };
 
   const resetGame = () => {
     setLivesLeft(3);
     setSkullFlag(false);
     setBackButtonFlag(true);
-    // Reset other game states as needed
+    setCurrentChapter(1);
   };
 
   const goToNextChapter = () => {
@@ -63,10 +64,18 @@ const Game = () => {
   const renderChapter = () => {
     switch (currentChapter) {
       case 1:
-        return <ChapterOne onComplete={goToNextChapter} />;
+        return <ChapterOne 
+          onComplete={goToNextChapter} 
+          loseLife={loseLife}
+          setShowLifeLost={setShowLifeLost} 
+         />;
       case 2:
-        return <ChapterTwo onComplete={goToNextChapter} />;
-      // ... other cases
+        return <ChapterTwo
+          onComplete={goToNextChapter} 
+          loseLife={loseLife}
+          setShowLifeLost={setShowLifeLost} 
+         />;
+    
       default:
         return <div>Game Completed!</div>;
     }
@@ -76,7 +85,7 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
-      {showLifeLost && <LifeLostPage livesLeft={livesLeft} onClose={handleCloseLifeLostPage} />}
+      {showLifeLost && <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} />}
       <ItemsAndLives livesLeft={livesLeft} />
       
       <div className="chapter-info">

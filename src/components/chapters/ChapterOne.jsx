@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
+import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 
 import trident from '../../assets/images/environment/trident.png';
 import sirenCove from '../../assets/images/environment/Siren-NoConch.png';
@@ -8,10 +9,17 @@ import ConchShore from '../../assets/images/environment/Conch-Shore.png';
 import Conch from '../../assets/images/inventory-items/Conch-Good.png';
 
 
-function ChapterOne() {
+function ChapterOne({onComplete, loseLife, setShowLifeLost}) {
 
   const totalSteps = 6; // Define the total number of steps in ChapterOne
   const [currentStep, setCurrentStep] = useState(0);
+  const [userChoice, setUserChoice] = useState(null);
+
+  const choices = [ 
+    {label: "Greet the Siren.", value: 1},
+    {label: "Attack the Siren!", value: 2},
+    {label: "Pick up the Conch Shell.", value: 3},
+  ];
 
   const handleKeyDown = (event) => {
     const key = event.key.toLowerCase();
@@ -28,6 +36,25 @@ function ChapterOne() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [currentStep]); // Update listener when currentStep changes
+
+
+  const handleChoiceSelect = (choice) => {
+    setUserChoice(choice);
+    switch (choice.value) {
+      case 1:
+        setCurrentStep(2);
+        break;
+      case 2:
+        setShowLifeLost(true);
+        loseLife();
+        break;
+      case 3:
+        setCurrentStep(4);
+        break;
+      default:
+        setCurrentStep(1);
+    }
+  }
 
 
   return (
@@ -48,7 +75,7 @@ function ChapterOne() {
           <div className="image-cropper">
             <img className="environ-image" src={sirenCove} alt="Siren on a rock, in a cove." width="500" height="250"></img>
           </div>
-          <p className="boldText">C to continue (last reminder).</p>
+          <p className="boldText">C to continue.</p>
           {/* <p className="boldText">B for back.</p> */}
         </div>
       )}
@@ -61,8 +88,10 @@ function ChapterOne() {
       )}
       {currentStep === 3 && (
         <div>
-          <p>Choose wisely.</p>
-          <img className="environ-item" src={Conch} alt="A mystifyingly beautiful conch shell." width="260" height="250"></img>
+          <h3>Choose wisely.</h3>
+          <img className="environ-item" src={Conch} alt="A mystifyingly beautiful conch shell." width="260" height="250">
+          </img>
+          <MultipleChoiceButtons choices={choices} onChoiceSelect={handleChoiceSelect} />
         </div>
       )}
     </div>

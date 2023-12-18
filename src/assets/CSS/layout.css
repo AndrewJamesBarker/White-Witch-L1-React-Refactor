@@ -1,6 +1,7 @@
 /* Layout Position */
 
 
+
 .widthControl {
   max-width: 600px;
   margin: auto;
@@ -97,4 +98,37 @@
   position: fixed;
   right: 15px;
   bottom: 10px;
+}
+
+/* Buttons */
+
+button:hover {
+  cursor: pointer;
+}
+
+.multiple-choice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+}
+
+.multiple-choice-buttons {
+  background-color: black;
+  border: .8px solid white;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  padding: .5rem;
+  margin: .5rem;
+  
 }
