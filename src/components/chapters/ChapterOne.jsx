@@ -9,7 +9,8 @@ import ConchShore from '../../assets/images/environment/Conch-Shore.png';
 import Conch from '../../assets/images/inventory-items/Conch-Good.png';
 
 
-function ChapterOne({onComplete, loseLife, setShowLifeLost}) {
+function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
+
 
   const totalSteps = 6; // Define the total number of steps in ChapterOne
   const [currentStep, setCurrentStep] = useState(0);
@@ -18,7 +19,7 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost}) {
   const choices = [ 
     {label: "Greet the Siren.", value: 1},
     {label: "Attack the Siren!", value: 2},
-    {label: "Pick up the Conch Shell.", value: 3},
+    {label: "Take the Conch Shell.", value: 3},
   ];
 
   const handleKeyDown = (event) => {
@@ -29,6 +30,13 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost}) {
       setCurrentStep(currentStep - 1);
     }
   };
+
+
+  useEffect(() => {
+    if(resetSignal) {
+      setCurrentStep(0);
+    }
+  }, [resetSignal]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);

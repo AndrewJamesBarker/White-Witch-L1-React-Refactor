@@ -7,11 +7,11 @@ import LifeLostPage from '../pages/LifeLostPage';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
-  const [skullFlag, setSkullFlag] = useState(false);
-  const [backButtonFlag, setBackButtonFlag] = useState(true);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
+  const [resetSignal, setResetSignal] = useState(false);
+
 
   // Mapping of chapter numbers to names
   const chapterNames = {
@@ -24,11 +24,6 @@ const Game = () => {
     if (livesLeft > 0) {
       setLivesLeft(livesLeft - 1);
     }
-    if (livesLeft === 1) {
-      setSkullFlag(true);
-      setBackButtonFlag(false);
-      // Additional logic for game over...
-    }
   };
 
   const handleCloseLifeLostPage = () => {
@@ -38,10 +33,16 @@ const Game = () => {
 
   const resetGame = () => {
     setLivesLeft(3);
-    setSkullFlag(false);
-    setBackButtonFlag(true);
     setCurrentChapter(1);
+    setResetSignal(true);
+    setShowLifeLost(false);
   };
+
+  useEffect(() => {
+    if(resetSignal) {
+      setResetSignal(false);
+    }
+  }, [resetSignal]);
 
   const goToNextChapter = () => {
     setCurrentChapter(currentChapter + 1);
@@ -68,12 +69,14 @@ const Game = () => {
           onComplete={goToNextChapter} 
           loseLife={loseLife}
           setShowLifeLost={setShowLifeLost} 
+          resetSignal={resetSignal}
          />;
       case 2:
         return <ChapterTwo
           onComplete={goToNextChapter} 
           loseLife={loseLife}
           setShowLifeLost={setShowLifeLost} 
+          resetSignal={resetSignal}
          />;
     
       default:

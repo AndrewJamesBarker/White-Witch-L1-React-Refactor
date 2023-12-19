@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import CoverArt from '../../assets/images/Poster/poster-alt.png';
+import CoverArt from '../../assets/images/Poster/Poster-simple.png';
 
 const StartPage = ({ onStartGame }) => {
   useEffect(() => {

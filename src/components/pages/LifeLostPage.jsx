@@ -27,7 +27,7 @@ const LifeLostPage = ({ livesLeft, onClose, resetGame }) => {
         <div id="lifeLostBox">
           <p className="boldText">Oh no! You lost a life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
-          <p>Don't worry, you can keep playing, but you only have {livesLeft} lives left.</p>
+          <p>Don't worry, you can keep playing, but you only have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
           <p className="boldText">Press Escape to continue.</p>
           <p>Good luck!</p>
         </div>
