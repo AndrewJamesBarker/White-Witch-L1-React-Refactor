@@ -9,12 +9,14 @@ import ConchShore from '../../assets/images/environment/Conch-Shore.png';
 import Conch from '../../assets/images/inventory-items/Conch-Good.png';
 
 
-function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
+function ChapterOne({onComplete, loseLife, setShowLifeLost, showLifeLost, resetSignal, showHelp}) {
 
 
   const totalSteps = 6; // Define the total number of steps in ChapterOne
   const [currentStep, setCurrentStep] = useState(0);
   const [userChoice, setUserChoice] = useState(null);
+  const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
+  const [conchTaken, setConchTaken] = useState(false);
 
   const choices = [ 
     {label: "Greet the Siren.", value: 1},
@@ -23,14 +25,17 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
   ];
 
   const handleKeyDown = (event) => {
+    if (showHelp) return;
+    if (showLifeLost) return;
     const key = event.key.toLowerCase();
-    if (key === "c" && currentStep < totalSteps - 1) {
+    if (key === "c" && currentStep < totalSteps - 1 && (currentStep !== 3 || stepThreeCompleted)) {
       setCurrentStep(currentStep + 1);
     } else if (key === "b" && currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
-
+  
+// Reset steps on all lives lost
 
   useEffect(() => {
     if(resetSignal) {
@@ -43,7 +48,7 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [currentStep]); // Update listener when currentStep changes
+  }, [currentStep, showHelp, setStepThreeCompleted, showLifeLost]); // Update listener when currentStep changes
 
 
   const handleChoiceSelect = (choice) => {
@@ -57,7 +62,8 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
         loseLife();
         break;
       case 3:
-        setCurrentStep(4);
+        setStepThreeCompleted(true); 
+        setConchTaken(true);
         break;
       default:
         setCurrentStep(1);
@@ -99,7 +105,7 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, resetSignal}) {
           <h3>Choose wisely.</h3>
           <img className="environ-item" src={Conch} alt="A mystifyingly beautiful conch shell." width="260" height="250">
           </img>
-          <MultipleChoiceButtons choices={choices} onChoiceSelect={handleChoiceSelect} />
+          <MultipleChoiceButtons choices={choices.filter(choice => !conchTaken || choice.value !== 3)} onChoiceSelect={handleChoiceSelect} />
         </div>
       )}
     </div>

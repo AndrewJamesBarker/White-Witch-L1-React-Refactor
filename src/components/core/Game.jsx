@@ -68,15 +68,19 @@ const Game = () => {
         return <ChapterOne 
           onComplete={goToNextChapter} 
           loseLife={loseLife}
+          showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}
+          showHelp={showHelp}
          />;
       case 2:
         return <ChapterTwo
           onComplete={goToNextChapter} 
           loseLife={loseLife}
+          showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}
+          showHelp={showHelp}
          />;
     
       default:
