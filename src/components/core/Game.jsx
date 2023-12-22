@@ -11,7 +11,7 @@ const Game = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
-
+  const [deathCause, setDeathCause] = useState('');
 
   // Mapping of chapter numbers to names
   const chapterNames = {
@@ -20,11 +20,13 @@ const Game = () => {
     // ... other chapter names
   };
 
-  const loseLife = () => {
+  const loseLife = (cause) => {
     if (livesLeft > 0) {
       setLivesLeft(livesLeft - 1);
+      setDeathCause(cause);  // Update the death cause
     }
   };
+  
 
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
@@ -92,7 +94,7 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
-      {showLifeLost && <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} />}
+      {showLifeLost && <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />}
       <ItemsAndLives livesLeft={livesLeft} />
       
       <div className="chapter-info">
