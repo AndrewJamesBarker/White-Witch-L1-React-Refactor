@@ -34,6 +34,25 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, showLifeLost, resetS
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const handleChoiceSelect = (choice) => {
+    setUserChoice(choice);
+    switch (choice.value) {
+      case 1:
+        setCurrentStep(2);
+        break;
+      case 2:
+        setShowLifeLost(true);
+        loseLife();
+        break;
+      case 3:
+        setConchTaken(true);
+        setStepThreeCompleted(true); 
+        break;
+      default:
+        setCurrentStep(1);
+    }
+  }
   
 // Reset steps on all lives lost
 
@@ -48,29 +67,9 @@ function ChapterOne({onComplete, loseLife, setShowLifeLost, showLifeLost, resetS
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [currentStep, showHelp, setStepThreeCompleted, showLifeLost]); // Update listener when currentStep changes
+  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost]); // Update listener when currentStep changes
 
-
-  const handleChoiceSelect = (choice) => {
-    setUserChoice(choice);
-    switch (choice.value) {
-      case 1:
-        setCurrentStep(2);
-        break;
-      case 2:
-        setShowLifeLost(true);
-        loseLife();
-        break;
-      case 3:
-        setStepThreeCompleted(true); 
-        setConchTaken(true);
-        break;
-      default:
-        setCurrentStep(1);
-    }
-  }
-
-
+  
   return (
     <div id="ChapterOnePage" className="widthControl">
       {currentStep === 0 && (
