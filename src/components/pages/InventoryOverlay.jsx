@@ -11,6 +11,7 @@ const InventoryOverlay = ({ hasConch, hasPearl }) => {
   return (
     <div className="overlayBox">
       <h2 className="centerText underline">Inventory</h2>
+      <p>Press i at anytime to open or close this page.</p>
       {!hasAnyItems && (
         <p className="centerText">You have no items.</p>
       )}
