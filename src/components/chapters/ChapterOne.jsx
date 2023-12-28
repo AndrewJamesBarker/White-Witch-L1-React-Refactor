@@ -15,6 +15,8 @@ function ChapterOne({
   showLifeLost,
   resetSignal,
   showHelp,
+  showInventory,
+  obtainConch,
 }) {
   // Define the total number of steps in ChapterOne
   const totalSteps = 6; 
@@ -40,6 +42,7 @@ function ChapterOne({
   const handleKeyDown = (event) => {
     if (showHelp) return;
     if (showLifeLost) return;
+    if (showInventory) return;
     const key = event.key.toLowerCase();
     if (
       key === "c" &&
@@ -65,8 +68,10 @@ function ChapterOne({
         loseLife('sirenAttack');
         break;
       case 3:
+        // makes the comch option disappear
         setConchTaken(true);
         setStepThreeCompleted(true);
+        obtainConch();
         break;
       default:
         setCurrentStep(1);
@@ -110,9 +115,9 @@ function ChapterOne({
             her lips move as if singing. Strangely, you hear nothing but the
             waves lapping at your feet.
           </p>
-          <div className="image-cropper">
+          <div className="imageCropper">
             <img
-              className="environ-image"
+              className="environImage"
               src={sirenCove}
               alt="Siren on a rock, in a cove."
               width="500"
@@ -131,7 +136,7 @@ function ChapterOne({
           </p>
           <p></p>
           <img
-            className="environ-image"
+            className="environImage"
             src={ConchShore}
             alt="Siren on a rock, in a cove."
             width="500"
@@ -143,7 +148,7 @@ function ChapterOne({
         <div>
           <h3>Choose wisely.</h3>
           <img
-            className="environ-item"
+            className="conchItem"
             src={Conch}
             alt="A mystifyingly beautiful conch shell."
             width="260"

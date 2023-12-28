@@ -6,7 +6,7 @@
   margin-right: auto;
 }
 
-.environ-image {
+.environImage {
   width: 31.32rem;
   height: 31.32rem;
   margin-left: auto;
@@ -14,15 +14,24 @@
   border-radius: 1rem;
 }
 
-.environ-item {
-  width: 16.5rem;
+.conchItem {
+  width: 18.5rem;
   height: 16rem;
-  margin-left: auto;
-  margin-right: auto;
+  /* margin-left: auto;
+  margin-right: auto; */
 }
 
+.pearlItem {
+  width: 18.5rem;
+  height: 18.5rem;
+}
 
-.image-cropper {
+.inventoryItem {
+  width: 19.5rem;
+  height: 16rem;
+}
+
+.imageCropper {
   width: 500px; /* Width of your image */
   height: 250px; /* Half of the height of your image */
   overflow: hidden;
@@ -32,7 +41,7 @@
   border-radius: 1rem;
 }
 
-.image-cropper img {
+.imageCropper img {
   width: 31.32rem;
   height: auto;
   margin-left: auto;

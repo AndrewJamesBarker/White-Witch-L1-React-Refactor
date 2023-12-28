@@ -2,16 +2,28 @@ import React, { useState, useEffect } from 'react';
 import ItemsAndLives from '../ui/ItemsAndLives';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
-import HelpScreen from '../utilities/HelpScreen';
+import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
+import InventoryOverlay from '../pages/InventoryOverlay';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
   const [deathCause, setDeathCause] = useState('');
+  const [hasConch, setHasConch] = useState(false);
+  const [hasPearl, setHasPearl] = useState(false);
+
+  const obtainConch = () => {
+    setHasConch(true);
+  };
+
+  const obtainPearl = () => { 
+    setHasPearl(true);
+  }
 
   // Mapping of chapter numbers to names
   const chapterNames = {
@@ -27,7 +39,6 @@ const Game = () => {
     }
   };
   
-
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
     livesLeft === 0 && resetGame();
@@ -55,6 +66,9 @@ const Game = () => {
       if (e.key.toLowerCase() === 'h') {
         setShowHelp(prev => !prev); // toggle showHelp
       }
+      if (e.key.toLowerCase() === 'i') {
+        setShowInventory(prev => !prev); // toggle showInventory
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -74,6 +88,8 @@ const Game = () => {
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}
           showHelp={showHelp}
+          showInventory={showInventory}
+          obtainConch={obtainConch}
          />;
       case 2:
         return <ChapterTwo
@@ -83,6 +99,7 @@ const Game = () => {
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}
           showHelp={showHelp}
+          showInventory={showInventory}
          />;
     
       default:
@@ -94,6 +111,7 @@ const Game = () => {
     <div>
       {renderChapter()}
       {showHelp && <HelpScreen />}
+      {showInventory && <InventoryOverlay hasConch={hasConch} hasPearl={hasPearl} />}
       {showLifeLost && <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />}
       <ItemsAndLives livesLeft={livesLeft} />
       
