@@ -13,7 +13,7 @@ const InventoryOverlay = ({ hasConch, hasPearl }) => {
       <h2 className="centerText underline">Inventory</h2>
       <p>Press i at anytime to open or close this page.</p>
       {!hasAnyItems && (
-        <p className="centerText">You have no items.</p>
+        <p className="centerText">You don't have any items. It's time to go and get some!</p>
       )}
       {hasConch && (
         <div className="widthControl">

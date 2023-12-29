@@ -3,10 +3,13 @@ import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 
+import DynamicOverlay from "../pages/DynamicOverlay";
+
 import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
+import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
 
 function ChapterOne({
   onComplete,
@@ -28,6 +31,11 @@ function ChapterOne({
   const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
   // Define whether the user has taken the conch shell
   const [conchTaken, setConchTaken] = useState(false);
+  // Define the current overlay, starting at null
+  const [currentOverlay, setCurrentOverlay] = useState(null);
+  // Define whether the overlay is visible
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+
 
   // Define the choices for step 3
 
@@ -37,12 +45,28 @@ function ChapterOne({
     { label: "Take the Conch Shell.", value: 3 },
   ];
 
+  // Define the overlay data
+
+  const overlayData = {
+    pickUpConch: {
+      text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but its memory lingers."
+,
+      image: { src: DoorVision, alt: "A magical door opening into a brilliant white light." }
+    },
+    listenToConch: {
+      text: "What happens when you listen to the conch.",
+      image: { src: "path/to/image2.png", alt: "Image 2" }
+    },
+  };
+  
+
   // Handle keydown events
 
   const handleKeyDown = (event) => {
     if (showHelp) return;
     if (showLifeLost) return;
     if (showInventory) return;
+    if (isOverlayVisible === true) return;
     const key = event.key.toLowerCase();
     if (
       key === "c" &&
@@ -72,6 +96,9 @@ function ChapterOne({
         setConchTaken(true);
         setStepThreeCompleted(true);
         obtainConch();
+        setIsOverlayVisible(true);
+        // Sets overlay to pickUpConch
+        setCurrentOverlay('pickUpConch');
         break;
       default:
         setCurrentStep(1);
@@ -93,7 +120,7 @@ function ChapterOne({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost]); // Update listener when currentStep changes
+  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost, isOverlayVisible, currentOverlay]); // Update listener when currentStep changes
 
   return (
     <div id="ChapterOnePage" className="widthControl">
@@ -147,13 +174,30 @@ function ChapterOne({
       {currentStep === 3 && (
         <div>
           <h3>Choose wisely.</h3>
-          <img
-            className="conchItem"
-            src={Conch}
-            alt="A mystifyingly beautiful conch shell."
-            width="260"
-            height="250"
-          ></img>
+          {!conchTaken && (
+             <img
+             className="conchItem"
+             src={Conch}
+             alt="A mystifyingly beautiful conch shell."
+             width="260"
+             height="250"
+           ></img>
+          )}
+          {conchTaken && (
+             <img className="environImage" src={DoorVision} alt="A magical door opening into a brilliant white light." />
+          )}
+          {conchTaken && currentOverlay && (
+          <DynamicOverlay 
+            isVisible={!!currentOverlay}
+            text={overlayData[currentOverlay].text}
+            image={overlayData[currentOverlay].image}
+            onClose={() => {
+              setCurrentOverlay(null);
+              setIsOverlayVisible(false);
+            }}
+          />
+        )}
+
           <MultipleChoiceButtons
             choices={choices.filter(
               (choice) => !conchTaken || choice.value !== 3
