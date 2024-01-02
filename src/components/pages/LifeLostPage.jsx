@@ -7,7 +7,7 @@ const LifeLostPage = ({ livesLeft, onClose, resetGame, deathCause }) => {
 
 // Define the cause of death
 const deathTexts = {
-  sirenAttack: "As you lunge toward her, the siren's eyes flash a deep, ominous red. In an instant, the serene cove transforms into a whirlpool of chaos. The siren's song, once indecipherable, becomes a piercing shriek, summoning the wrath of the sea. Towering waves engulf you, dragging you into the abyss. Your vision fades to black with the last echoes of the siren's curse ringing in your ears.",
+  sirenAttack: "As you take aim at her, the siren's eyes flash a deep, ominous red. In an instant, the serene cove transforms into a whirlpool of chaos. The siren's song, once indecipherable, becomes a piercing shriek, summoning the wrath of the sea. Towering waves engulf you, dragging you into the abyss. Your vision fades to black with the last echoes of the siren's curse ringing in your ears.",
   // ... other death causes
 };
 

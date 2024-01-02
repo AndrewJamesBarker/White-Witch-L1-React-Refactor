@@ -10,6 +10,9 @@ import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
+import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
+import SirenBust from "../../assets/images/portraits/Siren-Bust.png";
+import SirenCrest from "../../assets/images/portraits/Siren-Crest.png";
 
 function ChapterOne({
   onComplete,
@@ -39,11 +42,11 @@ function ChapterOne({
 
   // Define the choices for step 3
 
-  const choices = [
+  const [choices, setChoices] = useState([
     { label: "Greet the Siren.", value: 1 },
     { label: "Attack the Siren!", value: 2 },
     { label: "Take the Conch Shell.", value: 3 },
-  ];
+  ]);
 
   // Define the overlay data
 
@@ -57,15 +60,27 @@ function ChapterOne({
       text: "What happens when you listen to the conch.",
       image: { src: "path/to/image2.png", alt: "Image 2" }
     },
+    sirenGreetNoConch: {
+      text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
+      image: { src: Conch, alt: "A mystifyingly beautiful conch shell." }
+    },  
+    sirenGreetWithConch: {
+      text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
+      image: { src: SirenBust, alt: "The siren rendered in a crest like image guilded with her hair resembling ocean waves." }
+    },
   };
   
 
   // Handle keydown events
 
   const handleKeyDown = (event) => {
+    // conditions to prevent back and continue from working
+    // An overlay is visible
     if (showHelp) return;
     if (showLifeLost) return;
     if (showInventory) return;
+    // Multiple choice section is not complete
+    if (currentStep === 3 && !stepThreeCompleted && !isOverlayVisible) return;
     if (isOverlayVisible === true) return;
     const key = event.key.toLowerCase();
     if (
@@ -85,7 +100,13 @@ function ChapterOne({
     setUserChoice(choice);
     switch (choice.value) {
       case 1:
-        setCurrentStep(2);
+        if (!conchTaken) {
+          setIsOverlayVisible(true);
+          setCurrentOverlay('sirenGreetNoConch');
+        } else {
+          setIsOverlayVisible(true);
+          setCurrentOverlay('sirenGreetWithConch');
+        }
         break;
       case 2:
         setShowLifeLost(true);
@@ -94,12 +115,19 @@ function ChapterOne({
       case 3:
         // makes the comch option disappear
         setConchTaken(true);
-        setStepThreeCompleted(true);
+        // setStepThreeCompleted(true);
         obtainConch();
         setIsOverlayVisible(true);
         // Sets overlay to pickUpConch
         setCurrentOverlay('pickUpConch');
+        // update mulitiple choice buttons
+        setChoices([
+          { label: "Greet the Siren.", value: 1 },
+          { label: "Attack the Siren!", value: 2 },
+          { label: "Explore.", value: 4 },
+        ])
         break;
+      case 4:
       default:
         setCurrentStep(1);
     }
@@ -184,7 +212,18 @@ function ChapterOne({
            ></img>
           )}
           {conchTaken && (
-             <img className="environImage" src={DoorVision} alt="A magical door opening into a brilliant white light." />
+             <img className="environImage" src={ConchInSatchel} alt="The conch inside of a satchel beside a pistol." />
+          )}
+          {!conchTaken && currentOverlay && (
+            <DynamicOverlay 
+              isVisible={!!currentOverlay}
+              text={overlayData[currentOverlay].text}
+              image={overlayData[currentOverlay].image}
+              onClose={() => {
+                setCurrentOverlay(null);
+                setIsOverlayVisible(false);
+              }}
+            />
           )}
           {conchTaken && currentOverlay && (
           <DynamicOverlay 
@@ -199,9 +238,7 @@ function ChapterOne({
         )}
 
           <MultipleChoiceButtons
-            choices={choices.filter(
-              (choice) => !conchTaken || choice.value !== 3
-            )}
+            choices={choices}
             onChoiceSelect={handleChoiceSelect}
           />
         </div>
