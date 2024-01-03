@@ -11,8 +11,7 @@ import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
 import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
-import SirenBust from "../../assets/images/portraits/Siren-Bust.png";
-import SirenCrest from "../../assets/images/portraits/Siren-Crest.png";
+import Sundial from "../../assets/images/environment/Sundial.png";
 
 function ChapterOne({
   onComplete,
@@ -30,8 +29,10 @@ function ChapterOne({
   const [currentStep, setCurrentStep] = useState(0);
   // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
-  // Define whether the user has completed step 3
-  const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
+  // Define whether the user has completed step 4
+  const [stepFourCompleted, setStepFourCompleted] = useState(false);
+   // Define whether the user has completed step 3
+   const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
   // Define whether the user has taken the conch shell
   const [conchTaken, setConchTaken] = useState(false);
   // Define the current overlay, starting at null
@@ -66,7 +67,7 @@ function ChapterOne({
     },  
     sirenGreetWithConch: {
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
-      image: { src: SirenBust, alt: "The siren rendered in a crest like image guilded with her hair resembling ocean waves." }
+      image: { src: Sundial, alt: "An elaborate sundila protruding from the shore." }
     },
   };
   
@@ -81,6 +82,7 @@ function ChapterOne({
     if (showInventory) return;
     // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted && !isOverlayVisible) return;
+    if (currentStep === 4 && !stepFourCompleted && !isOverlayVisible) return;
     if (isOverlayVisible === true) return;
     const key = event.key.toLowerCase();
     if (
@@ -128,6 +130,9 @@ function ChapterOne({
         ])
         break;
       case 4:
+        setStepThreeCompleted(true);
+        setCurrentStep(4);
+        break;
       default:
         setCurrentStep(1);
     }
@@ -241,6 +246,20 @@ function ChapterOne({
             choices={choices}
             onChoiceSelect={handleChoiceSelect}
           />
+        </div>
+      )}
+      {currentStep === 4 && (
+        <div>
+          <p>
+            You explore the cove and find a sundial protruding from the shore.
+          </p>
+          <img
+            className="environImage"
+            src={Sundial}
+            alt="A sundial protruding from the shore."
+            width="500"
+            height="500"
+          ></img>
         </div>
       )}
     </div>
