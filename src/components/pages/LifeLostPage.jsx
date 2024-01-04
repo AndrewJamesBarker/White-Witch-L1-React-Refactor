@@ -35,12 +35,12 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
   }, [onClose, livesLeft, resetGame]);
 
   return (
-    <div className="lifeLostBox">
+    <div className="dynamicScenes">
       {livesLeft > 0 ? (
         <div className="widthControl">
           <p className="boldText">Oh no! You lost a life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
-          <p className="overlayText">{deathMessage}</p>
+          <p className="dynamicText">{deathMessage}</p>
           <p>Don't worry, you can keep playing, but you only have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
           <p className="boldText">Press Escape to continue.</p>
           <p>Good luck!</p>
@@ -49,7 +49,7 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
         <div>
           <p className="boldText widthControl">Oh no! You lost your last life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
-          <p className="overlayText">{deathMessage}</p>
+          <p className="dynamicText">{deathMessage}</p>
           <p>Game Over</p>
           <p className="boldText">Press Escape to start again.</p>
           <p>Good luck!</p>

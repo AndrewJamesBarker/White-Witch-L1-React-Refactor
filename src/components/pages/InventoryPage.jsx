@@ -9,11 +9,11 @@ const InventoryPage = ({ hasConch, hasPearl }) => {
 
   const hasAnyItems = hasConch || hasPearl;
   return (
-    <div className="overlayBox">
+    <div className="dynamicScenes">
       <h2 className="centerText underline">Inventory</h2>
       <p>Press i at anytime to open or close this page.</p>
       {!hasAnyItems && (
-        <p className="centerText">Other than your trusty semi-automatic laser pistol, You don't have any items. It's time to go and get some!</p>
+        <p className="centerText">You don't have any items other than your trusty semi-automatic laser pistol. It's time to go and get some stuff!</p>
       )}
       {hasConch && (
         <div className="widthControl">

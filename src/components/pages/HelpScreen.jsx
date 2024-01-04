@@ -4,7 +4,7 @@ import React from "react";
 const HelpScreen = ({ onHelpScreen }) => {
 
   return (
-    <div className="overlayBox">
+    <div className="dynamicScenes">
         <span>
           <h2>White Witch - Help</h2>
           <p>Press <span className="boldText">'H'</span> at any time to open or close this screen.</p>

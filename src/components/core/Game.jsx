@@ -44,6 +44,13 @@ const Game = () => {
     setHasPearl(true);
   }
 
+  const handleSatchelClick = () => {
+    console.log("Satchel clicked");
+    setShowInventory(prev => !prev);
+  }
+  
+  
+
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
@@ -123,6 +130,7 @@ const Game = () => {
           showInventory={showInventory}
           obtainConch={obtainConch}
           currentStep={currentStep} 
+          setCurrentStep={setCurrentStep}
           nextStep={nextStep}
           previousStep={previousStep}
           conchTaken={conchTaken}
@@ -151,7 +159,7 @@ const Game = () => {
   return (
     <div>
       {renderChapterContent()}
-      <ItemsAndLives livesLeft={livesLeft} />
+      <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapter-info">
         {chapterNames[currentChapter] || 'Unknown'}
       </div>

@@ -14,6 +14,7 @@ import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 
 function ChapterOne({
   currentStep,
+  setCurrentStep,
   nextStep,
   previousStep,
   onComplete,
@@ -71,7 +72,6 @@ function ChapterOne({
       ]);
     }
   };
-
 
   const dynamicSceneData = {
     pickUpConch: {
@@ -170,7 +170,7 @@ function ChapterOne({
         setConchTaken(true);
         // for inventory
         obtainConch();
-         // update multiple choice buttons
+        // show pick up conch scene
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("pickUpConch");
         break;
@@ -248,12 +248,12 @@ function ChapterOne({
       {dynamicSceneVisible && currentDynamicSceneKey ? (
         // Render only the dynamic scene content
         <div className="dynamicSceneContent">
-          <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
-          <img
+            <img
             src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
             alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
             className="environImage"
           />
+          <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
           <button onClick={() => setDynamicSceneVisible(false)}>Continue</button>
         </div>
       ) : (
