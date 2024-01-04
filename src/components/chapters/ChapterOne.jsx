@@ -48,6 +48,9 @@ function ChapterOne({
   const [dynamicSceneVisible, setDynamicSceneVisible] = useState(false);
   // track the current dynamic scene
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
+  // Define the dynamic scene and whether it is visible
+  const [showDynamicScene, setShowDynamicScene] = useState(false);
+
 
   // Define the choices for step 3
 
@@ -140,11 +143,13 @@ function ChapterOne({
     switch (choice.value) {
       case 1:
         if (!conchTaken) {
-          setIsOverlayVisible(true);
-          setCurrentOverlay("sirenGreetNoConch");
+          setShowDynamicScene(true);
+          setDynamicSceneVisible(true);
+          setCurrentDynamicSceneKey("sirenGreetNoConch");
         } else {
-          setIsOverlayVisible(true);
-          setCurrentOverlay("sirenGreetWithConch");
+          setShowDynamicScene(true);
+          setDynamicSceneVisible(true);
+          setCurrentDynamicSceneKey("sirenGreetWithConch");
         }
         break;
       case 2:
@@ -163,8 +168,9 @@ function ChapterOne({
           { label: "Attack the Siren!", value: 2 },
           { label: "Explore.", value: 4 },
         ]);
-        setCurrentDynamicSceneKey("pickUpConch");
+        setDynamicSceneVisible(true);
         setShowDynamicScene(true);
+        setCurrentDynamicSceneKey("pickUpConch");
 
         // update mulitiple choice buttons
 
@@ -235,104 +241,113 @@ function ChapterOne({
 
   return (
     <div id="ChapterOnePage" className="widthControl">
-      {currentStep === 0 && (
-        <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
-      )}
-      {currentStep === 0 && (
-        <div>
-          <h3>Press C to continue</h3>
-          <h4>You can also press H at anytime for help</h4>
-          <img id="trident" src={trident} alt="A beautiful shimering trident" />
-        </div>
-      )}
-      {currentStep === 1 && (
-        <div>
-          <p>
-            You are standing on the beach of a foggy cove. Ten feet out from
-            shore, a beautiful siren sits on a protruding rock. She smiles and
-            her lips move as if singing. Strangely, you hear nothing but the
-            waves lapping at your feet.
-          </p>
-          <div className="imageCropper environImage">
-            <img
-              className="environImage"
-              src={sirenCove}
-              alt="Siren on a rock, in a cove."
-              width="500"
-              height="250"
-            ></img>
-          </div>
-          <p className="boldText">C to continue.</p>
-          {/* <p className="boldText">B for back.</p> */}
-        </div>
-      )}
-      {currentStep === 2 && (
-        <div>
-          <p>
-            As you struggle to understand the Siren’s song, a conch shell washes
-            up on the beach.
-          </p>
-          <p></p>
+      {dynamicSceneVisible && currentDynamicSceneKey ? (
+        // Render only the dynamic scene content
+        <div className="dynamicSceneContent">
+          <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
           <img
+            src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
+            alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
             className="environImage"
-            src={ConchShore}
-            alt="Siren on a rock, in a cove."
-            width="500"
-            height="500"
-          ></img>
+          />
+          <button onClick={() => setDynamicSceneVisible(false)}>Continue</button>
         </div>
-      )}
-      {currentStep === 3 && (
-        <div>
-          <h3>Choose wisely.</h3>
-          {!conchTaken && (
-            <img
-              className="conchItem"
-              src={Conch}
-              alt="A mystifyingly beautiful conch shell."
-              width="260"
-              height="250"
-            />
+      ) : (
+        <>
+          {currentStep === 0 && (
+            <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
           )}
-          {conchTaken && (
-            <img
-              className="environImage"
-              src={ConchInSatchel}
-              alt="The conch inside of a satchel beside a pistol."
-            />
-          )}
-          {dynamicSceneVisible && currentDynamicSceneKey && (
-            <div className="dynamicSceneContent">
-              <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
+          {currentStep === 0 && (
+            <div>
+              <h3>Press C to continue</h3>
+              <h4>You can also press H at anytime for help</h4>
               <img
-                src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
-                alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
-                className="dynamicSceneImage"
+                id="trident"
+                src={trident}
+                alt="A beautiful shimering trident"
               />
             </div>
           )}
-          <MultipleChoiceButtons
-            choices={choices}
-            onChoiceSelect={handleChoiceSelect}
-          />
-        </div>
-      )}
+          {currentStep === 1 && (
+            <div>
+              <p>
+                You are standing on the beach of a foggy cove. Ten feet out from
+                shore, a beautiful siren sits on a protruding rock. She smiles
+                and her lips move as if singing. Strangely, you hear nothing but
+                the waves lapping at your feet.
+              </p>
+              <div className="imageCropper environImage">
+                <img
+                  className="environImage"
+                  src={sirenCove}
+                  alt="Siren on a rock, in a cove."
+                  width="500"
+                  height="250"
+                ></img>
+              </div>
+              <p className="boldText">C to continue.</p>
+              {/* <p className="boldText">B for back.</p> */}
+            </div>
+          )}
+          {currentStep === 2 && (
+            <div>
+              <p>
+                As you struggle to understand the Siren’s song, a conch shell
+                washes up on the beach.
+              </p>
+              <p></p>
+              <img
+                className="environImage"
+                src={ConchShore}
+                alt="Siren on a rock, in a cove."
+                width="500"
+                height="500"
+              ></img>
+            </div>
+          )}
+          {currentStep === 3 && (
+            <div>
+              <h3>Choose wisely.</h3>
+              {!conchTaken && (
+                <img
+                  className="conchItem"
+                  src={Conch}
+                  alt="A mystifyingly beautiful conch shell."
+                  width="260"
+                  height="250"
+                />
+              )}
+              {conchTaken && (
+                <img
+                  className="environImage"
+                  src={ConchInSatchel}
+                  alt="The conch inside of a satchel beside a pistol."
+                />
+              )}
+              <MultipleChoiceButtons
+                choices={choices}
+                onChoiceSelect={handleChoiceSelect}
+              />
+            </div>
+          )}
 
-      {currentStep === 4 && (
-        <div>
-          <p>
-            The Siren and her soldiers appear to have become bored by your
-            presence. Now's your chance to explore the cove. Use your keyboard
-            arrow keys and have a look around.
-          </p>
-          <img
-            className="environImage"
-            src={Sundial}
-            alt="A sundial protruding from the shore."
-            width="500"
-            height="500"
-          ></img>
-        </div>
+          {currentStep === 4 && (
+            <div>
+              <p>
+                The Siren and her soldiers appear to have become bored by your
+                presence. Now's your chance to explore the cove. Use your
+                keyboard arrow keys and have a look around.
+              </p>
+              <img
+                className="environImage"
+                src={Sundial}
+                alt="A sundial protruding from the shore."
+                width="500"
+                height="500"
+              ></img>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
