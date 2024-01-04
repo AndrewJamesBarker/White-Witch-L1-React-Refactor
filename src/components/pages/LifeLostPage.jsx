@@ -35,9 +35,9 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
   }, [onClose, livesLeft, resetGame]);
 
   return (
-    <div className="overlayBox">
+    <div className="lifeLostBox">
       {livesLeft > 0 ? (
-        <div className="widthControl" id="lifeLostBox">
+        <div className="widthControl">
           <p className="boldText">Oh no! You lost a life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
           <p className="overlayText">{deathMessage}</p>
@@ -46,7 +46,7 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
           <p>Good luck!</p>
         </div>
       ) : (
-        <div id="lifeLostBox">
+        <div>
           <p className="boldText widthControl">Oh no! You lost your last life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
           <p className="overlayText">{deathMessage}</p>

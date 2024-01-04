@@ -3,8 +3,6 @@ import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 
-import DynamicOverlay from "../pages/DynamicOverlay";
-
 import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
@@ -15,6 +13,9 @@ import Sundial from "../../assets/images/environment/Sundial.png";
 import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 
 function ChapterOne({
+  currentStep,
+  nextStep,
+  previousStep,
   onComplete,
   loseLife,
   setShowLifeLost,
@@ -23,23 +24,18 @@ function ChapterOne({
   showHelp,
   showInventory,
   obtainConch,
+  conchTaken,
+  setConchTaken,
 }) {
   // Define the total number of steps in ChapterOne
   const totalSteps = 6;
-  // Define the current step, starting at 0
-  const [currentStep, setCurrentStep] = useState(0);
+
   // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
   // Define whether the user has completed step 4
   const [stepFourCompleted, setStepFourCompleted] = useState(false);
   // Define whether the user has completed step 3
   const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
-  // Define whether the user has taken the conch shell
-  const [conchTaken, setConchTaken] = useState(false);
-  // Define the current overlay, starting at null
-  const [currentOverlay, setCurrentOverlay] = useState(null);
-  // Define whether the overlay is visible
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   // Track the last direction the user moved
   const [lastDirection, setLastDirection] = useState(null);
   // Track the number of repetitive moves
@@ -48,10 +44,8 @@ function ChapterOne({
   const [dynamicSceneVisible, setDynamicSceneVisible] = useState(false);
   // track the current dynamic scene
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
-  // Define the dynamic scene and whether it is visible
-  const [showDynamicScene, setShowDynamicScene] = useState(false);
 
-
+ 
   // Define the choices for step 3
 
   const [choices, setChoices] = useState([
@@ -59,6 +53,25 @@ function ChapterOne({
     { label: "Attack the Siren!", value: 2 },
     { label: "Take the Conch Shell.", value: 3 },
   ]);
+
+
+  // Update the choices for step 3 depending on whether the conch has been taken
+  const updateChoices = () => {
+    if (conchTaken) {
+      setChoices([
+        { label: "Greet the Siren.", value: 1 },
+        { label: "Attack the Siren!", value: 2 },
+        { label: "Explore.", value: 4 },
+      ]);
+    } else {
+      setChoices([
+        { label: "Greet the Siren.", value: 1 },
+        { label: "Attack the Siren!", value: 2 },
+        { label: "Take the Conch Shell.", value: 3 },
+      ]);
+    }
+  };
+
 
   const dynamicSceneData = {
     pickUpConch: {
@@ -94,12 +107,12 @@ function ChapterOne({
   const handleKeyDown = (event) => {
     // conditions to prevent back and continue from working
     // An overlay is visible
-    if (showHelp || showLifeLost || showInventory || isOverlayVisible) return;
+    if (showHelp || showLifeLost || showInventory) return;
 
     // Multiple choice section is not complete
-    if (currentStep === 3 && !stepThreeCompleted && !isOverlayVisible) return;
+    if (currentStep === 3 && !stepThreeCompleted) return;
 
-    if (isOverlayVisible === true) return;
+
     // Allows key listener for arrows but not c and b during step 4
     if (
       (event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
@@ -125,14 +138,12 @@ function ChapterOne({
     // Handle keydown events for Continue and Back
 
     const key = event.key.toLowerCase();
-    if (
-      key === "c" &&
-      currentStep < totalSteps - 1 &&
-      (currentStep !== 3 || stepThreeCompleted)
-    ) {
-      setCurrentStep(currentStep + 1);
-    } else if (key === "b" && currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+    if (key === "c" && currentStep < totalSteps - 1 && (currentStep !== 3 || stepThreeCompleted)) {
+      nextStep(); // Use nextStep function passed from Game component
+    } 
+    // Check for 'b' key to go back to the previous step
+    else if (key === "b" && currentStep > 0) {
+      previousStep(); // Use previousStep function passed from Game component
     }
   };
 
@@ -143,12 +154,10 @@ function ChapterOne({
     switch (choice.value) {
       case 1:
         if (!conchTaken) {
-          setShowDynamicScene(true);
           setDynamicSceneVisible(true);
           setCurrentDynamicSceneKey("sirenGreetNoConch");
         } else {
-          setShowDynamicScene(true);
-          setDynamicSceneVisible(true);
+           setDynamicSceneVisible(true);
           setCurrentDynamicSceneKey("sirenGreetWithConch");
         }
         break;
@@ -159,21 +168,11 @@ function ChapterOne({
       case 3:
         // makes the conch option disappear
         setConchTaken(true);
+        // for inventory
         obtainConch();
-        // setIsOverlayVisible(true);
-        // Sets overlay to pickUpConch
-        // setCurrentOverlay('pickUpConch');
-        setChoices([
-          { label: "Greet the Siren.", value: 1 },
-          { label: "Attack the Siren!", value: 2 },
-          { label: "Explore.", value: 4 },
-        ]);
+         // update multiple choice buttons
         setDynamicSceneVisible(true);
-        setShowDynamicScene(true);
         setCurrentDynamicSceneKey("pickUpConch");
-
-        // update mulitiple choice buttons
-
         break;
       case 4:
         setStepThreeCompleted(true);
@@ -229,15 +228,20 @@ function ChapterOne({
     showHelp,
     stepThreeCompleted,
     showLifeLost,
-    isOverlayVisible,
-    currentOverlay,
     stepFourCompleted,
     lastDirection,
     repetitiveMoves,
     dynamicSceneVisible,
     currentDynamicSceneKey,
     conchTaken,
+    nextStep,
+    previousStep,
   ]);
+
+
+  useEffect(() => {
+    updateChoices();
+  }, [conchTaken]);
 
   return (
     <div id="ChapterOnePage" className="widthControl">

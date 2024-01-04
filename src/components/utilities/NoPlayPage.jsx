@@ -1,7 +1,7 @@
 import React from "react";
 
 
-const NoPlayOverlay = () => {
+const NoPlayPage = () => {
   return (
     <div id="noPlayBox">
       <h3>Alright, refresh if you change your mind.</h3>
@@ -9,5 +9,5 @@ const NoPlayOverlay = () => {
   );
 };
 
-export default NoPlayOverlay;
+export default NoPlayPage;
 

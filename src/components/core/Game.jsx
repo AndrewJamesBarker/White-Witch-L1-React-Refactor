@@ -4,7 +4,7 @@ import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
-import InventoryOverlay from '../pages/InventoryOverlay';
+import InventoryPage from '../pages/InventoryPage';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
@@ -14,8 +14,26 @@ const Game = () => {
   const [showInventory, setShowInventory] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
   const [deathCause, setDeathCause] = useState('');
+  // state of item possession for inventory
   const [hasConch, setHasConch] = useState(false);
   const [hasPearl, setHasPearl] = useState(false);
+  // register for when player has taken the conch and pearl
+  const [conchTaken, setConchTaken] = useState(false);
+  const [pearlTaken, setPearlTaken] = useState(false);
+  // Define the current step, starting at 0
+  const [currentStep, setCurrentStep] = useState(0);
+  // move to next step in chapter
+  const nextStep = () => {
+    setCurrentStep(prevStep => prevStep + 1);
+  };
+  // move to previous step in chapter
+  const previousStep = () => {
+    setCurrentStep(prevStep => prevStep - 1);
+  };
+
+  const changeStep = (step) => {
+    setCurrentStep(step);
+  };
 
   // set conch for inventory
   const obtainConch = () => {
@@ -79,6 +97,19 @@ const Game = () => {
     };
   }, []);
 
+
+  const renderChapterContent = () => {
+    if (showHelp) {
+      return <HelpScreen />;
+    } else if (showInventory) {
+      return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} />;
+    } else if (showLifeLost) {
+      return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />;
+    } else {
+      return renderChapter();
+    }
+  }
+
   const renderChapter = () => {
     switch (currentChapter) {
       case 1:
@@ -91,7 +122,13 @@ const Game = () => {
           showHelp={showHelp}
           showInventory={showInventory}
           obtainConch={obtainConch}
+          currentStep={currentStep} 
+          nextStep={nextStep}
+          previousStep={previousStep}
+          conchTaken={conchTaken}
+          setConchTaken={setConchTaken}
          />;
+         
       case 2:
         return <ChapterTwo
           onComplete={goToNextChapter} 
@@ -101,6 +138,9 @@ const Game = () => {
           resetSignal={resetSignal}
           showHelp={showHelp}
           showInventory={showInventory}
+          currentStep={currentStep} 
+          changeStep={changeStep}
+          previousStep={previousStep}
          />;
     
       default:
@@ -110,12 +150,8 @@ const Game = () => {
 
   return (
     <div>
-      {renderChapter()}
-      {showHelp && <HelpScreen />}
-      {showInventory && <InventoryOverlay hasConch={hasConch} hasPearl={hasPearl} />}
-      {showLifeLost && <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />}
+      {renderChapterContent()}
       <ItemsAndLives livesLeft={livesLeft} />
-      
       <div className="chapter-info">
         {chapterNames[currentChapter] || 'Unknown'}
       </div>

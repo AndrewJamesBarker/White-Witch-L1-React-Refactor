@@ -5,7 +5,7 @@ import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.png";
 
 
-const InventoryOverlay = ({ hasConch, hasPearl }) => {
+const InventoryPage = ({ hasConch, hasPearl }) => {
 
   const hasAnyItems = hasConch || hasPearl;
   return (
@@ -33,4 +33,4 @@ const InventoryOverlay = ({ hasConch, hasPearl }) => {
   );
 }
 
-export default InventoryOverlay;
+export default InventoryPage;

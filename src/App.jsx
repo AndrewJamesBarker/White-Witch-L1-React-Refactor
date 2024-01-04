@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import './App.css'
-// import ChapterOne from './components/ChapterOne'
 import Game from './components/core/Game'
 import StartPage from './components/pages/StartPage'
-import NoPlayOverlay from './components/utilities/NoPlayOverlay'
+import NoPlayPage from './components/utilities/NoPlayPage'
 
 function App() {
   const [startGame, setStartGame] = useState(null);
@@ -16,7 +15,7 @@ function App() {
       <div className="App">
         {
           startGame === null ? <StartPage onStartGame={handleStartGame} /> : (
-          startGame ? <Game /> : <NoPlayOverlay />
+          startGame ? <Game /> : <NoPlayPage />
           )
         }
       </div>  
