@@ -14,7 +14,6 @@ import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png
 import Sundial from "../../assets/images/environment/Sundial.png";
 import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 
-
 function ChapterOne({
   onComplete,
   loseLife,
@@ -26,15 +25,15 @@ function ChapterOne({
   obtainConch,
 }) {
   // Define the total number of steps in ChapterOne
-  const totalSteps = 6; 
+  const totalSteps = 6;
   // Define the current step, starting at 0
   const [currentStep, setCurrentStep] = useState(0);
   // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
   // Define whether the user has completed step 4
   const [stepFourCompleted, setStepFourCompleted] = useState(false);
-   // Define whether the user has completed step 3
-   const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
+  // Define whether the user has completed step 3
+  const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
   // Define whether the user has taken the conch shell
   const [conchTaken, setConchTaken] = useState(false);
   // Define the current overlay, starting at null
@@ -45,6 +44,10 @@ function ChapterOne({
   const [lastDirection, setLastDirection] = useState(null);
   // Track the number of repetitive moves
   const [repetitiveMoves, setRepetitiveMoves] = useState(0);
+  // Define the dynamic scene and whether it is visible
+  const [dynamicSceneVisible, setDynamicSceneVisible] = useState(false);
+  // track the current dynamic scene
+  const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
 
   // Define the choices for step 3
 
@@ -54,33 +57,34 @@ function ChapterOne({
     { label: "Take the Conch Shell.", value: 3 },
   ]);
 
-  // Define the overlay data
-
-  const overlayData = {
+  const dynamicSceneData = {
     pickUpConch: {
-      text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but its memory lingers."
-,
-      image: { src: DoorVision, alt: "A magical door opening into a brilliant white light." }
+      text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but its memory lingers.",
+      imageSrc: DoorVision,
+      imageAlt: "A magical door opening into a brilliant white light.",
     },
     listenToConch: {
       text: "What happens when you listen to the conch.",
-      image: { src: "path/to/image2.png", alt: "Image 2" }
+      imageSrc: "path/to/image2.png",
+      imageAlt: "Image 2",
     },
     sirenGreetNoConch: {
       text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
-      image: { src: Conch, alt: "A mystifyingly beautiful conch shell." }
-    },  
+      imageSrc: Conch,
+      imageAlt: "A mystifyingly beautiful conch shell.",
+    },
     sirenGreetWithConch: {
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
-      image: { src: Sundial, alt: "An elaborate sundila protruding from the shore." }
+      imageSrc: Sundial,
+      imageAlt: "An elaborate sundial protruding from the shore.",
     },
     soldierBlock: {
       text: "As if materializing from thin air, two of the Sirens soldiers block your path. The one to your right stares you in the eye and you hear his watery voice in your head say, 'You shall not pass until your business with our queen is finished.'",
-      image: { src: SoldierBlock, alt: "Intimidating image of the merman soldiers blocking your path." }
+      imageSrc: SoldierBlock,
+      imageAlt: "Intimidating image of the merman soldiers blocking your path.",
     },
-   
+    // ... other scenarios
   };
-  
 
   // Handle keydown events
 
@@ -94,13 +98,18 @@ function ChapterOne({
 
     if (isOverlayVisible === true) return;
     // Allows key listener for arrows but not c and b during step 4
-    if ((event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
-    currentStep === 4 && !stepFourCompleted) {
-    return;
+    if (
+      (event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
+      currentStep === 4 &&
+      !stepFourCompleted
+    ) {
+      return;
     }
     // Handle keydown events for exploration
 
-    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+    if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+    ) {
       if (lastDirection === event.key) {
         setRepetitiveMoves(repetitiveMoves + 1);
       } else {
@@ -108,7 +117,7 @@ function ChapterOne({
         setLastDirection(event.key);
       }
       handleExplore(event.key);
-    };
+    }
 
     // Handle keydown events for Continue and Back
 
@@ -132,30 +141,33 @@ function ChapterOne({
       case 1:
         if (!conchTaken) {
           setIsOverlayVisible(true);
-          setCurrentOverlay('sirenGreetNoConch');
+          setCurrentOverlay("sirenGreetNoConch");
         } else {
           setIsOverlayVisible(true);
-          setCurrentOverlay('sirenGreetWithConch');
+          setCurrentOverlay("sirenGreetWithConch");
         }
         break;
       case 2:
         setShowLifeLost(true);
-        loseLife('sirenAttack');
+        loseLife("sirenAttack");
         break;
       case 3:
-        // makes the comch option disappear
+        // makes the conch option disappear
         setConchTaken(true);
-        // setStepThreeCompleted(true);
         obtainConch();
-        setIsOverlayVisible(true);
+        // setIsOverlayVisible(true);
         // Sets overlay to pickUpConch
-        setCurrentOverlay('pickUpConch');
-        // update mulitiple choice buttons
+        // setCurrentOverlay('pickUpConch');
         setChoices([
           { label: "Greet the Siren.", value: 1 },
           { label: "Attack the Siren!", value: 2 },
           { label: "Explore.", value: 4 },
-        ])
+        ]);
+        setCurrentDynamicSceneKey("pickUpConch");
+        setShowDynamicScene(true);
+
+        // update mulitiple choice buttons
+
         break;
       case 4:
         setStepThreeCompleted(true);
@@ -171,14 +183,14 @@ function ChapterOne({
   const handleExplore = (direction) => {
     if (repetitiveMoves > 2) {
       setIsOverlayVisible(true);
-      setCurrentOverlay('SoldierBlock');
+      setCurrentOverlay("SoldierBlock");
     } else if (repetitiveMoves > 3) {
       setShowLifeLost(true);
-      loseLife('ignoreSoldiers');
+      loseLife("ignoreSoldiers");
     }
     switch (direction) {
       case "ArrowUp":
-      console.log('up');
+        console.log("up");
         break;
       case "ArrowDown":
         break;
@@ -206,7 +218,20 @@ function ChapterOne({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost, isOverlayVisible, currentOverlay, stepFourCompleted, lastDirection, repetitiveMoves]); // Update listener when currentStep changes
+  }, [
+    currentStep,
+    showHelp,
+    stepThreeCompleted,
+    showLifeLost,
+    isOverlayVisible,
+    currentOverlay,
+    stepFourCompleted,
+    lastDirection,
+    repetitiveMoves,
+    dynamicSceneVisible,
+    currentDynamicSceneKey,
+    conchTaken,
+  ]);
 
   return (
     <div id="ChapterOnePage" className="widthControl">
@@ -261,50 +286,44 @@ function ChapterOne({
         <div>
           <h3>Choose wisely.</h3>
           {!conchTaken && (
-             <img
-             className="conchItem"
-             src={Conch}
-             alt="A mystifyingly beautiful conch shell."
-             width="260"
-             height="250"
-           ></img>
-          )}
-          {conchTaken && (
-             <img className="environImage" src={ConchInSatchel} alt="The conch inside of a satchel beside a pistol." />
-          )}
-          {!conchTaken && currentOverlay && (
-            <DynamicOverlay 
-              isVisible={!!currentOverlay}
-              text={overlayData[currentOverlay].text}
-              image={overlayData[currentOverlay].image}
-              onClose={() => {
-                setCurrentOverlay(null);
-                setIsOverlayVisible(false);
-              }}
+            <img
+              className="conchItem"
+              src={Conch}
+              alt="A mystifyingly beautiful conch shell."
+              width="260"
+              height="250"
             />
           )}
-          {conchTaken && currentOverlay && (
-          <DynamicOverlay 
-            isVisible={!!currentOverlay}
-            text={overlayData[currentOverlay].text}
-            image={overlayData[currentOverlay].image}
-            onClose={() => {
-              setCurrentOverlay(null);
-              setIsOverlayVisible(false);
-            }}
-          />
-        )}
-
+          {conchTaken && (
+            <img
+              className="environImage"
+              src={ConchInSatchel}
+              alt="The conch inside of a satchel beside a pistol."
+            />
+          )}
+          {dynamicSceneVisible && currentDynamicSceneKey && (
+            <div className="dynamicSceneContent">
+              <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
+              <img
+                src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
+                alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
+                className="dynamicSceneImage"
+              />
+            </div>
+          )}
           <MultipleChoiceButtons
             choices={choices}
             onChoiceSelect={handleChoiceSelect}
           />
         </div>
       )}
+
       {currentStep === 4 && (
         <div>
           <p>
-            The Siren and her soldiers appear to have become bored by your presence. Now's your chance to explore the cove. Use your keyboard arrow keys and have a look around.
+            The Siren and her soldiers appear to have become bored by your
+            presence. Now's your chance to explore the cove. Use your keyboard
+            arrow keys and have a look around.
           </p>
           <img
             className="environImage"

@@ -17,10 +17,11 @@ const Game = () => {
   const [hasConch, setHasConch] = useState(false);
   const [hasPearl, setHasPearl] = useState(false);
 
+  // set conch for inventory
   const obtainConch = () => {
     setHasConch(true);
   };
-
+  // set pearl for inventory
   const obtainPearl = () => { 
     setHasPearl(true);
   }
