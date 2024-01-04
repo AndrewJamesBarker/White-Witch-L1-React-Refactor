@@ -22,7 +22,7 @@ const StartPage = ({ onStartGame }) => {
     <div id="startBox">
       <div className="cursorBox">
         <h3 id="startPrompt">Want to play a game? Type Y/N.</h3>
-        <img className="center" src={CoverArt} alt="a rugged hero named Caballero in a dystopian world, with a mysterious sun emitting new light above and ominous figures looming in the background. Ethereal and ghostly, a Siren appears in the sky, adding a mystical element." />
+        <img className="center titleImage" src={CoverArt} alt="a rugged hero named Caballero in a dystopian world, with a mysterious sun emitting new light above and ominous figures looming in the background. Ethereal and ghostly, a Siren appears in the sky, adding a mystical element." />
       </div>
     </div>
   );

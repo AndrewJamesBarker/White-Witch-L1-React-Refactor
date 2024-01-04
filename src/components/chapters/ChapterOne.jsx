@@ -12,6 +12,8 @@ import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
 import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
 import Sundial from "../../assets/images/environment/Sundial.png";
+import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
+
 
 function ChapterOne({
   onComplete,
@@ -39,7 +41,10 @@ function ChapterOne({
   const [currentOverlay, setCurrentOverlay] = useState(null);
   // Define whether the overlay is visible
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-
+  // Track the last direction the user moved
+  const [lastDirection, setLastDirection] = useState(null);
+  // Track the number of repetitive moves
+  const [repetitiveMoves, setRepetitiveMoves] = useState(0);
 
   // Define the choices for step 3
 
@@ -69,6 +74,11 @@ function ChapterOne({
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
       image: { src: Sundial, alt: "An elaborate sundila protruding from the shore." }
     },
+    soldierBlock: {
+      text: "As if materializing from thin air, two of the Sirens soldiers block your path. The one to your right stares you in the eye and you hear his watery voice in your head say, 'You shall not pass until your business with our queen is finished.'",
+      image: { src: SoldierBlock, alt: "Intimidating image of the merman soldiers blocking your path." }
+    },
+   
   };
   
 
@@ -77,13 +87,31 @@ function ChapterOne({
   const handleKeyDown = (event) => {
     // conditions to prevent back and continue from working
     // An overlay is visible
-    if (showHelp) return;
-    if (showLifeLost) return;
-    if (showInventory) return;
+    if (showHelp || showLifeLost || showInventory || isOverlayVisible) return;
+
     // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted && !isOverlayVisible) return;
-    if (currentStep === 4 && !stepFourCompleted && !isOverlayVisible) return;
+
     if (isOverlayVisible === true) return;
+    // Allows key listener for arrows but not c and b during step 4
+    if ((event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
+    currentStep === 4 && !stepFourCompleted) {
+    return;
+    }
+    // Handle keydown events for exploration
+
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+      if (lastDirection === event.key) {
+        setRepetitiveMoves(repetitiveMoves + 1);
+      } else {
+        setRepetitiveMoves(0);
+        setLastDirection(event.key);
+      }
+      handleExplore(event.key);
+    };
+
+    // Handle keydown events for Continue and Back
+
     const key = event.key.toLowerCase();
     if (
       key === "c" &&
@@ -96,7 +124,7 @@ function ChapterOne({
     }
   };
 
-  // Handle choice selection
+  // Handle multiple choice selection
 
   const handleChoiceSelect = (choice) => {
     setUserChoice(choice);
@@ -138,6 +166,31 @@ function ChapterOne({
     }
   };
 
+  // Handle exploration
+
+  const handleExplore = (direction) => {
+    if (repetitiveMoves > 2) {
+      setIsOverlayVisible(true);
+      setCurrentOverlay('SoldierBlock');
+    } else if (repetitiveMoves > 3) {
+      setShowLifeLost(true);
+      loseLife('ignoreSoldiers');
+    }
+    switch (direction) {
+      case "ArrowUp":
+      console.log('up');
+        break;
+      case "ArrowDown":
+        break;
+      case "ArrowLeft":
+        break;
+      case "ArrowRight":
+        break;
+      default:
+        setCurrentStep(1);
+    }
+  };
+
   // Reset steps on all lives lost
 
   useEffect(() => {
@@ -153,7 +206,7 @@ function ChapterOne({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost, isOverlayVisible, currentOverlay]); // Update listener when currentStep changes
+  }, [currentStep, showHelp, stepThreeCompleted, showLifeLost, isOverlayVisible, currentOverlay, stepFourCompleted, lastDirection, repetitiveMoves]); // Update listener when currentStep changes
 
   return (
     <div id="ChapterOnePage" className="widthControl">
@@ -175,7 +228,7 @@ function ChapterOne({
             her lips move as if singing. Strangely, you hear nothing but the
             waves lapping at your feet.
           </p>
-          <div className="imageCropper">
+          <div className="imageCropper environImage">
             <img
               className="environImage"
               src={sirenCove}
@@ -251,7 +304,7 @@ function ChapterOne({
       {currentStep === 4 && (
         <div>
           <p>
-            You explore the cove and find a sundial protruding from the shore.
+            The Siren and her soldiers appear to have become bored by your presence. Now's your chance to explore the cove. Use your keyboard arrow keys and have a look around.
           </p>
           <img
             className="environImage"

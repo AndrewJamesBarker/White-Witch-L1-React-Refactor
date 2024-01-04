@@ -12,8 +12,8 @@ const DynamicOverlay = ({ isVisible, text, image, onClose }) => {
   return (
     <div className="overlayBox">
       <div className="overlayContent">
-        {image && <img className="environImage" src={image.src} alt={image.alt} />}
-        {text && <p className='widthControl'>{text}</p>}
+        {image && <img className="overlayImage" src={image.src} alt={image.alt} />}
+        {text && <p className='widthControl overlayText'>{text}</p>}
         <button onClick={onClose}>Close</button>
       </div>
     </div>
