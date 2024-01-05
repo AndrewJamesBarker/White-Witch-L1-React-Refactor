@@ -1,6 +1,8 @@
 
 /*  Effects */
 
+/* Image materialize */
+
 @keyframes materialize {
   0% {
       opacity: 0;
@@ -16,6 +18,25 @@
 
 .imageMaterialize {
   animation: materialize .5s ease-out forwards;
+}
+
+
+/* Pulsing Light Orb */
+.lifeCrystal {
+  animation: pulse 4s linear infinite;
+  padding: 0%;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+#lifeCrystalButton {
+  background: none;
+  border: none;
+  padding: 0%;
+  margin: 0%;
 }
 
 

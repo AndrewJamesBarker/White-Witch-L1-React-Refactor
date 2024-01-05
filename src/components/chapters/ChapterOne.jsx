@@ -7,11 +7,14 @@ import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
+import LifeCrystal from "../../assets/images/ui-elements/LifeCrystal.svg";
 import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
 import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
 import Sundial from "../../assets/images/environment/Sundial.png";
 import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 import PastelMountains from "../../assets/images/environment/PastelMountains1.png";
+import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
+import Marsh from "../../assets/images/environment/Marsh1.png";
 
 function ChapterOne({
   currentStep,
@@ -20,6 +23,7 @@ function ChapterOne({
   previousStep,
   onComplete,
   loseLife,
+  gainLife,
   setShowLifeLost,
   showLifeLost,
   resetSignal,
@@ -80,7 +84,7 @@ function ChapterOne({
 
   const dynamicSceneData = {
     pickUpConch: {
-      text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but its memory lingers.",
+      text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but the sensation lingers.",
       imageSrc: DoorVision,
       imageAlt: "A magical door opening into a brilliant white light.",
       imageCSS: "imageMaterialize environImage",
@@ -411,7 +415,7 @@ function ChapterOne({
                   <p className="standardText">
                     The Siren and her soldiers appear to have become bored by
                     your presence. Now's your chance to explore the cove. Use
-                    your keyboard arrow keys and have a look around.
+                    your keyboard <span className="boldText">'Arrow Keys'</span> and have a look around.
                   </p>
                   <img
                     className="environImage"
@@ -436,20 +440,22 @@ function ChapterOne({
                     something of a mirage. The Siren and her soldiers watch you
                     carefully.
                   </p>
+                  <button id="lifeCrystalButton" onClick={() => gainLife("Mysterious force")}>
+                    <img className="lifeCrystal" src={LifeCrystal} alt="A beuatiful rotating and pulsating orb of light" width="100" height="100"></img>
+                  </button>
                 </div>
               )}
               {southScene && (
                 <div>
                   <img
                     className="environImage"
-                    src={Sundial}
-                    alt="A sundial protruding from the shore."
+                    src={BlackToothMountainSouth}
+                    alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head with its chaws wide open. "
                     width="500"
                     height="500"
                   ></img>
                   <p className="standardText">
-                    To your south, you see an immense cape strutting out into the sea, overshadowed and blended into a gnarly, giant rotten tooth mountain. The Siren and her soldiers watch you
-                    carefully.
+                  To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
                   </p>
                 </div>
               )}
@@ -457,14 +463,13 @@ function ChapterOne({
                 <div>
                   <img
                     className="environImage"
-                    src={Sundial}
-                    alt="A sundial protruding from the shore."
+                    src={Marsh}
+                    alt="A labyrinthine marshland vista."
                     width="500"
                     height="500"
                   ></img>
                   <p className="standardText">
-                    To your east, you see a wet reedy marsh extending for miles with what looks like civilization on its distant horizon. The Siren and her soldiers watch you
-                    carefully.
+                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks—this sprawling marshland pulses with the quiet energy of some subtle and possibly dangerous magic. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, possibly buildings or settlements, appears. The Siren and her soldiers watch you carefully.
                   </p>
                 </div>
               )}

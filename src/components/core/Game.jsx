@@ -13,7 +13,9 @@ const Game = () => {
   const [showLifeLost, setShowLifeLost] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
+  const [gainLifeSignal, setGainLifeSignal] = useState(false);
   const [deathCause, setDeathCause] = useState('');
+  const [gainLifeCause, setGainLifeCause] = useState('');
   // state of item possession for inventory
   const [hasConch, setHasConch] = useState(false);
   const [hasPearl, setHasPearl] = useState(false);
@@ -68,6 +70,14 @@ const Game = () => {
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
     livesLeft === 0 && resetGame();
+  };
+
+
+  const gainLife = (cause) => {
+    if (livesLeft < 3) {
+      setLivesLeft(livesLeft + 1);
+      setGainLifeCause(cause);  // Update the life giving cause
+    }
   };
 
   const resetGame = () => {
@@ -125,6 +135,7 @@ const Game = () => {
         return <ChapterOne 
           onComplete={goToNextChapter} 
           loseLife={loseLife}
+          gainLife={gainLife}
           showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}
@@ -143,6 +154,7 @@ const Game = () => {
         return <ChapterTwo
           onComplete={goToNextChapter} 
           loseLife={loseLife}
+          gainLife={gainLife}
           showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
           resetSignal={resetSignal}

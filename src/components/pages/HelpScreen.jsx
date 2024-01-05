@@ -21,7 +21,7 @@ const HelpScreen = ({ onHelpScreen }) => {
                 </ul>
             </li>
             <li>Multiple choice buttons</li>
-            <li>Interactive elements (Hint: Drag & Drop)</li>
+            <li>Interactive elements (Hint: Drag & Drop, clicking items on screen, etc... )</li>
           </ol>
           <div id="helpLivesItems">
             <h3 className="centerText">Lives And Items</h3>
