@@ -1,5 +1,44 @@
 /* Layout Position */
 
+/* light ball effect */
+
+/* Define the main container */
+.container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+}
+
+/* Style for the light balls */
+.lightBall {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(255, 255, 234);
+  box-shadow: 0 0 15px rgb(255, 255, 234); /* Adjust for desired glow effect */
+  opacity: 0;
+  animation: floatAndFade 5s infinite;
+}
+
+/* Keyframes for floating and fading effect */
+@keyframes floatAndFade {
+  0% {
+    bottom: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  100% {
+    bottom: 100%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+  }
+}
+
+
 .widthControl {
   max-width: 600px;
   margin: auto;

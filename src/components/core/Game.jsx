@@ -75,6 +75,8 @@ const Game = () => {
     setCurrentChapter(1);
     setResetSignal(true);
     setShowLifeLost(false);
+    setConchTaken(false);
+    setHasConch(false);
   };
 
   useEffect(() => {

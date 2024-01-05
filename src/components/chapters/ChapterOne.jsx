@@ -11,6 +11,7 @@ import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
 import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
 import Sundial from "../../assets/images/environment/Sundial.png";
 import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
+import PastelMountains from "../../assets/images/environment/PastelMountains1.png";
 
 function ChapterOne({
   currentStep,
@@ -46,15 +47,19 @@ function ChapterOne({
   // track the current dynamic scene
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
 
- 
-  // Define the choices for step 3
+  // On/Off switch for explore scenes
+  const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
+  const [northScene, setNorthScene] = useState(false);
+  const [southScene, setSouthScene] = useState(false);
+  const [eastScene, setEastScene] = useState(false);
+  const [westScene, setWestScene] = useState(false);
 
+  // Define the choices for step 3
   const [choices, setChoices] = useState([
     { label: "Greet the Siren.", value: 1 },
     { label: "Attack the Siren!", value: 2 },
     { label: "Take the Conch Shell.", value: 3 },
   ]);
-
 
   // Update the choices for step 3 depending on whether the conch has been taken
   const updateChoices = () => {
@@ -78,28 +83,42 @@ function ChapterOne({
       text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but its memory lingers.",
       imageSrc: DoorVision,
       imageAlt: "A magical door opening into a brilliant white light.",
+      imageCSS: "imageMaterialize environImage",
+      textCSS: "standardText",
+      buttonText: "Continue",
     },
     listenToConch: {
       text: "What happens when you listen to the conch.",
       imageSrc: "path/to/image2.png",
       imageAlt: "Image 2",
+      imageCSS: "imageMaterialize environImage",
+      textCSS: "standardText",
+      buttonText: "Continue",
     },
     sirenGreetNoConch: {
       text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
       imageSrc: Conch,
       imageAlt: "A mystifyingly beautiful conch shell.",
+      imageCSS: "imageMaterialize environImage",
+      textCSS: "standardText",
+      buttonText: "Continue",
     },
     sirenGreetWithConch: {
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
       imageSrc: Sundial,
       imageAlt: "An elaborate sundial protruding from the shore.",
+      imageCSS: "imageMaterialize environImage",
+      textCSS: "standardText",
+      buttonText: "Continue",
     },
     soldierBlock: {
       text: "As if materializing from thin air, two of the Sirens soldiers block your path. The one to your right stares you in the eye and you hear his watery voice in your head say, 'You shall not pass until your business with our queen is finished.'",
       imageSrc: SoldierBlock,
       imageAlt: "Intimidating image of the merman soldiers blocking your path.",
+      imageCSS: "imageMaterialize environImage",
+      textCSS: "standardText",
+      buttonText: "Go Back",
     },
-    // ... other scenarios
   };
 
   // Handle keydown events
@@ -137,9 +156,13 @@ function ChapterOne({
     // Handle keydown events for Continue and Back
 
     const key = event.key.toLowerCase();
-    if (key === "c" && currentStep < totalSteps - 1 && (currentStep !== 3 || stepThreeCompleted)) {
+    if (
+      key === "c" &&
+      currentStep < totalSteps - 1 &&
+      (currentStep !== 3 || stepThreeCompleted)
+    ) {
       nextStep(); // Use nextStep function passed from Game component
-    } 
+    }
     // Check for 'b' key to go back to the previous step
     else if (key === "b" && currentStep > 0) {
       previousStep(); // Use previousStep function passed from Game component
@@ -156,7 +179,7 @@ function ChapterOne({
           setDynamicSceneVisible(true);
           setCurrentDynamicSceneKey("sirenGreetNoConch");
         } else {
-           setDynamicSceneVisible(true);
+          setDynamicSceneVisible(true);
           setCurrentDynamicSceneKey("sirenGreetWithConch");
         }
         break;
@@ -182,30 +205,72 @@ function ChapterOne({
     }
   };
 
+  const handleDynamicSceneClose = () => {
+    setDynamicSceneVisible(false);
+    resetExplorationState(); // Reset the exploration state
+  };
+
   // Handle exploration
 
+  const resetExplorationState = () => {
+    setRepetitiveMoves(0);
+    setLastDirection(null);
+  };
+
   const handleExplore = (direction) => {
-    if (repetitiveMoves > 2) {
-      setIsOverlayVisible(true);
-      setCurrentOverlay("SoldierBlock");
-    } else if (repetitiveMoves > 3) {
+    if (lastDirection === direction) {
+      setRepetitiveMoves(repetitiveMoves + 1);
+    } else {
+      setRepetitiveMoves(1); // reset to 1 for the first move in a new direction
+      setLastDirection(direction); // update lastDirection with the new direction
+    }
+
+    if (repetitiveMoves === 2) {
+      // Warning threshold
+      setDynamicSceneVisible(true);
+      setCurrentDynamicSceneKey("soldierBlock");
+    }
+    else if (repetitiveMoves > 2) {
+      // Death threshold
       setShowLifeLost(true);
       loseLife("ignoreSoldiers");
+      setRepetitiveMoves(0); // reset after death
     }
     switch (direction) {
       case "ArrowUp":
-        console.log("up");
+        setNuetralExploreScene(false);
+        setSouthScene(false);
+        setEastScene(false);
+        setWestScene(false);
+        setNorthScene(true);
         break;
       case "ArrowDown":
+        setNuetralExploreScene(false);
+        setNorthScene(false);
+        setEastScene(false);
+        setWestScene(false);
+        setSouthScene(true);
         break;
       case "ArrowLeft":
+        setNuetralExploreScene(false);
+        setNorthScene(false);
+        setSouthScene(false);
+        setEastScene(false);
+        setWestScene(true);
         break;
       case "ArrowRight":
+        setNuetralExploreScene(false);
+        setNorthScene(false);
+        setSouthScene(false);
+        setWestScene(false);
+        setEastScene(true);
         break;
       default:
         setCurrentStep(1);
     }
   };
+
+
 
   // Reset steps on all lives lost
 
@@ -248,13 +313,17 @@ function ChapterOne({
       {dynamicSceneVisible && currentDynamicSceneKey ? (
         // Render only the dynamic scene content
         <div className="dynamicScenes">
-            <img
+          <img
             src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
             alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
-            className="environImage imageMaterialize"
+            className={dynamicSceneData[currentDynamicSceneKey].imageCSS}
           />
-          <p className="standardText">{dynamicSceneData[currentDynamicSceneKey].text}</p>
-          <button onClick={() => setDynamicSceneVisible(false)}>Continue</button>
+          <p className="standardText">
+            {dynamicSceneData[currentDynamicSceneKey].text}
+          </p>
+          <button onClick={handleDynamicSceneClose}>
+            {dynamicSceneData[currentDynamicSceneKey].buttonText}
+          </button>
         </div>
       ) : (
         <>
@@ -336,20 +405,84 @@ function ChapterOne({
           )}
 
           {currentStep === 4 && (
-            <div>
-              <p className="standardText">
-                The Siren and her soldiers appear to have become bored by your
-                presence. Now's your chance to explore the cove. Use your
-                keyboard arrow keys and have a look around.
-              </p>
-              <img
-                className="environImage"
-                src={Sundial}
-                alt="A sundial protruding from the shore."
-                width="500"
-                height="500"
-              ></img>
-            </div>
+            <>
+              {nuetralExploreScene && (
+                <div>
+                  <p className="standardText">
+                    The Siren and her soldiers appear to have become bored by
+                    your presence. Now's your chance to explore the cove. Use
+                    your keyboard arrow keys and have a look around.
+                  </p>
+                  <img
+                    className="environImage"
+                    src={Sundial}
+                    alt="A sundial protruding from the shore."
+                    width="500"
+                    height="500"
+                  ></img>
+                </div>
+              )}
+              {northScene && (
+                <div>
+                  <img
+                    className="environImage"
+                    src={PastelMountains}
+                    alt="A mystical range of pastel mountains."
+                    width="500"
+                    height="500"
+                  ></img>
+                  <p className="standardText">
+                    To your north, you see a mystical range of pastel mountains,
+                    something of a mirage. The Siren and her soldiers watch you
+                    carefully.
+                  </p>
+                </div>
+              )}
+              {southScene && (
+                <div>
+                  <img
+                    className="environImage"
+                    src={Sundial}
+                    alt="A sundial protruding from the shore."
+                    width="500"
+                    height="500"
+                  ></img>
+                  <p className="standardText">
+                    To your south, you see an immense cape strutting out into the sea, overshadowed and blended into a gnarly, giant rotten tooth mountain. The Siren and her soldiers watch you
+                    carefully.
+                  </p>
+                </div>
+              )}
+              {eastScene && (
+                <div>
+                  <img
+                    className="environImage"
+                    src={Sundial}
+                    alt="A sundial protruding from the shore."
+                    width="500"
+                    height="500"
+                  ></img>
+                  <p className="standardText">
+                    To your east, you see a wet reedy marsh extending for miles with what looks like civilization on its distant horizon. The Siren and her soldiers watch you
+                    carefully.
+                  </p>
+                </div>
+              )}
+              {westScene && (
+                <div>
+                  <p className="standardText">
+                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Is there a ringing in your ears?
+                  </p>
+                  <img
+                    className="environImage"
+                    src={Sundial}
+                    alt="A sundial protruding from the shore."
+                    width="500"
+                    height="500"
+                  ></img>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
