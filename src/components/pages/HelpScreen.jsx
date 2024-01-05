@@ -17,6 +17,7 @@ const HelpScreen = ({ onHelpScreen }) => {
                     <li>C - Continue</li>
                     <li>B - Back</li>
                     <li>I - Inventory</li>
+                    <li>Directional Arrow Keys</li>
                 </ul>
             </li>
             <li>Multiple choice buttons</li>

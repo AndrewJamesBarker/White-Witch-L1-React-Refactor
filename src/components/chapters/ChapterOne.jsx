@@ -112,7 +112,6 @@ function ChapterOne({
     // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted) return;
 
-
     // Allows key listener for arrows but not c and b during step 4
     if (
       (event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
@@ -224,7 +223,6 @@ function ChapterOne({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [
-    currentStep,
     showHelp,
     stepThreeCompleted,
     showLifeLost,
@@ -234,11 +232,13 @@ function ChapterOne({
     dynamicSceneVisible,
     currentDynamicSceneKey,
     conchTaken,
+    currentStep,
+    setCurrentStep,
     nextStep,
     previousStep,
   ]);
 
-
+  // Update choices for multiple choice section when conch is taken
   useEffect(() => {
     updateChoices();
   }, [conchTaken]);
@@ -247,13 +247,13 @@ function ChapterOne({
     <div id="ChapterOnePage" className="widthControl">
       {dynamicSceneVisible && currentDynamicSceneKey ? (
         // Render only the dynamic scene content
-        <div className="dynamicSceneContent">
+        <div className="dynamicScenes">
             <img
             src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
             alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
-            className="environImage"
+            className="environImage imageMaterialize"
           />
-          <p>{dynamicSceneData[currentDynamicSceneKey].text}</p>
+          <p className="standardText">{dynamicSceneData[currentDynamicSceneKey].text}</p>
           <button onClick={() => setDynamicSceneVisible(false)}>Continue</button>
         </div>
       ) : (
@@ -274,13 +274,13 @@ function ChapterOne({
           )}
           {currentStep === 1 && (
             <div>
-              <p>
+              <p className="standardText">
                 You are standing on the beach of a foggy cove. Ten feet out from
                 shore, a beautiful siren sits on a protruding rock. She smiles
                 and her lips move as if singing. Strangely, you hear nothing but
                 the waves lapping at your feet.
               </p>
-              <div className="imageCropper environImage">
+              <div className="imageCropper">
                 <img
                   className="environImage"
                   src={sirenCove}
@@ -295,13 +295,13 @@ function ChapterOne({
           )}
           {currentStep === 2 && (
             <div>
-              <p>
+              <p className="standardText">
                 As you struggle to understand the Siren’s song, a conch shell
                 washes up on the beach.
               </p>
               <p></p>
               <img
-                className="environImage"
+                className="environImage imageMaterialize"
                 src={ConchShore}
                 alt="Siren on a rock, in a cove."
                 width="500"
@@ -337,7 +337,7 @@ function ChapterOne({
 
           {currentStep === 4 && (
             <div>
-              <p>
+              <p className="standardText">
                 The Siren and her soldiers appear to have become bored by your
                 presence. Now's your chance to explore the cove. Use your
                 keyboard arrow keys and have a look around.

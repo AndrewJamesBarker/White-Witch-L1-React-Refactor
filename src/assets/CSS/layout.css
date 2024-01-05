@@ -35,7 +35,12 @@
 
 /* Text Style */
 
+.standardText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.6;
 
+}
 .boldText {
   font-size: 1.2rem;
   font-weight: bold;
