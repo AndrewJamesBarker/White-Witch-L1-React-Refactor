@@ -4,6 +4,7 @@ import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
+import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 
 const Game = () => {
@@ -11,11 +12,12 @@ const Game = () => {
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
+  const [showLifeGain, setShowLifeGain] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
-  const [gainLifeSignal, setGainLifeSignal] = useState(false);
   const [deathCause, setDeathCause] = useState('');
-  const [gainLifeCause, setGainLifeCause] = useState('');
+  const [lifeCause, setLifeCause] = useState('');
+  const [showCrystal, setShowCrystal] = useState(true);
   // state of item possession for inventory
   const [hasConch, setHasConch] = useState(false);
   const [hasPearl, setHasPearl] = useState(false);
@@ -51,8 +53,6 @@ const Game = () => {
     setShowInventory(prev => !prev);
   }
   
-  
-
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
@@ -72,12 +72,18 @@ const Game = () => {
     livesLeft === 0 && resetGame();
   };
 
+  const handleCloseLifeGainPage = () => {
+    setShowLifeGain(false);
+    setShowCrystal(false);
+  };
+
 
   const gainLife = (cause) => {
     if (livesLeft < 3) {
       setLivesLeft(livesLeft + 1);
-      setGainLifeCause(cause);  // Update the life giving cause
     }
+      setLifeCause(cause); // Update the life giving cause
+      setShowLifeGain(true);
   };
 
   const resetGame = () => {
@@ -124,7 +130,10 @@ const Game = () => {
       return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} />;
     } else if (showLifeLost) {
       return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />;
-    } else {
+    } else if (showLifeGain) {
+      return <LifeGainPage livesLeft={livesLeft} onClose={handleCloseLifeGainPage} lifeCause={lifeCause} />;
+    } 
+    else {
       return renderChapter();
     }
   }
@@ -138,6 +147,9 @@ const Game = () => {
           gainLife={gainLife}
           showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
+          showLifeGain={showLifeGain}
+          setShowLifeGain={setShowLifeGain}
+          livesLeft={livesLeft}
           resetSignal={resetSignal}
           showHelp={showHelp}
           showInventory={showInventory}
@@ -148,6 +160,7 @@ const Game = () => {
           previousStep={previousStep}
           conchTaken={conchTaken}
           setConchTaken={setConchTaken}
+          showCrystal={showCrystal}
          />;
          
       case 2:
@@ -157,6 +170,9 @@ const Game = () => {
           gainLife={gainLife}
           showLifeLost={showLifeLost}
           setShowLifeLost={setShowLifeLost} 
+          showLifeGain={showLifeGain}
+          setShowLifeGain={setShowLifeGain}
+          livesLeft={livesLeft}
           resetSignal={resetSignal}
           showHelp={showHelp}
           showInventory={showInventory}

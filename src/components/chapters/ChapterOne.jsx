@@ -26,12 +26,16 @@ function ChapterOne({
   gainLife,
   setShowLifeLost,
   showLifeLost,
+  showLifeGain,
+  setShowLifeGain,
+  livesLeft,
   resetSignal,
   showHelp,
   showInventory,
   obtainConch,
   conchTaken,
   setConchTaken,
+  showCrystal,
 }) {
   // Define the total number of steps in ChapterOne
   const totalSteps = 6;
@@ -111,12 +115,12 @@ function ChapterOne({
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
       imageSrc: Sundial,
       imageAlt: "An elaborate sundial protruding from the shore.",
-      imageCSS: "imageMaterialize environImage",
+      imageCSS: "environImage",
       textCSS: "standardText",
       buttonText: "Continue",
     },
     soldierBlock: {
-      text: "As if materializing from thin air, two of the Sirens soldiers block your path. The one to your right stares you in the eye and you hear his watery voice in your head say, 'You shall not pass until your business with our queen is finished.'",
+      text: "Two of the Sirens soldiers block your path as if materializing from thin air. The soldier on your left stares you in the eye, and from within in your head, you hear his watery voice say, 'You shall not pass until your business with our queen is finished.'",
       imageSrc: SoldierBlock,
       imageAlt: "Intimidating image of the merman soldiers blocking your path.",
       imageCSS: "imageMaterialize environImage",
@@ -295,6 +299,7 @@ function ChapterOne({
     showHelp,
     stepThreeCompleted,
     showLifeLost,
+    showLifeGain,
     stepFourCompleted,
     lastDirection,
     repetitiveMoves,
@@ -440,9 +445,11 @@ function ChapterOne({
                     something of a mirage. The Siren and her soldiers watch you
                     carefully.
                   </p>
-                  <button id="lifeCrystalButton" onClick={() => gainLife("Mysterious force")}>
-                    <img className="lifeCrystal" src={LifeCrystal} alt="A beuatiful rotating and pulsating orb of light" width="100" height="100"></img>
-                  </button>
+                  {showCrystal && (
+                     <button id="lifeCrystalButton" onClick={() => gainLife(livesLeft === 3 ? 'livesFullCrystal' : 'findCrystal')}>
+                     <img className="lifeCrystal" src={LifeCrystal} alt="A beuatiful rotating and pulsating orb of light" width="100" height="100"></img>
+                   </button>
+                  )}  
                 </div>
               )}
               {southScene && (
@@ -469,7 +476,7 @@ function ChapterOne({
                     height="500"
                   ></img>
                   <p className="standardText">
-                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks—this sprawling marshland pulses with the quiet energy of some subtle and possibly dangerous magic. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, possibly buildings or settlements, appears. The Siren and her soldiers watch you carefully.
+                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks—this sprawling marshland pulses with the quiet energy of some subtle and possibly dangerous magic. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, perhaps buildings or settlements, appears. The Siren and her soldiers keep a close eye on you.
                   </p>
                 </div>
               )}
