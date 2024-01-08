@@ -225,60 +225,52 @@ function ChapterOne({
     setLastDirection(null);
   };
 
-  const handleExplore = (direction) => {
+  // Update repetitive moves
+  const updateRepetitiveMoves = (direction) => {
     if (lastDirection === direction) {
-      setRepetitiveMoves(repetitiveMoves + 1);
-    } else {
-      setRepetitiveMoves(1); // reset to 1 for the first move in a new direction
-      setLastDirection(direction); // update lastDirection with the new direction
-    }
+      const newRepetitiveMoves = repetitiveMoves + 1;
+      setRepetitiveMoves(newRepetitiveMoves);
 
-    if (repetitiveMoves === 2) {
-      // Warning threshold
-      setDynamicSceneVisible(true);
-      setCurrentDynamicSceneKey("soldierBlock");
-    }
-    else if (repetitiveMoves > 2) {
-      // Death threshold
-      setShowLifeLost(true);
-      loseLife("ignoreSoldiers");
-      setRepetitiveMoves(0); // reset after death
-    }
-    switch (direction) {
-      case "ArrowUp":
-        setNuetralExploreScene(false);
-        setSouthScene(false);
-        setEastScene(false);
-        setWestScene(false);
-        setNorthScene(true);
-        break;
-      case "ArrowDown":
-        setNuetralExploreScene(false);
-        setNorthScene(false);
-        setEastScene(false);
-        setWestScene(false);
-        setSouthScene(true);
-        break;
-      case "ArrowLeft":
-        setNuetralExploreScene(false);
-        setNorthScene(false);
-        setSouthScene(false);
-        setEastScene(false);
-        setWestScene(true);
-        break;
-      case "ArrowRight":
-        setNuetralExploreScene(false);
-        setNorthScene(false);
-        setSouthScene(false);
-        setWestScene(false);
-        setEastScene(true);
-        break;
-      default:
-        setCurrentStep(1);
+      if (newRepetitiveMoves === 2) {
+        setDynamicSceneVisible(true);
+        setCurrentDynamicSceneKey("soldierBlock");
+      }
+    } else {
+      setRepetitiveMoves(1);
+      setLastDirection(direction);
     }
   };
 
-
+  // Handle exploration moves
+  const handleExplore = (direction) => {
+    // Check if the direction has changed
+    if (lastDirection !== direction) {
+      setRepetitiveMoves(1); // Reset to 1 for a new direction
+      setLastDirection(direction);
+    } else {
+      // If the direction is the same, increment repetitive moves
+      const newRepetitiveMoves = repetitiveMoves + 1;
+      setRepetitiveMoves(newRepetitiveMoves);
+  
+      if (newRepetitiveMoves === 2) {
+        // Show soldier block on the second consecutive move in the same direction
+        setDynamicSceneVisible(true);
+        setCurrentDynamicSceneKey("soldierBlock");
+      } else if (newRepetitiveMoves > 2) {
+        // Trigger life loss for more than two consecutive moves in the same direction
+        setShowLifeLost(true);
+        loseLife("ignoreSoldiers");
+      }
+    }
+  
+    // Set exploration scenes based on direction
+    setNuetralExploreScene(false);
+    setNorthScene(direction === "ArrowUp");
+    setSouthScene(direction === "ArrowDown");
+    setEastScene(direction === "ArrowRight");
+    setWestScene(direction === "ArrowLeft");
+  };
+  
 
   // Reset steps on all lives lost
 
@@ -385,6 +377,7 @@ function ChapterOne({
                 width="500"
                 height="500"
               ></img>
+              <p className="standardText">Press C to continue</p>
             </div>
           )}
           {currentStep === 3 && (
