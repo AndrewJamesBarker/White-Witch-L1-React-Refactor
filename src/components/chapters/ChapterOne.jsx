@@ -27,7 +27,6 @@ function ChapterOne({
   setShowLifeLost,
   showLifeLost,
   showLifeGain,
-  setShowLifeGain,
   livesLeft,
   resetSignal,
   showHelp,
