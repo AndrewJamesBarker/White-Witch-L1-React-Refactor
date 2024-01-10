@@ -120,7 +120,7 @@ function ChapterOne({
       buttonText: "Continue",
     },
     soldierBlock: {
-      text: "Two of the Sirens soldiers block your path as if materializing from thin air. The soldier on your left stares you in the eye, and from within in your head, you hear his watery voice say, 'You shall not pass until your business with our queen is finished.'",
+      text: "Two of the Sirens soldiers block your path as if materializing from thin air. The soldier on your left stares you in the eye, and from within in your head, you hear his watery voice say, 'You shall not pass until your business with our queen is finished!'",
       imageSrc: SoldierBlock,
       imageAlt: "Intimidating image of the merman soldiers blocking your path.",
       imageCSS: "imageMaterialize environImage",
