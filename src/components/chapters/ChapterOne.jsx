@@ -15,6 +15,7 @@ import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 import PastelMountains from "../../assets/images/environment/PastelMountains1.png";
 import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
 import Marsh from "../../assets/images/environment/Marsh1.png";
+import CaballeroProfile from "../../assets/images/portraits/Caballero-Profile.png";
 
 function ChapterOne({
   currentStep,
@@ -454,7 +455,7 @@ function ChapterOne({
                     height="500"
                   ></img>
                   <p className="standardText">
-                  To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
+                    To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
                   </p>
                 </div>
               )}
@@ -479,8 +480,8 @@ function ChapterOne({
                   </p>
                   <img
                     className="environImage"
-                    src={Sundial}
-                    alt="A sundial protruding from the shore."
+                    src={CaballeroProfile}
+                    alt="A profile image of Caballero's rugged face."
                     width="500"
                     height="500"
                   ></img>
