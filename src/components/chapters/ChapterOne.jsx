@@ -16,6 +16,7 @@ import PastelMountains from "../../assets/images/environment/PastelMountains1.pn
 import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
 import Marsh from "../../assets/images/environment/Marsh1.png";
 import CaballeroProfile from "../../assets/images/portraits/Caballero-Profile.png";
+import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
 
 function ChapterOne({
   currentStep,
@@ -475,16 +476,16 @@ function ChapterOne({
               )}
               {westScene && (
                 <div>
-                  <p className="standardText">
-                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Is there a ringing in your ears?
-                  </p>
                   <img
                     className="environImage"
-                    src={CaballeroProfile}
-                    alt="A profile image of Caballero's rugged face."
+                    src={SirenPortrait}
+                    alt="The Sirens beautiful face."
                     width="500"
                     height="500"
                   ></img>
+                  <p className="standardText">
+                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Like the sirens in the stories of old, her beauty bids you closer. Is there a ringing in your ears?
+                  </p>
                 </div>
               )}
             </>
