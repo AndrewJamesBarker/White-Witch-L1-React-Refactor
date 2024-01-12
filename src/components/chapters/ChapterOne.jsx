@@ -62,6 +62,7 @@ function ChapterOne({
   const [southScene, setSouthScene] = useState(false);
   const [eastScene, setEastScene] = useState(false);
   const [westScene, setWestScene] = useState(false);
+  const [listenConchScene, setlistenConchScene] = useState(false);
 
   // Define the choices for step 3
   const [choices, setChoices] = useState([
@@ -245,7 +246,7 @@ function ChapterOne({
   // Handle exploration moves
   const handleExplore = (direction) => {
     // Check if the direction has changed
-    if (lastDirection !== direction) {
+    if (!stepFourCompleted && lastDirection !== direction) {
       setRepetitiveMoves(1); // Reset to 1 for a new direction
       setLastDirection(direction);
     } else {
@@ -253,15 +254,15 @@ function ChapterOne({
       const newRepetitiveMoves = repetitiveMoves + 1;
       setRepetitiveMoves(newRepetitiveMoves);
   
-      if (newRepetitiveMoves === 2) {
+      if (newRepetitiveMoves === 2 && !westScene) {
         // Show soldier block on the second consecutive move in the same direction
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("soldierBlock");
-      } else if (newRepetitiveMoves > 2) {
+      } else if (!stepFourCompleted && newRepetitiveMoves > 2 && !westScene) {
         // Trigger life loss for more than two consecutive moves in the same direction
         setShowLifeLost(true);
         loseLife("ignoreSoldiers");
-      }
+      } 
     }
   
     // Set exploration scenes based on direction
@@ -270,6 +271,12 @@ function ChapterOne({
     setSouthScene(direction === "ArrowDown");
     setEastScene(direction === "ArrowRight");
     setWestScene(direction === "ArrowLeft");
+
+    if (!stepFourCompleted && westScene && direction === "ArrowLeft") {
+      setStepFourCompleted(true);
+      setCurrentStep(5);
+      setRepetitiveMoves(0);
+    }
   };
   
 
@@ -488,6 +495,33 @@ function ChapterOne({
                   </p>
                 </div>
               )}
+            </>
+          )}
+          {currentStep === 5 && (
+            <>
+              <div>
+                  <img
+                    className="environImage"
+                    src={CaballeroProfile}
+                    alt="The profile of Caballero's rugged face."
+                    width="500"
+                    height="500"
+                  ></img>
+                  <p className="standardText">
+                    You listen to the conch shell. You hear the Siren's voice in
+                    your head. She says, "I am the Siren of the Cove. Welcome
+                    to my domain. I am the guardian of the conch shell. It is
+                    the key to the door of the White Light. You must find the
+                    door and open it."
+                  </p>
+                  <p className="standardText">
+                    You are suddenly overcome with a sense of purpose. You know
+                    what you must do.
+                  </p>
+                  <p className="standardText">
+                    Press <span className="boldText">'C'</span> to continue.
+                  </p>
+                </div>
             </>
           )}
         </>
