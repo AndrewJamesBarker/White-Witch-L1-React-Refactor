@@ -15,6 +15,8 @@ import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
 import PastelMountains from "../../assets/images/environment/PastelMountains1.png";
 import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
 import Marsh from "../../assets/images/environment/Marsh1.png";
+import CaballeroProfile from "../../assets/images/portraits/Caballero-Profile.png";
+import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
 
 function ChapterOne({
   currentStep,
@@ -53,6 +55,9 @@ function ChapterOne({
   const [dynamicSceneVisible, setDynamicSceneVisible] = useState(false);
   // track the current dynamic scene
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
+  // allow directional event listening to be active or not
+  const [allowDirectionChange, setAllowDirectionChange] = useState(true);
+
 
   // On/Off switch for explore scenes
   const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
@@ -60,6 +65,7 @@ function ChapterOne({
   const [southScene, setSouthScene] = useState(false);
   const [eastScene, setEastScene] = useState(false);
   const [westScene, setWestScene] = useState(false);
+  const [conchListened, setConchListened] = useState(false);
 
   // Define the choices for step 3
   const [choices, setChoices] = useState([
@@ -94,14 +100,14 @@ function ChapterOne({
       textCSS: "standardText",
       buttonText: "Continue",
     },
-    listenToConch: {
-      text: "What happens when you listen to the conch.",
-      imageSrc: "path/to/image2.png",
-      imageAlt: "Image 2",
-      imageCSS: "imageMaterialize environImage",
-      textCSS: "standardText",
-      buttonText: "Continue",
-    },
+    // listenToConch: {
+    //   text: "What happens when you listen to the conch.",
+    //   imageSrc: "path/to/image2.png",
+    //   imageAlt: "Image 2",
+    //   imageCSS: "imageMaterialize environImage",
+    //   textCSS: "standardText",
+    //   buttonText: "Continue",
+    // },
     sirenGreetNoConch: {
       text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
       imageSrc: Conch,
@@ -149,7 +155,7 @@ function ChapterOne({
     // Handle keydown events for exploration
 
     if (
-      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) && currentStep === 4
     ) {
       if (lastDirection === event.key) {
         setRepetitiveMoves(repetitiveMoves + 1);
@@ -212,11 +218,15 @@ function ChapterOne({
     }
   };
 
+  // Handle dynamic scene close
   const handleDynamicSceneClose = () => {
     setDynamicSceneVisible(false);
-    resetExplorationState(); // Reset the exploration state
+    // allow directional tracking to resume
+    resetExplorationState();
+    // Re-enable direction change when dynamic scene is closed
+    setAllowDirectionChange(true);
   };
-
+  
   // Handle exploration
 
   const resetExplorationState = () => {
@@ -240,36 +250,50 @@ function ChapterOne({
     }
   };
 
-  // Handle exploration moves
-  const handleExplore = (direction) => {
-    // Check if the direction has changed
-    if (lastDirection !== direction) {
-      setRepetitiveMoves(1); // Reset to 1 for a new direction
-      setLastDirection(direction);
+// Handle exploration moves
+const handleExplore = (direction) => {
+  // If in soldierBlock scene and direction change is not allowed, check for death condition
+  if (dynamicSceneVisible && currentDynamicSceneKey === "soldierBlock" && !allowDirectionChange) {
+    if (direction === lastDirection) {
+      setShowLifeLost(true);
+      loseLife("ignoreSoldiers");
     } else {
-      // If the direction is the same, increment repetitive moves
-      const newRepetitiveMoves = repetitiveMoves + 1;
-      setRepetitiveMoves(newRepetitiveMoves);
-  
-      if (newRepetitiveMoves === 2) {
-        // Show soldier block on the second consecutive move in the same direction
-        setDynamicSceneVisible(true);
-        setCurrentDynamicSceneKey("soldierBlock");
-      } else if (newRepetitiveMoves > 2) {
-        // Trigger life loss for more than two consecutive moves in the same direction
-        setShowLifeLost(true);
-        loseLife("ignoreSoldiers");
-      }
+      setDynamicSceneVisible(false);
+      setAllowDirectionChange(true);
     }
-  
-    // Set exploration scenes based on direction
-    setNuetralExploreScene(false);
-    setNorthScene(direction === "ArrowUp");
-    setSouthScene(direction === "ArrowDown");
-    setEastScene(direction === "ArrowRight");
-    setWestScene(direction === "ArrowLeft");
-  };
-  
+  }
+
+  // Check if the direction has changed
+  if (!stepFourCompleted && lastDirection !== direction) {
+    setRepetitiveMoves(1); // Reset to 1 for a new direction
+    setLastDirection(direction);
+  } else {
+    // If the direction is the same, increment repetitive moves
+    const newRepetitiveMoves = repetitiveMoves + 1;
+    setRepetitiveMoves(newRepetitiveMoves);
+
+    if (newRepetitiveMoves === 2 && !westScene) {
+      // Show soldier block on the second consecutive move in the same direction
+      setDynamicSceneVisible(true);
+      setCurrentDynamicSceneKey("soldierBlock");
+      setAllowDirectionChange(false);
+    }
+  }
+
+  // Set exploration scenes based on direction
+  setNuetralExploreScene(false);
+  setNorthScene(direction === "ArrowUp");
+  setSouthScene(direction === "ArrowDown");
+  setEastScene(direction === "ArrowRight");
+  setWestScene(direction === "ArrowLeft");
+
+  if (!stepFourCompleted && westScene && direction === "ArrowLeft") {
+    setStepFourCompleted(true);
+    setCurrentStep(5);
+    setRepetitiveMoves(0);
+  }
+};
+
 
   // Reset steps on all lives lost
 
@@ -454,7 +478,7 @@ function ChapterOne({
                     height="500"
                   ></img>
                   <p className="standardText">
-                  To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
+                    To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
                   </p>
                 </div>
               )}
@@ -468,24 +492,47 @@ function ChapterOne({
                     height="500"
                   ></img>
                   <p className="standardText">
-                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks—this sprawling marshland pulses with the quiet energy of some subtle and possibly dangerous magic. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, perhaps buildings or settlements, appears. The Siren and her soldiers keep a close eye on you.
+                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, perhaps buildings or settlements, appears. The Siren and her soldiers keep a close eye on you.
                   </p>
                 </div>
               )}
               {westScene && (
                 <div>
-                  <p className="standardText">
-                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Is there a ringing in your ears?
-                  </p>
                   <img
                     className="environImage"
-                    src={Sundial}
-                    alt="A sundial protruding from the shore."
+                    src={SirenPortrait}
+                    alt="The Sirens beautiful face."
                     width="500"
                     height="500"
                   ></img>
+                  <p className="standardText">
+                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Like the sirens in the stories of old, her beauty bids you closer. Is there a ringing in your ears?
+                  </p>
                 </div>
               )}
+            </>
+          )}
+          {currentStep === 5 && (
+            <>
+              <div>
+                  <img
+                    className="environImage"
+                    src={CaballeroProfile}
+                    alt="The profile of Caballero's rugged face."
+                    width="500"
+                    height="500"
+                  ></img>
+                  {conchListened && (
+                    <>
+                    <p className="standardText">
+                      Oooouch!! Something slithers down your ear canal, tears through your eardrum, and nestles into your cochlea. Overcome with some strange euphoria, you hear a beautiful voice singing:
+                    </p>
+                    <p className="standardText">
+                      The Siren speaks, “You are brave, and it is noble of you to seek to help your people in this dark age… but if you are to succeed, you will need powers beyond your means. Go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot.
+                    </p>
+                    </>
+                  )} 
+                </div>
             </>
           )}
         </>
