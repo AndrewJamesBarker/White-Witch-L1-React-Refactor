@@ -221,6 +221,7 @@ function ChapterOne({
   // Handle dynamic scene close
   const handleDynamicSceneClose = () => {
     setDynamicSceneVisible(false);
+    // allow directional tracking to resume
     resetExplorationState();
     // Re-enable direction change when dynamic scene is closed
     setAllowDirectionChange(true);
@@ -530,10 +531,7 @@ const handleExplore = (direction) => {
                       The Siren speaks, “You are brave, and it is noble of you to seek to help your people in this dark age… but if you are to succeed, you will need powers beyond your means. Go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot.
                     </p>
                     </>
-                  )}
-                 
-               
-                  
+                  )} 
                 </div>
             </>
           )}
