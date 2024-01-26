@@ -57,7 +57,8 @@ function ChapterOne({
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
   // allow directional event listening to be active or not
   const [allowDirectionChange, setAllowDirectionChange] = useState(true);
-
+  // track the current scene. Used for directional event listening
+  const [currentScene, setCurrentScene] = useState("neutral");
 
   // On/Off switch for explore scenes
   const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
@@ -155,7 +156,8 @@ function ChapterOne({
     // Handle keydown events for exploration
 
     if (
-      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) && currentStep === 4
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) &&
+      currentStep === 4
     ) {
       if (lastDirection === event.key) {
         setRepetitiveMoves(repetitiveMoves + 1);
@@ -226,7 +228,7 @@ function ChapterOne({
     // Re-enable direction change when dynamic scene is closed
     setAllowDirectionChange(true);
   };
-  
+
   // Handle exploration
 
   const resetExplorationState = () => {
@@ -250,50 +252,197 @@ function ChapterOne({
     }
   };
 
-// Handle exploration moves
-const handleExplore = (direction) => {
-  // If in soldierBlock scene and direction change is not allowed, check for death condition
-  if (dynamicSceneVisible && currentDynamicSceneKey === "soldierBlock" && !allowDirectionChange) {
-    if (direction === lastDirection) {
-      setShowLifeLost(true);
-      loseLife("ignoreSoldiers");
+  // Handle exploration moves
+  const handleExplore = (direction) => {
+    // Check if in soldierBlock scene and direction change is not allowed
+    if (
+      dynamicSceneVisible &&
+      currentDynamicSceneKey === "soldierBlock" &&
+      !allowDirectionChange
+    ) {
+      if (direction === lastDirection) {
+        setShowLifeLost(true);
+        loseLife("ignoreSoldiers");
+      } else {
+        setDynamicSceneVisible(false);
+        setAllowDirectionChange(true);
+      }
+      return; // Important to return here to stop further processing
+    }
+
+    // If the direction has changed or this is the first move
+    if (lastDirection !== direction || repetitiveMoves === 0) {
+      setRepetitiveMoves(1);
+      setLastDirection(direction);
     } else {
-      setDynamicSceneVisible(false);
-      setAllowDirectionChange(true);
+      // Increment repetitive moves
+      const newRepetitiveMoves = repetitiveMoves + 1;
+      setRepetitiveMoves(newRepetitiveMoves);
+
+      // Check if it's time to move to step 5
+      if (
+        !stepFourCompleted &&
+        direction === "ArrowLeft" &&
+        newRepetitiveMoves === 2
+      ) {
+        setStepFourCompleted(true);
+        setCurrentStep(5);
+        return; // Stop further processing
+      }
+
+      // Check for soldier block scene
+      if (newRepetitiveMoves === 2) {
+        setDynamicSceneVisible(true);
+        setCurrentDynamicSceneKey("soldierBlock");
+        setAllowDirectionChange(false);
+      }
     }
-  }
 
-  // Check if the direction has changed
-  if (!stepFourCompleted && lastDirection !== direction) {
-    setRepetitiveMoves(1); // Reset to 1 for a new direction
-    setLastDirection(direction);
-  } else {
-    // If the direction is the same, increment repetitive moves
-    const newRepetitiveMoves = repetitiveMoves + 1;
-    setRepetitiveMoves(newRepetitiveMoves);
+    // Update the current scene
+    setCurrentScene(
+      direction === "ArrowUp"
+        ? "north"
+        : direction === "ArrowDown"
+        ? "south"
+        : direction === "ArrowLeft"
+        ? "west"
+        : direction === "ArrowRight"
+        ? "east"
+        : "neutral"
+    );
+  };
 
-    if (newRepetitiveMoves === 2 && !westScene) {
-      // Show soldier block on the second consecutive move in the same direction
-      setDynamicSceneVisible(true);
-      setCurrentDynamicSceneKey("soldierBlock");
-      setAllowDirectionChange(false);
+  const renderScene = () => {
+    switch (currentScene) {
+      case "neutral":
+        return (
+          <div>
+            <p className="standardText">
+              The Siren and her soldiers appear to have become bored by your
+              presence. Now's your chance to explore the cove. Use your keyboard{" "}
+              <span className="boldText">'Arrow Keys'</span> and have a look
+              around.
+            </p>
+            <img
+              className="environImage"
+              src={Sundial}
+              alt="A sundial protruding from the shore."
+              width="500"
+              height="500"
+            ></img>
+          </div>
+        );
+      case "north":
+        return (
+          <div>
+            <img
+              className="environImage"
+              src={PastelMountains}
+              alt="A mystical range of pastel mountains."
+              width="500"
+              height="500"
+            ></img>
+            <p className="standardText">
+              To your north, you see a mystical range of pastel mountains,
+              something of a mirage. The Siren and her soldiers watch you
+              carefully.
+            </p>
+            {showCrystal && (
+              <button
+                id="lifeCrystalButton"
+                onClick={() =>
+                  gainLife(livesLeft === 3 ? "livesFullCrystal" : "findCrystal")
+                }
+              >
+                <img
+                  className="lifeCrystal"
+                  src={LifeCrystal}
+                  alt="A beuatiful rotating and pulsating orb of light"
+                  width="100"
+                  height="100"
+                ></img>
+              </button>
+            )}
+          </div>
+        );
+      case "south":
+        return (
+          <div>
+            <img
+              className="environImage"
+              src={BlackToothMountainSouth}
+              alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head with its chaws wide open. "
+              width="500"
+              height="500"
+            ></img>
+            <p className="standardText">
+              To the south, an immense cape extends into the sea, its form
+              merging into the shadow of a massive mountain. The mountain's side
+              is marked by a gnarly demonic face intricately carved into its
+              facade. Atop, perched like a crown on the mountain's brow, sits
+              what appears to be a castle. This is the place known to some as
+              Black Tooth Mountain, the fortress of the King of the Zealots and
+              leader of the Dark Triad, Therionarch. A shiver runs up your
+              spine. The Siren and her soldiers watch you carefully.
+            </p>
+          </div>
+        );
+      case "east":
+        return (
+          <div>
+            <img
+              className="environImage"
+              src={Marsh}
+              alt="A labyrinthine marshland vista."
+              width="500"
+              height="500"
+            ></img>
+            <p className="standardText">
+              To the east lies a vast, wet marsh stretching out for miles. It is
+              dense with reeds and waterlogged plants, creating a labyrinth of
+              natural waterways and muddy banks. Far in the distance, just at
+              the edge of this expansive wetland, the silhouette of structures,
+              perhaps buildings or settlements, appears. The Siren and her
+              soldiers keep a close eye on you.
+            </p>
+          </div>
+        );
+      case "west":
+        return (
+          <div>
+            <img
+              className="environImage"
+              src={SirenPortrait}
+              alt="The Sirens beautiful face."
+              width="500"
+              height="500"
+            ></img>
+            <p className="standardText">
+              To your west, the Siren flashes a razor tooth smile and tries to
+              communicate with you again. Like the sirens in the stories of old,
+              her beauty bids you closer. Is there a ringing in your ears?
+            </p>
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <p className="standardText">
+              Use your keyboard{" "}
+              <span className="boldText">'Arrow Keys'</span> and have a look
+              around.
+            </p>
+            <img
+              className="environImage"
+              src={Sundial}
+              alt="A sundial protruding from the shore."
+              width="500"
+              height="500"
+            ></img>
+          </div>
+        ); // Should never happen
     }
-  }
-
-  // Set exploration scenes based on direction
-  setNuetralExploreScene(false);
-  setNorthScene(direction === "ArrowUp");
-  setSouthScene(direction === "ArrowDown");
-  setEastScene(direction === "ArrowRight");
-  setWestScene(direction === "ArrowLeft");
-
-  if (!stepFourCompleted && westScene && direction === "ArrowLeft") {
-    setStepFourCompleted(true);
-    setCurrentStep(5);
-    setRepetitiveMoves(0);
-  }
-};
-
+  };
 
   // Reset steps on all lives lost
 
@@ -428,111 +577,36 @@ const handleExplore = (direction) => {
               />
             </div>
           )}
-
-          {currentStep === 4 && (
-            <>
-              {nuetralExploreScene && (
-                <div>
-                  <p className="standardText">
-                    The Siren and her soldiers appear to have become bored by
-                    your presence. Now's your chance to explore the cove. Use
-                    your keyboard <span className="boldText">'Arrow Keys'</span> and have a look around.
-                  </p>
-                  <img
-                    className="environImage"
-                    src={Sundial}
-                    alt="A sundial protruding from the shore."
-                    width="500"
-                    height="500"
-                  ></img>
-                </div>
-              )}
-              {northScene && (
-                <div>
-                  <img
-                    className="environImage"
-                    src={PastelMountains}
-                    alt="A mystical range of pastel mountains."
-                    width="500"
-                    height="500"
-                  ></img>
-                  <p className="standardText">
-                    To your north, you see a mystical range of pastel mountains,
-                    something of a mirage. The Siren and her soldiers watch you
-                    carefully.
-                  </p>
-                  {showCrystal && (
-                     <button id="lifeCrystalButton" onClick={() => gainLife(livesLeft === 3 ? 'livesFullCrystal' : 'findCrystal')}>
-                     <img className="lifeCrystal" src={LifeCrystal} alt="A beuatiful rotating and pulsating orb of light" width="100" height="100"></img>
-                   </button>
-                  )}  
-                </div>
-              )}
-              {southScene && (
-                <div>
-                  <img
-                    className="environImage"
-                    src={BlackToothMountainSouth}
-                    alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head with its chaws wide open. "
-                    width="500"
-                    height="500"
-                  ></img>
-                  <p className="standardText">
-                    To the south, an immense cape extends into the sea, its form merging into the shadow of a massive mountain. The mountain's side is marked by a gnarly demonic face intricately carved into its facade. Atop, perched like a crown on the mountain's brow, sits what appears to be a castle. This is the place known to some as Black Tooth Mountain, the fortress of the King of the Zealots and leader of the Dark Triad, Therionarch. A shiver runs up your spine. The Siren and her soldiers watch you carefully.
-                  </p>
-                </div>
-              )}
-              {eastScene && (
-                <div>
-                  <img
-                    className="environImage"
-                    src={Marsh}
-                    alt="A labyrinthine marshland vista."
-                    width="500"
-                    height="500"
-                  ></img>
-                  <p className="standardText">
-                    To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks. Far in the distance, just at the edge of this expansive wetland, the silhouette of structures, perhaps buildings or settlements, appears. The Siren and her soldiers keep a close eye on you.
-                  </p>
-                </div>
-              )}
-              {westScene && (
-                <div>
-                  <img
-                    className="environImage"
-                    src={SirenPortrait}
-                    alt="The Sirens beautiful face."
-                    width="500"
-                    height="500"
-                  ></img>
-                  <p className="standardText">
-                    To your west, the Siren flashes a razor tooth smile and tries to communicate with you again. Like the sirens in the stories of old, her beauty bids you closer. Is there a ringing in your ears?
-                  </p>
-                </div>
-              )}
-            </>
-          )}
+          {currentStep === 4 && renderScene()}
           {currentStep === 5 && (
             <>
               <div>
-                  <img
-                    className="environImage"
-                    src={CaballeroProfile}
-                    alt="The profile of Caballero's rugged face."
-                    width="500"
-                    height="500"
-                  ></img>
-                  {conchListened && (
-                    <>
+                <img
+                  className="environImage"
+                  src={CaballeroProfile}
+                  alt="The profile of Caballero's rugged face."
+                  width="500"
+                  height="500"
+                ></img>
+                {conchListened && (
+                  <>
                     <p className="standardText">
-                      Oooouch!! Something slithers down your ear canal, tears through your eardrum, and nestles into your cochlea. Overcome with some strange euphoria, you hear a beautiful voice singing:
+                      Oooouch!! Something slithers down your ear canal, tears
+                      through your eardrum, and nestles into your cochlea.
+                      Overcome with some strange euphoria, you hear a beautiful
+                      voice singing:
                     </p>
                     <p className="standardText">
-                      The Siren speaks, “You are brave, and it is noble of you to seek to help your people in this dark age… but if you are to succeed, you will need powers beyond your means. Go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot.
+                      The Siren speaks, “You are brave, and it is noble of you
+                      to seek to help your people in this dark age… but if you
+                      are to succeed, you will need powers beyond your means. Go
+                      to the Cave of Mirrors, retrieve the Pearl Of The Moon,
+                      and free my sister, The White Witch. Only she can match
+                      the evil that is afoot.
                     </p>
-                    </>
-                  )} 
-                </div>
+                  </>
+                )}
+              </div>
             </>
           )}
         </>
