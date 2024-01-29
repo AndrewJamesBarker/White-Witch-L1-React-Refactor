@@ -420,7 +420,7 @@ function ChapterOne({
             <p className="standardText">
               To your west, the Siren flashes a razor tooth smile and tries to
               communicate with you again. Like the sirens in the stories of old,
-              her beauty bids you closer. Is there a ringing in your ears? Perhaps you should explore a bit more, if you havent already done so?
+              her beauty bids you closer. Is there a ringing in your ears? Perhaps you should continue exploring, if you havent already done so?
             </p>
           </div>
         );
