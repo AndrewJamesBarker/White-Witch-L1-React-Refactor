@@ -17,6 +17,7 @@ import BlackToothMountainSouth from "../../assets/images/environment/BlackToothM
 import Marsh from "../../assets/images/environment/Marsh1.png";
 import CaballeroProfile from "../../assets/images/portraits/Caballero-Profile.png";
 import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
+import LifeGainPage from "../pages/LifeGainPage";
 
 function ChapterOne({
   currentStep,
@@ -37,6 +38,8 @@ function ChapterOne({
   conchTaken,
   setConchTaken,
   showCrystal,
+  currentScene,
+  setCurrentScene,
 }) {
   // Define the total number of steps in ChapterOne
   const totalSteps = 6;
@@ -57,8 +60,7 @@ function ChapterOne({
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
   // allow directional event listening to be active or not
   const [allowDirectionChange, setAllowDirectionChange] = useState(true);
-  // track the current scene. Used for directional event listening
-  const [currentScene, setCurrentScene] = useState("neutral");
+  
 
   // On/Off switch for explore scenes
   const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
@@ -214,6 +216,7 @@ function ChapterOne({
       case 4:
         setStepThreeCompleted(true);
         setCurrentStep(4);
+        setCurrentScene("neutral");
         break;
       default:
         setCurrentStep(1);
@@ -444,6 +447,7 @@ function ChapterOne({
     }
   };
 
+ 
   // Reset steps on all lives lost
 
   useEffect(() => {

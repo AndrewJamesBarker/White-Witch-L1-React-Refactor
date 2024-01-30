@@ -3,7 +3,7 @@ import "../../assets/CSS/layout.css";
 import { useEffect } from "react";
 import LifeCrystal from "../../assets/images/ui-elements/LifeCrystal.svg";
 
-const LifeGainPage = ({ livesLeft, onClose, lifeCause }) => {
+const LifeGainPage = ({ livesLeft, onClose, lifeCause, currentScene }) => {
 
 // Define the cause of the regained life
 const lifeTexts = {
@@ -26,7 +26,7 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         if (livesLeft > 0) {
-          onClose();
+          onClose(currentScene);
         } else if (livesLeft === 0) {
           resetGame();
         }
@@ -38,7 +38,7 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose, livesLeft]);
+  }, [onClose, livesLeft, currentScene]);
 
   return (
     <div className="dynamicScenes widthControl">  

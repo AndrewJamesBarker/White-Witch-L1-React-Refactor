@@ -24,6 +24,8 @@ const Game = () => {
   // register for when player has taken the conch and pearl
   const [conchTaken, setConchTaken] = useState(false);
   const [pearlTaken, setPearlTaken] = useState(false);
+  // track the current scene. Used for directional event listening
+  const [currentScene, setCurrentScene] = useState("");
   // Define the current step, starting at 0
   const [currentStep, setCurrentStep] = useState(0);
   // move to next step in chapter
@@ -72,9 +74,10 @@ const Game = () => {
     livesLeft === 0 && resetGame();
   };
 
-  const handleCloseLifeGainPage = () => {
+  const lifeGainClose = (scene) => {
     setShowLifeGain(false);
     setShowCrystal(false);
+    setCurrentScene(scene);
   };
 
 
@@ -131,7 +134,7 @@ const Game = () => {
     } else if (showLifeLost) {
       return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />;
     } else if (showLifeGain) {
-      return <LifeGainPage livesLeft={livesLeft} onClose={handleCloseLifeGainPage} lifeCause={lifeCause} />;
+      return <LifeGainPage livesLeft={livesLeft} onClose={lifeGainClose} lifeCause={lifeCause} currentScene={currentScene} />;
     } 
     else {
       return renderChapter();
@@ -161,6 +164,8 @@ const Game = () => {
           conchTaken={conchTaken}
           setConchTaken={setConchTaken}
           showCrystal={showCrystal}
+          currentScene={currentScene}
+          setCurrentScene={setCurrentScene}
          />;
          
       case 2:
