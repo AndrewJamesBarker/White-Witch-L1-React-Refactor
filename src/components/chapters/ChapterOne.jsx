@@ -401,11 +401,7 @@ function ChapterOne({
               height="500"
             ></img>
             <p className="standardText">
-              To the east lies a vast, wet marsh stretching out for miles. It is
-              dense with reeds and waterlogged plants, creating a labyrinth of
-              natural waterways and muddy banks. Far in the distance, just at
-              the edge of this expansive wetland, the silhouette of buildings or settlements, appears. The Siren and her
-              soldiers keep a close eye on you.
+              To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks. Far in the distance, just at the edge of this expansive wetland, the silhouette of buildings or settlements appears. The Siren and her soldiers keep a close eye on you.
             </p>
           </div>
         );
