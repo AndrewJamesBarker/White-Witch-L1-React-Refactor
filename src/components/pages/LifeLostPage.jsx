@@ -8,7 +8,7 @@ const LifeLostPage = ({ livesLeft, onClose, resetGame, deathCause }) => {
 // Define the cause of death
 const deathTexts = {
   sirenAttack: "As you take aim at her, the siren's eyes flash a deep, ominous red. In an instant, the serene cove transforms into a whirlpool of chaos. The siren's song, once indecipherable, becomes a piercing shriek, summoning the wrath of the sea. Your vision fades to black as towering waves draw you into the abyss.",
-  ignoreSoldiers: "You ignore the soldiers and push your way through them. As you walk, a piercing noise focuses into a splitting headache dead center of your forehead. Before you can turn to see it's too late. One of the Sirens generals leisurely approaches your dead corpse, and with a flick of his wrist, your body is flung into the mouth of an eagerly awaiting sea serpent.",
+  ignoreSoldiers: "You ignore the soldiers and push your way through them. As you walk, a piercing noise focuses into a splitting headache dead center of your forehead. Before you can turn to see it's too late. One of the Sirens generals leisurely approaches your corpse, and with a flick of his wrist, your body is flung into the mouth of an eagerly awaiting sea serpent.",
   // ... other death causes
 };
 
