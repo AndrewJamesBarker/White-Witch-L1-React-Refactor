@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
+import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
 
 import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
@@ -17,7 +18,6 @@ import BlackToothMountainSouth from "../../assets/images/environment/BlackToothM
 import Marsh from "../../assets/images/environment/Marsh1.png";
 import CaballeroProfile from "../../assets/images/portraits/Caballero-Profile.png";
 import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
-import LifeGainPage from "../pages/LifeGainPage";
 
 function ChapterOne({
   currentStep,
@@ -60,7 +60,6 @@ function ChapterOne({
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
   // allow directional event listening to be active or not
   const [allowDirectionChange, setAllowDirectionChange] = useState(true);
-  
 
   // On/Off switch for explore scenes
   const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
@@ -68,7 +67,15 @@ function ChapterOne({
   const [southScene, setSouthScene] = useState(false);
   const [eastScene, setEastScene] = useState(false);
   const [westScene, setWestScene] = useState(false);
+  // State for conch drag and drop success
   const [conchListened, setConchListened] = useState(false);
+  // Drag and drop items
+  const items = ['Conch']; 
+
+  const handleDragEnd = (event) => {
+    // set the conch as listened to true on drag end
+    setConchListened(true);
+  };
 
   // Define the choices for step 3
   const [choices, setChoices] = useState([
@@ -401,7 +408,12 @@ function ChapterOne({
               height="500"
             ></img>
             <p className="standardText">
-              To the east lies a vast, wet marsh stretching out for miles. It is dense with reeds and waterlogged plants, creating a labyrinth of natural waterways and muddy banks. Far in the distance, just at the edge of this expansive wetland, the silhouette of buildings or settlements appears. The Siren and her soldiers keep a close eye on you.
+              To the east lies a vast, wet marsh stretching out for miles. It is
+              dense with reeds and waterlogged plants, creating a labyrinth of
+              natural waterways and muddy banks. Far in the distance, just at
+              the edge of this expansive wetland, the silhouette of buildings or
+              settlements appears. The Siren and her soldiers keep a close eye
+              on you.
             </p>
           </div>
         );
@@ -418,7 +430,9 @@ function ChapterOne({
             <p className="standardText">
               To your west, the Siren flashes a razor tooth smile and tries to
               communicate with you again. Like the sirens in the stories of old,
-              her beauty bids you closer. Is there a ringing in your ears? Perhaps you should continue exploring, if you havent already done so.
+              her beauty bids you closer. Is there a ringing in your ears?
+              Perhaps you should continue exploring, if you havent already done
+              so.
             </p>
           </div>
         );
@@ -426,9 +440,8 @@ function ChapterOne({
         return (
           <div>
             <p className="standardText">
-              Use your keyboard{" "}
-              <span className="boldText">'Arrow Keys'</span> and have a look
-              around.
+              Use your keyboard <span className="boldText">'Arrow Keys'</span>{" "}
+              and have a look around.
             </p>
             <img
               className="environImage"
@@ -442,7 +455,6 @@ function ChapterOne({
     }
   };
 
- 
   // Reset steps on all lives lost
 
   useEffect(() => {
@@ -578,35 +590,11 @@ function ChapterOne({
           )}
           {currentStep === 4 && renderScene()}
           {currentStep === 5 && (
-            <>
-              <div>
-                <img
-                  className="environImage"
-                  src={CaballeroProfile}
-                  alt="The profile of Caballero's rugged face."
-                  width="500"
-                  height="500"
-                ></img>
-                {conchListened && (
-                  <>
-                    <p className="standardText">
-                      Oooouch!! Something slithers down your ear canal, tears
-                      through your eardrum, and nestles into your cochlea.
-                      Overcome with some strange euphoria, you hear a beautiful
-                      voice singing:
-                    </p>
-                    <p className="standardText">
-                      The Siren speaks, “You are brave, and it is noble of you
-                      to seek to help your people in this dark age… but if you
-                      are to succeed, you will need powers beyond your means. Go
-                      to the Cave of Mirrors, retrieve the Pearl Of The Moon,
-                      and free my sister, The White Witch. Only she can match
-                      the evil that is afoot.
-                    </p>
-                  </>
-                )}
-              </div>
-            </>
+            <ConchDrag
+              items={items}
+              onDragEnd={handleDragEnd}
+              conchListened={conchListened}
+            />
           )}
         </>
       )}
