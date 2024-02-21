@@ -1,28 +1,39 @@
-import React from "react";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import React, {useState} from "react";
+import { DndContext, useDroppable, useDraggable } from '@dnd-kit/core';
+
 import { CSS } from "@dnd-kit/utilities";
 import CaballeroProfile from "../../../assets/images/portraits/Caballero-Profile.png";
-import SortableConch from "../SortableItems/SortableConch"; 
+import DraggableConch from "../SortableItems/DraggableConch";
 
-const ConchDrag = ({ items, onDragEnd, conchListened }) => {
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
 
+const ConchDrag = () => {
+  const [dragCompleted, setDragCompleted] = useState(false);
+
+  const onDragEnd = (event) => {
+    const { over } = event;
+    if (over && over.id === 'caballeroPortrait') {
+      setDragCompleted(true);
+    }
+  };
   return (
     <div>
-      {/* Narrative Text */}
-      <div>
-        <img
+      {!dragCompleted && (
+        <div>
+          <img
           className="environImage"
           src={CaballeroProfile}
           alt="The profile of Caballero's rugged face."
           width="500"
           height="500"
         />
-        {conchListened && (
+          <p className="standardText"> 
+            As you approach her, the Siren flashes you a razor tooth smile and appears to speak, though you still cannot hear her voice. Is the ocean getting louder, or is that sound coming from your satchel?
+          </p>
+        </div>
+      )}
+      {/* Narrative Text */}
+      <div>
+        {dragCompleted && (
           <>
             <p className="standardText">
               Oooouch!! Something slithers down your ear canal, tears through
@@ -42,15 +53,19 @@ const ConchDrag = ({ items, onDragEnd, conchListened }) => {
       </div>
 
       <DndContext onDragEnd={onDragEnd}>
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          {items.map(id => (
-            <SortableConch key={id} id={id} />
-          ))}
-        </SortableContext>
+        <DraggableConch id="conchShell" />
+        <DroppablePortrait>
+        <img src={CaballeroProfile} alt="Caballero's Portrait" width="500" height="500" />
+        </DroppablePortrait>
       </DndContext>
-
-    </div>
+    </div>   
   );
 };
+const DroppablePortrait = ({ children }) => {
+  const { setNodeRef } = useDroppable({
+    id: 'caballeroPortrait',
+  });
 
+  return <div ref={setNodeRef}>{children}</div>;
+};
 export default ConchDrag;
