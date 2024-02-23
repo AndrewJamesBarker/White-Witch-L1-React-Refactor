@@ -41,7 +41,7 @@ function ChapterOne({
   setCurrentScene,
 }) {
   // Define the total number of steps in ChapterOne
-  const totalSteps = 6;
+  const totalSteps = 7;
 
   // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
@@ -74,6 +74,7 @@ function ChapterOne({
   const handleDragEnd = (event) => {
     // set the conch as listened to true on drag end
     setConchListened(true);
+    // nextStep();
   };
 
   // Define the choices for step 3
@@ -364,7 +365,7 @@ function ChapterOne({
                 }
               >
                 <img
-                  className="lifeCrystal"
+                  className="objectPulse"
                   src={LifeCrystal}
                   alt="A beuatiful rotating and pulsating orb of light"
                   width="100"
@@ -588,11 +589,35 @@ function ChapterOne({
           )}
           {currentStep === 4 && renderScene()}
           {currentStep === 5 && (
+            <div>
+            <p className="standardText"> 
+              As you approach her, the Siren flashes you a razor tooth smile and appears to speak, though you still cannot hear her voice. Is the ocean getting louder, or is that sound coming from the Conch?
+            </p>
             <ConchDrag
-              items={items}
-              onDragEnd={handleDragEnd}
-              conchListened={conchListened}
+              onDragComplete={() => {
+                setConchListened(true)
+                nextStep();
+              }
+              }   
             />
+            </div>
+          )}
+          {conchListened && currentStep === 6 && (
+               <>
+                 <p className="standardText">
+                   Oooouch!! Something slithers down your ear canal, tears through
+                   your eardrum, and nestles into your cochlea. Overcome with some
+                   strange euphoria, you hear a beautiful voice singing:
+                 </p>
+                 <p className="standardText">
+                   The Siren speaks, “You are brave, and it is noble of you to seek
+                   to help your people in this dark age… but if you are to succeed,
+                   you will need powers beyond your means. Head east and go to the
+                   Cave of Mirrors, retrieve the Pearl Of The Moon, and free my
+                   sister, The White Witch. Only she can match the evil that is
+                   afoot.
+                 </p>
+               </>
           )}
         </>
       )}

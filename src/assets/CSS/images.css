@@ -21,8 +21,8 @@
 }
 
 
-/* Pulsing crystal */
-.lifeCrystal {
+/* Pulsing object */
+.objectPulse {
   animation: pulse 4s linear infinite;
   padding: 0%;
 }

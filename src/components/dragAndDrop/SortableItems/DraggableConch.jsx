@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import "../../../assets/CSS/layout.css";
+import "../../../assets/CSS/images.css";
 import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.png";
 
 const DraggableConch = ({ id }) => {
@@ -20,7 +22,7 @@ const DraggableConch = ({ id }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <img src={conchShellImage} alt="Conch Shell" width="200" height="200" />
+      <img className='objectPulse' src={conchShellImage} alt="Conch Shell" width="150" height="150" />
     </div>
   );
 };
