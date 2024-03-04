@@ -17,11 +17,13 @@ const HelpScreen = ({ onHelpScreen }) => {
                     <li>C - Continue</li>
                     <li>B - Back</li>
                     <li>I - Inventory</li>
+                    <li>H - Help</li>
                     <li>Directional Arrow Keys</li>
                 </ul>
             </li>
             <li>Multiple choice buttons</li>
-            <li>Interactive elements (Hint: Drag & Drop, clicking items on screen, etc... )</li>
+            <li>Drag & Drop</li>
+            <li>Clicking on items</li>
           </ol>
           <div id="helpLivesItems">
             <h3 className="centerText">Lives And Items</h3>

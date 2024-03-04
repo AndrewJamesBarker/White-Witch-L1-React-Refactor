@@ -3,6 +3,9 @@ import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
+import AudioPlayer from "../ui/AudioPlayer";
+
+// Images
 
 import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
@@ -17,6 +20,11 @@ import PastelMountains from "../../assets/images/environment/PastelMountains1.pn
 import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
 import Marsh from "../../assets/images/environment/Marsh1.png";
 import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
+import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.png";
+
+// Music
+
+import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
 
 function ChapterOne({
   currentStep,
@@ -613,6 +621,7 @@ function ChapterOne({
               }
               }   
             />
+            <p className="standardText">Remember, you can press 'h' at any time for help.</p>
             </div>
           )}
           {conchListened && currentStep === 6 && (
@@ -622,6 +631,7 @@ function ChapterOne({
                    your eardrum, and nestles into your cochlea. Overcome with some
                    strange euphoria, you hear a beautiful voice singing:
                  </p>
+                  <AudioPlayer src={deniseSirenVocal} autoplay={true} />
                  <p className="standardText">Press C to continue</p>
                </>
           )}
@@ -635,6 +645,7 @@ function ChapterOne({
                    sister, The White Witch. Only she can match the evil that is
                    afoot.
                  </p>
+                 <img alt='faint image of the white witches face within a magical orb' src={WhiteWitchPearl}></img>
             </>
           )}
         </>
