@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 images
+audio
 
 # Editor directories and files
 .vscode/*
