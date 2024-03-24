@@ -3,12 +3,12 @@
 /* light ball effect */
 
 /* Define the main container */
-.container {
+/* .container {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 600px;
+  height: 600px;
   overflow: hidden;
-}
+} */
 
 .leather-background {
   background-image: url('../images/backgrounds/old-paper-flatter.png');
