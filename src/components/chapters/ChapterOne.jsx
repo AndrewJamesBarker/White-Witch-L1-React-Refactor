@@ -4,10 +4,11 @@ import "../../assets/CSS/images.css";
 import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
 import AudioPlayer from "../ui/AudioPlayer";
-
+import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 // Images
 
 import trident from "../../assets/images/environment/trident.png";
+import soloMan from "../../assets/images/portraits/solo-man.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
@@ -50,7 +51,8 @@ function ChapterOne({
 }) {
   // Define the total number of steps in ChapterOne
   const totalSteps = 8;
-
+  // Define whether the user has completed the introduction
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
   // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
   // Define whether the user has completed step 4
@@ -77,7 +79,7 @@ function ChapterOne({
   // State for conch drag and drop success
   const [conchListened, setConchListened] = useState(false);
   // Drag and drop items
-  const items = ['Conch']; 
+  const items = ["Conch"];
 
   const handleDragEnd = (event) => {
     // set the conch as listened to true on drag end
@@ -155,9 +157,17 @@ function ChapterOne({
   // Handle keydown events
 
   const handleKeyDown = (event) => {
+    // console.log(`Key pressed: ${event.key}`);
+
     // conditions to prevent back and continue from working
     // An overlay is visible
     if (showHelp || showLifeLost || showInventory) return;
+    // Intro is not complete and user presses 'c'
+    if (currentStep === 0 && !isIntroComplete && event.key === "c") {
+      setIsIntroComplete(true);
+      return;  
+  }
+  
 
     // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted) return;
@@ -171,18 +181,13 @@ function ChapterOne({
       return;
     }
     // Remove ability to go back to previous step after step 4
-    if (
-      (event.key.toLowerCase() === "b") &&
-      currentStep > 4 
-    ) {
+    if (event.key.toLowerCase() === "b" && currentStep > 4) {
       return;
     }
 
-    if (
-      (event.key.toLowerCase() === "c") && currentStep === 5)
-      {
-        return;
-      }
+    if (event.key.toLowerCase() === "c" && currentStep === 5) {
+      return;
+    }
     // Handle keydown events for exploration
 
     if (
@@ -449,10 +454,9 @@ function ChapterOne({
               height="500"
             ></img>
             <p className="standardText">
-              Like the sirens in the stories of old,
-              the Sirens beauty bids you closer.
-              Perhaps you should continue exploring, if you havent already done
-              so. 
+              Like the sirens in the stories of old, the Sirens beauty bids you
+              closer. Perhaps you should continue exploring, if you havent
+              already done so.
             </p>
           </div>
         );
@@ -505,6 +509,7 @@ function ChapterOne({
     setCurrentStep,
     nextStep,
     previousStep,
+    isIntroComplete,
   ]);
 
   // Update choices for multiple choice section when conch is taken
@@ -531,20 +536,17 @@ function ChapterOne({
         </div>
       ) : (
         <>
-          {currentStep === 0 && (
+        {currentStep === 0 && !isIntroComplete ? (
+          <IntroductionSynopsis   
+          />
+        ) : currentStep === 0 && isIntroComplete ? (
+          <div>
             <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
-          )}
-          {currentStep === 0 && (
-            <div>
-              <h3>Press C to continue</h3>
-              <h4>You can also press H at anytime for help</h4>
-              <img
-                id="trident"
-                src={trident}
-                alt="A beautiful shimering trident"
-              />
-            </div>
-          )}
+            <h3>Press C to continue</h3>
+            <h4><strong>You can also press H at anytime for help</strong></h4>
+            <img id="trident" src={trident} alt="A beautiful shimmering trident" />
+          </div>
+        ) : null}
           {currentStep === 1 && (
             <div>
               <p className="standardText">
@@ -611,41 +613,48 @@ function ChapterOne({
           {currentStep === 4 && renderScene()}
           {currentStep === 5 && (
             <div>
-            <p className="standardText"> 
-              As you approach her, the Siren flashes you a razor tooth smile and appears to speak, though you still cannot hear her voice. Is the ocean getting louder, or is that sound coming from the Conch?
-            </p>
-            <ConchDrag
-              onDragComplete={() => {
-                setConchListened(true)
-                nextStep();
-              }
-              }   
-            />
-            <p className="standardText">Remember, you can press 'h' at any time for help.</p>
+              <p className="standardText">
+                As you approach her, the Siren flashes you a razor tooth smile
+                and appears to speak, though you still cannot hear her voice. Is
+                the ocean getting louder, or is that sound coming from the
+                Conch?
+              </p>
+              <ConchDrag
+                onDragComplete={() => {
+                  setConchListened(true);
+                  nextStep();
+                }}
+              />
+              <p className="standardText">
+                Remember, you can press 'h' at any time for help.
+              </p>
             </div>
           )}
           {conchListened && currentStep === 6 && (
-               <>
-                 <p className="standardText">
-                   Oooouch!! Something slithers down your ear canal, tears through
-                   your eardrum, and nestles into your cochlea. Overcome with some
-                   strange euphoria, you hear a beautiful voice singing:
-                 </p>
-                  <AudioPlayer src={deniseSirenVocal} autoplay={true} />
-                 <p className="standardText">Press C to continue</p>
-               </>
+            <>
+              <p className="standardText">
+                Oooouch!! Something slithers down your ear canal, tears through
+                your eardrum, and nestles into your cochlea. Overcome with some
+                strange euphoria, you hear a beautiful voice singing:
+              </p>
+              <AudioPlayer src={deniseSirenVocal} autoplay={true} />
+              <p className="standardText">Press C to continue</p>
+            </>
           )}
           {currentStep === 7 && (
             <>
               <p className="standardText">
-                   The Siren speaks, “You are brave, and it is noble of you to seek
-                   to help your people in this dark age… but if you are to succeed,
-                   you will need powers beyond your means. Head east and go to the
-                   Cave of Mirrors, retrieve the Pearl Of The Moon, and free my
-                   sister, The White Witch. Only she can match the evil that is
-                   afoot.
-                 </p>
-                 <img alt='faint image of the white witches face within a magical orb' src={WhiteWitchPearl}></img>
+                The Siren speaks, “You are brave, and it is noble of you to seek
+                to help your people in this dark age… but if you are to succeed,
+                you will need powers beyond your means. Head east and go to the
+                Cave of Mirrors, retrieve the Pearl Of The Moon, and free my
+                sister, The White Witch. Only she can match the evil that is
+                afoot.
+              </p>
+              <img
+                alt="faint image of the white witches face within a magical orb"
+                src={WhiteWitchPearl}
+              ></img>
             </>
           )}
         </>

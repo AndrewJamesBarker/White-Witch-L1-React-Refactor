@@ -10,6 +10,15 @@
   overflow: hidden;
 }
 
+.leather-background {
+  background-image: url('../images/backgrounds/old-paper-flatter.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Add some padding to effectively 'crop' the background image */
+  padding: 10px; /* Adjust this value to crop more or less */
+}
+
 /* Style for the light balls */
 .lightBall {
   position: absolute;
@@ -38,9 +47,22 @@
   }
 }
 
+/* Intro text */
 
+.introText {
+  transition: transform 0.5s ease;
+  transform-origin: center;
+}
+
+/* Optional: Basic hover effect to indicate interactivity */
+.introText:hover {
+  cursor: pointer;
+}
+
+
+/* Layout Position */
 .widthControl {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -99,6 +121,13 @@
 
 .centerText {
   text-align: center;
+}
+
+.positionBottom {
+  position: absolute;
+  bottom: 25%;
+  left: 0;
+  width: 100%;
 }
 
 .itemTitle {
