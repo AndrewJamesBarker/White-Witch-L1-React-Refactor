@@ -22,7 +22,7 @@ const DraggableConch = ({ id }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <img className='objectPulse' src={conchShellImage} alt="Conch Shell" width="150" height="150" />
+      <img className='objectPulse conchDraggable' src={conchShellImage} alt="Conch Shell" width="150" height="150" />
     </div>
   );
 };

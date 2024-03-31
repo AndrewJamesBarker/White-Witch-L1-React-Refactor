@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { forwardRef } from "react";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.png";
 
 
-const InventoryPage = ({ hasConch, hasPearl }) => {
+const InventoryPage = forwardRef(({ hasConch, hasPearl }, ref) => {
 
   const hasAnyItems = hasConch || hasPearl;
   return (
-    <div className="dynamicScenes">
-      <h2 className="centerText underline">Inventory</h2>
-      <p>Press i at anytime to open or close this page.</p>
+    <div ref={ref} className="dynamicScenes standardText">
+      <h2 className="centerText underline blueText">Inventory</h2>
+      <p>Press <span className="blueText boldText">'i' </span>at anytime to open or close this page.</p>
       {!hasAnyItems && (
         <p className="centerText">You don't have any items other than your trusty semi-automatic laser pistol. It's time to go and get some stuff!</p>
       )}
@@ -31,6 +31,6 @@ const InventoryPage = ({ hasConch, hasPearl }) => {
       )}  
     </div>
   );
-}
+});
 
 export default InventoryPage;

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { DndContext, useDroppable, useDraggable, DragOverlay } from '@dnd-kit/core';
-
+import "../../../assets/CSS/layout.css";
 import { CSS } from "@dnd-kit/utilities";
 import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.png";
 import CaballeroProfile from "../../../assets/images/portraits/Caballero-Profile.png";
@@ -24,23 +24,27 @@ const ConchDrag = ({ onDragComplete }) => {
     }
   };
   return (
-      <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <DroppablePortrait>
+  
+   <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <div className="dragAndDropContainer">
+      <DragTarget>
         <img src={CaballeroProfile} alt="Caballero's Portrait" width="300" height="300" />
-        </DroppablePortrait>
+      </DragTarget>
         {!dragCompleted && draggedItemId !== 'conchShell' && <DraggableConch id="conchShell" />}
-
-        <DragOverlay>
-          {draggedItemId === 'conchShell' && (
-            <img src={conchShellImage} alt="Conch Shell"  style={{ width: '150px', height: '150px' }} />
-          )}
-        </DragOverlay>
+    </div> 
+      <DragOverlay>
+        {draggedItemId === 'conchShell' && (
+          <img className="conchDraggable" src={conchShellImage} alt="Conch Shell"  style={{ width: '150px', height: '150px', cursor: 'pointer', touchAction: 'none' }} />
+        )}
+      </DragOverlay>
       </DndContext> 
+  
+     
   );
 };
 
 
-const DroppablePortrait = ({ children }) => {
+const DragTarget = ({ children }) => {
   const { setNodeRef } = useDroppable({
     id: 'caballeroPortrait',
   });

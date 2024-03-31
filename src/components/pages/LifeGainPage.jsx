@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, forwardRef } from "react";
 import "../../assets/CSS/layout.css";
-import { useEffect } from "react";
 import LifeCrystal from "../../assets/images/ui-elements/LifeCrystal.svg";
 
-const LifeGainPage = ({ livesLeft, onClose, lifeCause, currentScene }) => {
+const LifeGainPage = forwardRef(({ livesLeft, onClose, lifeCause, currentScene }, ref) => {
 
 // Define the cause of the regained life
 const lifeTexts = {
@@ -41,8 +40,8 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
   }, [onClose, livesLeft, currentScene]);
 
   return (
-    <div className="dynamicScenes widthControl">  
-        <p className="boldText">{lifeMessage.title}</p>
+    <div ref={ref} className="dynamicScenes widthControl">  
+        <p className="boldText blueText">{lifeMessage.title}</p>
         <img alt="skull and crossbones" src={LifeCrystal} width="200" height="200" />
         <p className="standardText">{lifeMessage.message}</p>
         <p>You now have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
@@ -50,6 +49,6 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
         <p>Good luck!</p>
     </div>
   );
-};
+});
 
 export default LifeGainPage;

@@ -7,11 +7,11 @@ function ItemsAndLives({ livesLeft, onSatchelClick }) {
     return (
         <div id="itemsAndLives">
             <button id="satchelButton" onClick={onSatchelClick} aria-label="Open inventory" >
-                <img alt="an image of a satchel" src={satchel} width="85" height="85" />
+                <img alt="an image of a satchel" src={satchel} width="65" height="65" />
             </button>
             {Array.from({ length: livesLeft }, (_, i) => (
                 <span key={i}>
-                    <img alt={`Life ${i + 1}`} src={caballero} width="85" height="85" />
+                    <img alt={`Life ${i + 1}`} src={caballero} width="65" height="65" />
                 </span>
             ))}
         </div>

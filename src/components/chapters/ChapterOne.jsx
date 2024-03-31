@@ -5,6 +5,7 @@ import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
 import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
+
 // Images
 
 import trident from "../../assets/images/environment/trident.png";
@@ -22,9 +23,10 @@ import BlackToothMountainSouth from "../../assets/images/environment/BlackToothM
 import Marsh from "../../assets/images/environment/Marsh1.png";
 import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
 import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.png";
+import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.png";
 
 // Music
-
+import Listen from "../../assets/audio/listen.mp3";
 import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
 
 function ChapterOne({
@@ -120,14 +122,6 @@ function ChapterOne({
       textCSS: "standardText",
       buttonText: "Continue",
     },
-    // listenToConch: {
-    //   text: "What happens when you listen to the conch.",
-    //   imageSrc: "path/to/image2.png",
-    //   imageAlt: "Image 2",
-    //   imageCSS: "imageMaterialize environImage",
-    //   textCSS: "standardText",
-    //   buttonText: "Continue",
-    // },
     sirenGreetNoConch: {
       text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
       imageSrc: Conch,
@@ -165,9 +159,8 @@ function ChapterOne({
     // Intro is not complete and user presses 'c'
     if (currentStep === 0 && !isIntroComplete && event.key === "c") {
       setIsIntroComplete(true);
-      return;  
-  }
-  
+      return;
+    }
 
     // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted) return;
@@ -358,7 +351,15 @@ function ChapterOne({
               presence. Now's your chance to explore the cove. Use your keyboard{" "}
               <span className="boldText">'Arrow Keys'</span> and have a look
               around.
+              <img
+                className="directionalArrows"
+                src={DirectionalKeys}
+                alt="keyboard directional arrows"
+                width="45"
+                height="35"
+              ></img>
             </p>
+
             <img
               className="environImage"
               src={Sundial}
@@ -455,8 +456,8 @@ function ChapterOne({
             ></img>
             <p className="standardText">
               Like the sirens in the stories of old, the Sirens beauty bids you
-              closer. Perhaps you should continue exploring, if you havent
-              already done so.
+              closer (west). Perhaps you should continue exploring, if you
+              havent already done so.
             </p>
           </div>
         );
@@ -536,17 +537,28 @@ function ChapterOne({
         </div>
       ) : (
         <>
-        {currentStep === 0 && !isIntroComplete ? (
-          <IntroductionSynopsis   
-          />
-        ) : currentStep === 0 && isIntroComplete ? (
-          <div>
-            <h2 id="headLine">Chapter One: The Siren In The Cove</h2>
-            <h3>Press C to continue</h3>
-            <h4><strong>You can also press H at anytime for help</strong></h4>
-            <img id="trident" src={trident} alt="A beautiful shimmering trident" />
-          </div>
-        ) : null}
+          {currentStep === 0 && !isIntroComplete ? (
+            <IntroductionSynopsis />
+          ) : currentStep === 0 && isIntroComplete ? (
+            <div>
+              <h2 id="headLine">
+                Chapter One:{" "}
+                <span className="blueText">The Siren In The Cove</span>
+              </h2>
+              <h3>
+                Press <span className="blueText">'C'</span> to continue
+              </h3>
+              <h4>
+                You can also press<strong className="blueText"> 'H'</strong> at
+                anytime for help
+              </h4>
+              <img
+                id="trident"
+                src={trident}
+                alt="A beautiful shimmering trident"
+              />
+            </div>
+          ) : null}
           {currentStep === 1 && (
             <div>
               <p className="standardText">
@@ -564,7 +576,7 @@ function ChapterOne({
                   height="250"
                 ></img>
               </div>
-              <p className="boldText">C to continue.</p>
+              <p className="boldText blueText">C to continue.</p>
               {/* <p className="boldText">B for back.</p> */}
             </div>
           )}
@@ -582,7 +594,7 @@ function ChapterOne({
                 width="500"
                 height="500"
               ></img>
-              <p className="standardText">Press C to continue</p>
+              <p className="standardText blueText">Press C to continue</p>
             </div>
           )}
           {currentStep === 3 && (
@@ -626,8 +638,14 @@ function ChapterOne({
                 }}
               />
               <p className="standardText">
-                Remember, you can press 'h' at any time for help.
+                Remember, you can press{" "}
+                <strong className="blueText">'H'</strong> at any time for help.
               </p>
+              <AudioPlayer
+                src={Listen}
+                autoplay={true}
+                alt="Audio of a creepy voice repeating the word 'listen'"
+              />
             </div>
           )}
           {conchListened && currentStep === 6 && (
@@ -637,19 +655,27 @@ function ChapterOne({
                 your eardrum, and nestles into your cochlea. Overcome with some
                 strange euphoria, you hear a beautiful voice singing:
               </p>
-              <AudioPlayer src={deniseSirenVocal} autoplay={true} />
-              <p className="standardText">Press C to continue</p>
+              <AudioPlayer
+                src={deniseSirenVocal}
+                autoplay={true}
+                alt="A sweet voice singing over the ocean 'I grew up insid of it, I grew up in the light of it."
+              />
+              <p className="standardText blueText">Press C to continue</p>
+              <p className="boldText">'I grew up inside of it,</p>
+              <p className="boldText">I grew up in the light of it.'</p>
+              
             </>
           )}
           {currentStep === 7 && (
             <>
               <p className="standardText">
-                The Siren speaks, “You are brave, and it is noble of you to seek
-                to help your people in this dark age… but if you are to succeed,
-                you will need powers beyond your means. Head east and go to the
-                Cave of Mirrors, retrieve the Pearl Of The Moon, and free my
-                sister, The White Witch. Only she can match the evil that is
-                afoot.
+                The Siren speaks, and thanks to the creature now living in your
+                ear, you can understand what she’s saying: “You are brave, and
+                it is noble of you to seek help for your people in this dark
+                age… but if you are to succeed, you will need powers beyond your
+                means. Head east and go to the Cave of Mirrors, retrieve the
+                Pearl Of The Moon and free my sister, The White Witch. Only she
+                can match the evil that is afoot.
               </p>
               <img
                 alt="faint image of the white witches face within a magical orb"

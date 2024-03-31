@@ -1,9 +1,9 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import "../../assets/CSS/layout.css";
 import { useEffect } from "react";
 import skullCrossBones from '../../assets/images/ui-elements/SkullXBones.png';
 
-const LifeLostPage = ({ livesLeft, onClose, resetGame, deathCause }) => {
+const LifeLostPage =  forwardRef(({ livesLeft, onClose, resetGame, deathCause }, ref) => {
 
 // Define the cause of death
 const deathTexts = {
@@ -35,10 +35,10 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
   }, [onClose, livesLeft, resetGame]);
 
   return (
-    <div className="dynamicScenes widthControl">
+    <div ref={ref} className="dynamicScenes widthControl">
       {livesLeft > 0 ? (
         <div>
-          <p className="boldText">Oh no! You lost a life!</p>
+          <p className="boldText blueText">Oh no! You lost a life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
           <p className="standardText">{deathMessage}</p>
           <p>Don't worry, you can keep playing, but you only have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
@@ -57,6 +57,6 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
       )}
     </div>
   );
-};
+});
 
 export default LifeLostPage;

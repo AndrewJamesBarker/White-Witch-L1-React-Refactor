@@ -25,6 +25,9 @@
 .objectPulse {
   animation: pulse 4s linear infinite;
   padding: 0%;
+  cursor: pointer;
+  touch-action: none;
+
 }
 
 @keyframes pulse {

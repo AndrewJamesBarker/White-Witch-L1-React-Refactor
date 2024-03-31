@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ItemsAndLives from '../ui/ItemsAndLives';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
@@ -28,6 +28,38 @@ const Game = () => {
   const [currentScene, setCurrentScene] = useState("");
   // Define the current step, starting at 0
   const [currentStep, setCurrentStep] = useState(0);
+  // ref for modals
+  const helpRef = useRef(null);  // Ref for help modal
+  const inventoryRef = useRef(null);  // Ref for help modal
+  const lifeLostRef = useRef(null);  // Ref for life lost modal
+  const lifeGainRef = useRef(null);  // Ref for life gain modal
+
+
+  // Function to close modals if clicked outside
+  const handleClickOutside = (event) => {
+    if (showHelp && helpRef.current && !helpRef.current.contains(event.target)) {
+      setShowHelp(false);
+    }
+    if (showInventory && inventoryRef.current && !inventoryRef.current.contains(event.target)) {
+      setShowInventory(false);
+    }
+    if (showLifeLost && lifeLostRef.current && !lifeLostRef.current.contains(event.target)) {
+      setShowLifeLost(false);
+    }
+    if (showLifeGain && lifeGainRef.current && !lifeGainRef.current.contains(event.target)) {
+      setShowLifeGain(false);
+      lifeGainClose(currentScene)
+    }
+    // Repeat for other modals like inventory, life lost/gain pages
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showHelp, showInventory, showLifeLost, showLifeGain]); // Add other dependencies as necessary
+
   // move to next step in chapter
   const nextStep = () => {
     setCurrentStep(prevStep => prevStep + 1);
@@ -128,13 +160,13 @@ const Game = () => {
 
   const renderChapterContent = () => {
     if (showHelp) {
-      return <HelpScreen />;
+      return <HelpScreen ref={helpRef}/>;
     } else if (showInventory) {
-      return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} />;
+      return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} ref={inventoryRef} />;
     } else if (showLifeLost) {
-      return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} />;
+      return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} ref={lifeLostRef}/>;
     } else if (showLifeGain) {
-      return <LifeGainPage livesLeft={livesLeft} onClose={lifeGainClose} lifeCause={lifeCause} currentScene={currentScene} />;
+      return <LifeGainPage livesLeft={livesLeft} onClose={lifeGainClose} lifeCause={lifeCause} currentScene={currentScene} ref={lifeGainRef}/>;
     } 
     else {
       return renderChapter();
@@ -192,10 +224,10 @@ const Game = () => {
   };
 
   return (
-    <div>
+    <div className='raleway'>
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
-      <div className="chapter-info">
+      <div className="chapterInfo blueText">
         {chapterNames[currentChapter] || 'Unknown'}
       </div>
     </div>
