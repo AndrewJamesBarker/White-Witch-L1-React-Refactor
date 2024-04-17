@@ -10,7 +10,7 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
           White Witch - <span className="blueText">Help</span>
         </h2>
         <p>
-          Press <span className="boldText blueText">'h'</span> at any time to
+          Press <span className="boldText blueText">H</span> at any time to
           open or close this screen.
         </p>
       </span>
@@ -19,10 +19,10 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
         <li>
         <span className="blueText">Keystroke Commands</span> 
           <ul className="custom-bullets">
-            <li className="whiteText">'C' = Continue</li>
-            <li className="whiteText">'B' = Back</li>
-            <li className="whiteText">'I' = Inventory</li>
-            <li className="whiteText">'H' = Help</li>
+            <li className="whiteText">C = Continue</li>
+            <li className="whiteText">B = Back</li>
+            <li className="whiteText">I = Inventory</li>
+            <li className="whiteText">H = Help</li>
             <li className="whiteText">
               <span
                 style={{
@@ -55,7 +55,7 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
         <br></br>
         <p className="widthControl">
           You can also accumulate items. They are stored in the satchel (lower
-          right screen) and you check your item inventory either by typing <span className="boldText blueText" > 'i'</span>, or
+          right screen) and you check your item inventory either by typing <span className="boldText blueText" > I</span>, or
           by clicking on the satchel.
         </p>
       </div>

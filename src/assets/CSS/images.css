@@ -116,3 +116,7 @@
   margin-right: auto;
   text-align: center;
 }
+
+.borderRadius {
+  border-radius: 1rem;
+}

@@ -23,7 +23,7 @@ const StartPage = ({ onStartGame }) => {
   return (
     <div id="startBox">
       <div>
-        <h3 id="startPrompt">Want to play a game? <strong className='blueText'>Type Y</strong>/<strong className='blueText'>N.</strong></h3>
+        <h3 id="startPrompt">Want to play a game? <span className="blueText">Type Y/N</span></h3>
         <AudioPlayer src={TheDarktower} autoplay={true} muted={false} loop={false} />
         <img className="center titleImage" src={CoverArt} alt="a rugged hero named Caballero in a dystopian world, with a mysterious sun emitting new light above and ominous figures looming in the background. Ethereal and ghostly, a Siren appears in the sky, adding a mystical element." />
       </div>

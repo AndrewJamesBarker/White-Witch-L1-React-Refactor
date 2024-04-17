@@ -6,6 +6,7 @@ import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
+import SaveGame from '../pages/SaveGame';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
@@ -73,6 +74,9 @@ const Game = () => {
     setCurrentStep(step);
   };
 
+  // save game progress
+  const saveGame = () => {};
+
   // set conch for inventory
   const obtainConch = () => {
     setHasConch(true);
@@ -90,7 +94,8 @@ const Game = () => {
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
-    2: 'The Fields',
+    2: 'Save Chapter One',
+    3: 'The Fields',
     // ... other chapter names
   };
 
@@ -199,8 +204,14 @@ const Game = () => {
           currentScene={currentScene}
           setCurrentScene={setCurrentScene}
          />;
-         
+      
       case 2:
+        return <SaveGame 
+        onComplete={goToNextChapter} 
+        onSaveGame={saveGame}
+        />
+
+      case 3:
         return <ChapterTwo
           onComplete={goToNextChapter} 
           loseLife={loseLife}

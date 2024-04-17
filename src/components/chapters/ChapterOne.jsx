@@ -9,7 +9,6 @@ import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 // Images
 
 import trident from "../../assets/images/environment/trident.png";
-import soloMan from "../../assets/images/portraits/solo-man.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
@@ -52,7 +51,7 @@ function ChapterOne({
   setCurrentScene,
 }) {
   // Define the total number of steps in ChapterOne
-  const totalSteps = 8;
+  const totalSteps = 7;
   // Define whether the user has completed the introduction
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   // Define the user's choice, starting at null
@@ -197,11 +196,12 @@ function ChapterOne({
     }
 
     // Handle keydown events for Continue and Back
-
+   
     const key = event.key.toLowerCase();
     if (
       key === "c" &&
       currentStep < totalSteps - 1 &&
+       // C and B Temp disabled during multiple choice section
       (currentStep !== 3 || stepThreeCompleted)
     ) {
       nextStep(); // Use nextStep function passed from Game component
@@ -210,6 +210,10 @@ function ChapterOne({
     else if (key === "b" && currentStep > 0) {
       previousStep(); // Use previousStep function passed from Game component
     }
+    else if (key === 'c' && currentStep === totalSteps) {
+      onComplete();
+    }
+
   };
 
   // Handle multiple choice selection
@@ -546,12 +550,10 @@ function ChapterOne({
                 <span className="blueText">The Siren In The Cove</span>
               </h2>
               <h3>
-                Press <span className="blueText">'C'</span> to continue
-              </h3>
-              <h4>
-                You can also press<strong className="blueText"> 'H'</strong> at
+                Press <span className="blueText">C</span> to continue.
+                You can also press<span className="blueText"> H</span> at
                 anytime for help
-              </h4>
+              </h3>
               <img
                 id="trident"
                 src={trident}
@@ -681,6 +683,7 @@ function ChapterOne({
                 alt="faint image of the white witches face within a magical orb"
                 src={WhiteWitchPearl}
               ></img>
+              <p className="standardText blueText">Press C for your reward!</p>
             </>
           )}
         </>
