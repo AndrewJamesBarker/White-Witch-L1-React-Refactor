@@ -199,9 +199,9 @@ function ChapterOne({
    
     const key = event.key.toLowerCase();
     if (
+       // C and B Temp disabled during multiple choice section
       key === "c" &&
       currentStep < totalSteps - 1 &&
-       // C and B Temp disabled during multiple choice section
       (currentStep !== 3 || stepThreeCompleted)
     ) {
       nextStep(); // Use nextStep function passed from Game component
@@ -210,9 +210,13 @@ function ChapterOne({
     else if (key === "b" && currentStep > 0) {
       previousStep(); // Use previousStep function passed from Game component
     }
+    else if (currentStep === 6) {
+      nextStep();
+    }
     else if (key === 'c' && currentStep === totalSteps) {
       onComplete();
     }
+    
 
   };
 
@@ -515,6 +519,7 @@ function ChapterOne({
     nextStep,
     previousStep,
     isIntroComplete,
+    totalSteps
   ]);
 
   // Update choices for multiple choice section when conch is taken
