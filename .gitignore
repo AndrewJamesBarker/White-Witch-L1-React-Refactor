@@ -16,7 +16,6 @@ node_modules
 /frontend/dist-ssr/
 /frontend/public/
 frontend/src/assets/
-
 frontend/public/
 
 # Local configuration files
@@ -37,3 +36,9 @@ frontend/public/
 *.njsproj
 *.sln
 *.sw?
+
+# env files
+
+/backend/.env
+/frontend/.env
+.env
