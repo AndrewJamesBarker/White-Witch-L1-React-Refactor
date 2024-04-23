@@ -1,5 +1,5 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,20 +7,30 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
+/frontend/node_modules/
 node_modules
-dist
-dist-ssr
+/backend/node_modules/
+# Production build directories
+/dist/
+/frontend/dist-ssr/
+/frontend/public/
+frontend/src/assets/
+
+frontend/public/
+
+# Local configuration files
 *.local
 
-images
-audio
-download-codes
-
+# Media folders
+/frontend/images/
+/frontend/audio/
+/frontend/download-codes/
 
 # Editor directories and files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*

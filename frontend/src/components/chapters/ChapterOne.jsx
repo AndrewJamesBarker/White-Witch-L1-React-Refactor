@@ -184,6 +184,13 @@ function ChapterOne({
 
     if (
       ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) &&
+      currentStep > 4
+    ) {
+      return;
+    }
+
+    if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) &&
       currentStep === 4
     ) {
       if (lastDirection === event.key) {
