@@ -683,13 +683,7 @@ function ChapterOne({
           {currentStep === 7 && (
             <>
               <p className="standardText">
-                The Siren speaks, and thanks to the creature now living in your
-                ear, you can understand what she’s saying: “You are brave, and
-                it is noble of you to seek help for your people in this dark
-                age… but if you are to succeed, you will need powers beyond your
-                means. Head east and go to the Cave of Mirrors, retrieve the
-                Pearl Of The Moon and free my sister, The White Witch. Only she
-                can match the evil that is afoot.
+                The Siren speaks, and thanks to the creature now living in your ear, her previously indecipherable squeaking transforms into a melodious voice: “You are brave, and it is noble of you to seek help for your people in this dark age… but if you are to succeed, you will need powers beyond your means. Head east, go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot. Take heed that your mirrored reflection may have more substance than you know. The pearl is a crystal ball that allows access to the door of the future, yet it also holds another powerful secret: Use it wisely, or be consumed by its power."
               </p>
               <img
                 alt="faint image of the white witches face within a magical orb"
