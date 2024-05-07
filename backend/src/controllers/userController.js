@@ -1,20 +1,31 @@
-import User from '../models/User.js';
+import User from '../models/User.js';  
 
 export const getUser = async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 export const createUser = async (req, res) => {
-  const user = new User(req.body);
+  const { username, email, password, items, livesLeft, notes } = req.body;
   try {
-    await user.save();
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    const newUser = new User({
+      username,
+      email,
+      password,
+      gameState: {
+        level: 1,
+        items: items,
+        livesLeft: livesLeft
+      },
+      notes: notes
+    });
+    await newUser.save();
+    res.status(201).json(newUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
