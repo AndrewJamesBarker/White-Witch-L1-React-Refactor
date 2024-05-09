@@ -10,18 +10,16 @@ export const getUser = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { username, email, password, items, livesLeft, notes } = req.body;
+  const { username, email, password, gameState, notes } = req.body;  
   try {
     const newUser = new User({
       username,
       email,
       password,
-      gameState: {
-        level: 1,
-        items: items,
-        livesLeft: livesLeft
+      gameState: {  
+        ...gameState
       },
-      notes: notes
+      notes  
     });
     await newUser.save();
     res.status(201).json(newUser);
@@ -29,3 +27,4 @@ export const createUser = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
