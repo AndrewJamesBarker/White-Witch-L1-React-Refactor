@@ -23,6 +23,6 @@ userSchema.pre('save', async function(next) {
 });
 
 // Create a model from the schema
-const UserGameState = mongoose.model('UserGameState', userSchema);
+const UserGameState = mongoose.model('UserGameState', userSchema, 'userGameStates');
 
 export default UserGameState;
