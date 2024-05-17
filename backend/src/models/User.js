@@ -6,12 +6,26 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   gameState: {
-    level: { type: Number, default: 0 },
+    currentChapter: {
+      level: { type: Number, default: 1 },
+      completed: { type: Boolean, default: false }
+    },
     items: [{ type: String }],
-    livesLeft: { type: Number, default: 3 }
+    livesLeft: { type: Number, default: 3 },
+    chaptersCompleted: {
+      chapterOne: { type: Boolean, default: false },
+      chapterTwo: { type: Boolean, default: false },
+      chapterThree: { type: Boolean, default: false },
+      chapterFour: { type: Boolean, default: false },
+      chapterFive: { type: Boolean, default: false },
+      chapterSix: { type: Boolean, default: false },
+      chapterSeven: { type: Boolean, default: false },
+      chapterEight: { type: Boolean, default: false },
+    },
   },
   notes: [{ type: String }]
 });
+
 
 // Password hashing middleware before saving a new user
 userSchema.pre('save', async function(next) {
