@@ -7,6 +7,7 @@ import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 import SaveGame from '../pages/SaveGame';
+import SignIn from '../pages/SignIn';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
@@ -34,6 +35,7 @@ const Game = () => {
   const inventoryRef = useRef(null);  // Ref for help modal
   const lifeLostRef = useRef(null);  // Ref for life lost modal
   const lifeGainRef = useRef(null);  // Ref for life gain modal
+  const [showSignIn, setShowSignIn] = useState(false);  // State to manage sign-in form visibility
 
 
   // Function to close modals if clicked outside
@@ -75,7 +77,10 @@ const Game = () => {
   };
 
   // save game progress
-  const saveGame = () => {};
+  const saveGame = () => {
+    console.log("Save game");
+    setShowSignIn(true);
+  };
 
   // set conch for inventory
   const obtainConch = () => {
@@ -164,7 +169,9 @@ const Game = () => {
 
 
   const renderChapterContent = () => {
-    if (showHelp) {
+    if (showSignIn) {
+      return <SignIn />;
+    } else if (showHelp) {
       return <HelpScreen ref={helpRef}/>;
     } else if (showInventory) {
       return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} ref={inventoryRef} />;
