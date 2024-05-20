@@ -1,16 +1,26 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import userRoutes from './routes/userRoutes.js'; // Adjust the path as necessary
 
-// Initialize express app
-const app = express();
 
 // Load environment variables
 dotenv.config();
 
+// Initialize express app
+const app = express();
+
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Setup CORS
+app.use(cors({
+  origin: process.env.CORS_ORIGIN, // Allow only this origin to connect
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  credentials: true // Allow cookies
+}));
+
 
 // Define routes
 app.get('/', (req, res) => {

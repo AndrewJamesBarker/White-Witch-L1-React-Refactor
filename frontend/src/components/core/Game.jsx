@@ -78,7 +78,7 @@ const Game = () => {
 
   // save game progress
   const saveGame = () => {
-    console.log("Save game");
+    // console.log("Save game");
     setShowSignIn(true);
   };
 

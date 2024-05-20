@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
-
 const SignIn = () => {
+  console.log('API Base URL:', import.meta.env.VITE_API_URL);
+  const apiBaseUrl = 'http://localhost:3001';
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +13,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:3001/api/users', {
+        const response = await axios.post(`${apiBaseUrl}/api/users`, {
           username,
           email,
           password,
@@ -40,22 +41,22 @@ const SignIn = () => {
     };
           
   return (
-    <div class="flexContainer">
+    <div className="flexContainer">
     <h2>Sign In</h2>
     {error && <p className="errorMessage">{error}</p>}
 
     <form onSubmit={handleSubmit}>
-      <div class="inputGroup">
+      <div className="inputGroup">
         <label>Username</label>
-        <input type="text" value={username} onChange={e => setUsername(e.target.value)} required />
+        <input type="text" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} required />
       </div>
-      <div class="inputGroup">
+      <div className="inputGroup">
         <label>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required />
       </div>
-      <div class="inputGroup">
+      <div className="inputGroup">
         <label>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required />
       </div>
       <button type="submit">Sign In</button>
     </form>
