@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
-const SignIn = () => {
+const AccountForm = () => {
   console.log('API Base URL:', import.meta.env.VITE_API_URL);
   const apiBaseUrl = 'http://localhost:3001';
   const [username, setUsername] = useState('');
@@ -11,34 +11,37 @@ const SignIn = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
+    e.preventDefault();
+    try {
         const response = await axios.post(`${apiBaseUrl}/api/users`, {
-          username,
-          email,
-          password,
-          gameState: {
-            currentChapter: { level: 1, completed: false},
-            items: ['laser pistol'],
-            livesLeft: 3,
-            chaptersCompleted: {
-              chapterOne: false,
-              chapterTwo: false,
-              chapterThree: false,
-              chapterFour: false,
-              chapterFive: false,
-              chapterSix: false,
-              chapterSeven: false,
-              chapterEight: false
-            },
-          }
+            username,
+            email,
+            password,
+            gameState: {
+                currentChapter: { level: 1, completed: false },
+                items: ['laser pistol'],
+                livesLeft: 3,
+                chaptersCompleted: {
+                    chapterOne: false,
+                    chapterTwo: false,
+                    chapterThree: false,
+                    chapterFour: false,
+                    chapterFive: false,
+                    chapterSix: false,
+                    chapterSeven: false,
+                    chapterEight: false
+                },
+            }
         });
         console.log('User created:', response.data);
         // Redirect to game or dashboard page after successful sign-in
-      } catch (err) {
-        setError(err.response.data.message || 'Error creating user');
-      }
-    };
+    } catch (err) {
+        console.error('Submission error:', err);
+        // robust error handling
+        setError(err.response && err.response.data ? err.response.data.message : (err.message || 'Error creating user'));
+    }
+};
+
           
   return (
     <div className="flexContainer">
@@ -65,4 +68,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default AccountForm;

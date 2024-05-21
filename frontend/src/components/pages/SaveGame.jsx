@@ -1,6 +1,5 @@
 import React from "react";
 
-
 // Images
 import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
 
