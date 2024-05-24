@@ -6,7 +6,7 @@ import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
-import SaveGame from '../pages/SaveGame';
+import Register from '../pages/Register';
 import AccountForm from '../pages/AccountForm';
 
 const Game = () => {
@@ -81,7 +81,7 @@ const Game = () => {
   };
 
   // save game progress
-  const handleSaveGame = () => {
+  const handleRegister = () => {
     if (!isAuthenticated) {
       setShowAccountForm(true); // Show the account form if not logged in
       // Optionally set saveGameOption based on what user needs to do
@@ -161,6 +161,10 @@ const Game = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+        return;
+      }
+    
       if (e.key.toLowerCase() === 'h') {
         setShowHelp(prev => !prev); // toggle showHelp
       }
@@ -222,9 +226,9 @@ const Game = () => {
          />;
       
       case 2:
-        return <SaveGame 
+        return <Register 
         onComplete={goToNextChapter} 
-        onSaveGame={handleSaveGame}
+        onRegister={handleRegister}
         />
 
       case 3:

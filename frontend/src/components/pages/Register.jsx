@@ -3,12 +3,12 @@ import React from "react";
 // Images
 import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
 
-const SaveGame = ({ onSaveGame, onComplete }) => {
+const Register = ({ onRegister, onComplete }) => {
   return (
     <div id="startBox" className="widthControl">
       <div>
         <h3 id="startPrompt">
-          Want to save your game?
+          Want to register?
         </h3>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}
@@ -16,10 +16,10 @@ const SaveGame = ({ onSaveGame, onComplete }) => {
       {/* <div className="imageMaterialize imagePulse">
         <img className="borderRadius" alt="The bandcamp music distributionicon" src={Bandcamp} width="110" height="50"></img>
       </div> */}
-      <button onClick={onSaveGame} className="btn">Save Game</button>
+      <button onClick={onRegister} className="btn">Register</button>
 
     </div>
   );
 }
 
-export default SaveGame;
+export default Register;

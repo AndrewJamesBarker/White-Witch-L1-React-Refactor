@@ -3,15 +3,21 @@ import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
 const AccountForm = () => {
-  console.log('API Base URL:', import.meta.env.VITE_API_URL);
-  const apiBaseUrl = 'http://localhost:3001';
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const emailRegex = /\S+@\S+\.\S+/;
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      return; // Stop the submission if the email is not valid
+    }
     try {
         const response = await axios.post(`${apiBaseUrl}/api/users`, {
             username,
@@ -45,7 +51,7 @@ const AccountForm = () => {
           
   return (
     <div className="flexContainer">
-    <h2>Sign In</h2>
+    <h2>Register</h2>
     {error && <p className="errorMessage">{error}</p>}
 
     <form onSubmit={handleSubmit}>
