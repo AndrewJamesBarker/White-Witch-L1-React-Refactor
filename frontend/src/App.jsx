@@ -5,10 +5,12 @@ import StartPage from './components/pages/StartPage';
 import NoPlayPage from './components/utilities/NoPlayPage';
 import SignInSaveButton from './components/ui/SignInSaveButton';
 import axios from 'axios';
+import { AuthProvider } from './context/AuthContext'; 
+
 
 function App() {
   const [startGame, setStartGame] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+
   const [userId, setUserId] = useState(null);
 
   const handleStartGame = (start) => {
@@ -32,19 +34,20 @@ function App() {
   const handleRegister = async (event) => {
     event.preventDefault();
     // Registration logic here
-    setIsSignedIn(true);
+
     console.log('User registered');
   };
 
   const handleSignIn = async (event) => {
     event.preventDefault();
     // Sign in logic here
-    setIsSignedIn(true);
+
     setUserId('user-id'); // Replace with actual user ID after sign in
     console.log('User signed in');
   };
 
   return (
+    <AuthProvider>
     <div className="App">
       {
         startGame === null ? 
@@ -54,11 +57,11 @@ function App() {
             <NoPlayPage />
       }
       <SignInSaveButton 
-        isSignedIn={isSignedIn} 
         onSaveGame={handleSaveGame} 
         onSignIn={handleSignIn}
       />
     </div>
+    </AuthProvider>
   )
 }
 

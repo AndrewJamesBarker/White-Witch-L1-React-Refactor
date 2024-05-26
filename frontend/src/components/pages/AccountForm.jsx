@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
@@ -8,6 +9,8 @@ const AccountForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
+
 
   const emailRegex = /\S+@\S+\.\S+/;
 
@@ -40,6 +43,8 @@ const AccountForm = () => {
             }
         });
         console.log('User created:', response.data);
+        // Set user to authenticated state
+        login(); 
         // Redirect to game or dashboard page after successful sign-in
     } catch (err) {
         console.error('Submission error:', err);

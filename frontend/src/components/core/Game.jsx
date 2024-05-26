@@ -8,6 +8,7 @@ import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 import Register from '../pages/Register';
 import AccountForm from '../pages/AccountForm';
+import { useAuth } from '../../context/AuthContext';
 
 const Game = () => {
   const [livesLeft, setLivesLeft] = useState(3);
@@ -36,9 +37,9 @@ const Game = () => {
   const lifeLostRef = useRef(null);  // Ref for life lost modal
   const lifeGainRef = useRef(null);  // Ref for life gain modal
   // State to manage sign-in form visibility and save game option
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAccountForm, setShowAccountForm] = useState(false);  // State to manage sign-in form visibility
   const [saveGameOption, setSaveGameOption] = useState(''); // 'login', 'register', 'save'
+  const { isAuthenticated } = useAuth();
 
 
 
