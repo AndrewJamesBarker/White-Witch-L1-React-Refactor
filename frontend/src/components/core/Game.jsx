@@ -102,14 +102,14 @@ const Game = () => {
   }
 
   const handleSatchelClick = () => {
-    console.log("Satchel clicked");
+    // console.log("Satchel clicked");
     setShowInventory(prev => !prev);
   }
   
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
-    2: 'Save Chapter One',
+    2: 'Register',
     3: 'The Fields',
     // ... other chapter names
   };

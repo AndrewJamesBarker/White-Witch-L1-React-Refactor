@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom'; // Import useHistory and Link from react-router-dom
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
@@ -10,6 +11,7 @@ const AccountForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const navigate = useNavigate(); // Use navigate to redirect to another page
 
 
   const emailRegex = /\S+@\S+\.\S+/;
@@ -42,10 +44,12 @@ const AccountForm = () => {
                 },
             }
         });
-        console.log('User created:', response.data);
+        // console.log('User created:', response.data);
         // Set user to authenticated state
         login(); 
         // Redirect to game or dashboard page after successful sign-in
+        navigate('/dashboard'); 
+
     } catch (err) {
         console.error('Submission error:', err);
         // robust error handling
@@ -72,7 +76,7 @@ const AccountForm = () => {
         <label>Password</label>
         <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required />
       </div>
-      <button type="submit">Sign In</button>
+      <button type="submit">Register</button>
     </form>
   </div>
   
