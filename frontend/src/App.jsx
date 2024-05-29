@@ -8,6 +8,7 @@ import SignInSaveButton from './components/ui/SignInSaveButton';
 import Dashboard from './components/pages/Dashboard'; // Assuming you have a Dashboard component
 import axios from 'axios';
 import { AuthProvider } from './context/AuthContext'; 
+import RegisterForm from './components/forms/RegisterForm';
 
 function App() {
   const [startGame, setStartGame] = useState(null);
@@ -70,6 +71,7 @@ function App() {
               <NoPlayPage />
             } />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/register" element={<RegisterForm />} />
           </Routes>
           <SignInSaveButton 
             onSaveGame={handleSaveGame} 

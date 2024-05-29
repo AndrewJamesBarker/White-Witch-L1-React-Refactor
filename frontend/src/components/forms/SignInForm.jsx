@@ -21,6 +21,10 @@ const SignInForm = () => {
     }
   };
 
+  const handleRegisterRedirect = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="flexContainer">
       <h2>Sign In</h2>
@@ -35,6 +39,10 @@ const SignInForm = () => {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <button type="submit">Sign In</button>
+        
+        <p className='boldText paddingMarginReset'>Dont have an account yet?</p>
+        <button onClick={handleRegisterRedirect}>Register</button>
+     
       </form>
     </div>
   );
