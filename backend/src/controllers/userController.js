@@ -62,7 +62,7 @@ export const updateUserInfo = async (req, res) => {
   }
 };
 
-// Update user game state
+// Update user game state for Save Game
 export const updateGameState = async (req, res) => {
   const { id } = req.params;
   const { gameState } = req.body; // Only accept gameState changes

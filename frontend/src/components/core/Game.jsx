@@ -7,7 +7,7 @@ import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 import Register from '../pages/Register';
-import AccountForm from '../pages/AccountForm';
+import RegisterForm from '../forms/RegisterForm';
 import { useAuth } from '../../context/AuthContext';
 
 const Game = () => {
@@ -37,8 +37,7 @@ const Game = () => {
   const lifeLostRef = useRef(null);  // Ref for life lost modal
   const lifeGainRef = useRef(null);  // Ref for life gain modal
   // State to manage sign-in form visibility and save game option
-  const [showAccountForm, setShowAccountForm] = useState(false);  // State to manage sign-in form visibility
-  const [saveGameOption, setSaveGameOption] = useState(''); // 'login', 'register', 'save'
+  const [showRegisterForm, setShowRegisterForm] = useState(false);  // State to manage sign-in form visibility
   const { isAuthenticated } = useAuth();
 
 
@@ -81,15 +80,9 @@ const Game = () => {
     setCurrentStep(step);
   };
 
-  // save game progress
+  // register player
   const handleRegister = () => {
-    if (!isAuthenticated) {
-      setShowAccountForm(true); // Show the account form if not logged in
-      // Optionally set saveGameOption based on what user needs to do
-    } else {
-      // Proceed with saving the game directly
-      console.log("Save game directly");
-    }
+      setShowRegisterForm(true); 
   };
 
   // set conch for inventory
@@ -183,8 +176,8 @@ const Game = () => {
 
 
   const renderChapterContent = () => {
-    if (showAccountForm) {
-      return <AccountForm />;
+    if (showRegisterForm) {
+      return <RegisterForm />;
     } else if (showHelp) {
       return <HelpScreen ref={helpRef}/>;
     } else if (showInventory) {

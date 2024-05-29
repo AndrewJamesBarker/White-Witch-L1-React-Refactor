@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom'; // Import useHistory and Link from react-router-dom
+import { useNavigate, Link } from 'react-router-dom';  // Use navigate to redirect to another page
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
-const AccountForm = () => {
+const RegisterForm = () => {
   const apiBaseUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useAuth();
-  const navigate = useNavigate(); // Use navigate to redirect to another page
+  const navigate = useNavigate(); 
 
 
   const emailRegex = /\S+@\S+\.\S+/;
@@ -45,8 +44,7 @@ const AccountForm = () => {
             }
         });
         // console.log('User created:', response.data);
-        // Set user to authenticated state
-        login(); 
+  
         // Redirect to game or dashboard page after successful sign-in
         navigate('/dashboard'); 
 
@@ -83,4 +81,4 @@ const AccountForm = () => {
   );
 };
 
-export default AccountForm;
+export default RegisterForm;

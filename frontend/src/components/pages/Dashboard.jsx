@@ -1,12 +1,20 @@
+import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import SignInForm from '../forms/SignInForm';
 
 const Dashboard = () => {
-  const { user } = useAuth(); // Access user data from context
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <div>
-      <h1>Welcome, {user ? user.username : 'Guest'}!</h1>
-      {/* Other dashboard content */}
+      {isAuthenticated ? (
+        <>
+        <h1>Welcome, {user.username}!</h1>
+        <button className="button">Save</button> 
+        </>  
+      ) : (
+        <SignInForm />
+      )}
     </div>
   );
 };

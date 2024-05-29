@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Routes for user
 router.get('/', authenticate, getUser);
-router.post('/', createUser); // Registration might not need authentication
+router.post('/', createUser); // Registration 
 router.patch('/info', authenticate, updateUserInfo); // Update personal info
 router.patch('/gamestate', authenticate, updateGameState); // Update game state
 

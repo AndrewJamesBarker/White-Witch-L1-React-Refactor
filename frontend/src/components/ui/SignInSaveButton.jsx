@@ -1,11 +1,17 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';  // Adjust the path as necessary
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const SignInSaveButton = ({ onSaveGame, onSignIn }) => {
-    const { isAuthenticated } = useAuth();  // Getting the state from context
+const SignInSaveButton = () => {
+    const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/dashboard', { state: { isAuthenticated } });
+    };
 
     return (
-        <button onClick={isAuthenticated ? onSaveGame : onSignIn} className="button topRight">
+        <button onClick={handleClick} className="button topRight">
             {isAuthenticated ? 'Save' : 'Sign In'}
         </button>
     );
