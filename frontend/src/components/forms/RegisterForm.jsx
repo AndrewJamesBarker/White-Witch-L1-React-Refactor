@@ -23,7 +23,7 @@ const RegisterForm = () => {
       return; // Stop the submission if the email is not valid
     }
     try {
-        const response = await axios.post(`${apiBaseUrl}/api/users`, {
+        const response = await axios.post(`${apiBaseUrl}/api/users/register`, {
             username,
             email,
             password,

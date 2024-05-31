@@ -1,25 +1,34 @@
-import User from '../models/User.js';  
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import UserGameState from '../models/User.js';
 
-
-// For signing in
-export const getUser = async (req, res) => {
-  const { username } = req.params;  // Assuming username is passed as a URL parameter
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    const user = await UserGameState.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
     }
-    res.json(user);
+    
+    // Generate a token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET, // Secret key for encoding
+      { expiresIn: '1h' }     // Token expires in 1 hour
+    );
+    
+    res.json({ token, userId: user._id, username: user.username });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+
 // For registering
 export const createUser = async (req, res) => {
   const { username, email, password, gameState, notes } = req.body;  
   try {
-    const newUser = new User({
+    const newUser = new UserGameState({
       username,
       email,
       password,
@@ -43,7 +52,7 @@ export const updateUserInfo = async (req, res) => {
   const { id } = req.params;
   const { username, email, password } = req.body; // Only accept personal info changes
   try {
-    const user = await User.findById(id);
+    const user = await UserGameState.findById(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -67,7 +76,7 @@ export const updateGameState = async (req, res) => {
   const { id } = req.params;
   const { gameState } = req.body; // Only accept gameState changes
   try {
-    const user = await User.findById(id);
+    const user = await UserGameState.findById(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -87,7 +96,7 @@ export const updateGameState = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await UserGameState.findById(req.params.id);
     await user.remove();
     res.json({ message: 'User deleted' });
   } catch (err) {

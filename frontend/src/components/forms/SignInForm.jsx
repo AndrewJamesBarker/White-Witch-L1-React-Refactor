@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const SignInForm = () => {
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,7 +15,7 @@ const SignInForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password });
+      const response = await axios.post(`${apiBaseUrl}/api/users/auth/login`, { email, password });
       login(response.data);
       navigate('/dashboard');
     } catch (err) {
@@ -30,7 +32,7 @@ const SignInForm = () => {
       <h2>Sign In</h2>
       {error && <p className="errorMessage">{error}</p>}
       <form onSubmit={handleSubmit}>
-      <div className="inputGroup">
+        <div className="inputGroup">
           <label>Email:</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
@@ -40,9 +42,8 @@ const SignInForm = () => {
         </div>
         <button type="submit">Sign In</button>
         
-        <p className='boldText paddingMarginReset'>Dont have an account yet?</p>
+        <p className='boldText paddingMarginReset'>Don't have an account yet?</p>
         <button onClick={handleRegisterRedirect}>Register</button>
-     
       </form>
     </div>
   );

@@ -17,15 +17,12 @@ app.use(express.json());
 // Setup CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN, // Allow only this origin to connect
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allowed methods
   credentials: true // Allow cookies
 }));
 
 
 // Define routes
-app.get('/', (req, res) => {
-  res.send('Hello from the Express app!');
-});
 
 // Mount the user routes at '/api/users'
 app.use('/api/users', userRoutes);
