@@ -11,5 +11,4 @@ router.patch('/auth/info', authenticate, updateUserInfo); // Update personal inf
 router.patch('/auth/gamestate', authenticate, updateGameState); // Update game state
 router.delete('/:id', authenticate, deleteUser);
 
-
 export default router;

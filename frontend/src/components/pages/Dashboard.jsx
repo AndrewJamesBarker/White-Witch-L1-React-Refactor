@@ -1,20 +1,19 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import SignInForm from '../forms/SignInForm';
 
 const Dashboard = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div>
-      {isAuthenticated ? (
-        <>
-        <h1>Welcome, {user.username}!</h1>
-        <button className="button">Save</button> 
-        </>  
-      ) : (
-        <SignInForm />
-      )}
+      <h1>Greetings {user.username}!</h1>
+      <button className="button">Resume Game</button>
+      <button className="button">Save Game</button>
+      <button className="button" onClick={handleLogout}>Logout</button>
     </div>
   );
 };

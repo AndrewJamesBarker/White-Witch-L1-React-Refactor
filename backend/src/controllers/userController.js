@@ -12,11 +12,10 @@ export const loginUser = async (req, res) => {
     
     // Generate a token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email, username: user.username },
       process.env.JWT_SECRET, // Secret key for encoding
       { expiresIn: '1h' }     // Token expires in 1 hour
     );
-    
     res.json({ token, userId: user._id, username: user.username });
   } catch (err) {
     res.status(500).json({ message: err.message });

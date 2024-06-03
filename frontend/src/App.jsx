@@ -4,21 +4,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Game from './components/core/Game';
 import StartPage from './components/pages/StartPage';
 import NoPlayPage from './components/utilities/NoPlayPage';
-import SignInSaveButton from './components/ui/SignInSaveButton';
-import Dashboard from './components/pages/Dashboard'; // Assuming you have a Dashboard component
+import SignInDashButton from './components/ui/SignInSaveButton';
+import Dashboard from './components/pages/Dashboard';
+import PrivateRoute from './components/pages/PrivateRoute';
 import axios from 'axios';
-import { AuthProvider } from './context/AuthContext'; 
+import { AuthProvider } from './context/AuthContext';
 import RegisterForm from './components/forms/RegisterForm';
+import SignInForm from './components/forms/SignInForm';
 
 function App() {
   const [startGame, setStartGame] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (document.activeElement.tagName === 'INPUT' ||
-          document.activeElement.tagName === 'TEXTAREA' ||
-          document.activeElement.tagName === 'SELECT') {
+      if (
+        document.activeElement.tagName === 'INPUT' ||
+        document.activeElement.tagName === 'TEXTAREA' ||
+        document.activeElement.tagName === 'SELECT'
+      ) {
         return;
       }
       if (event.key === 's') {
@@ -34,11 +37,17 @@ function App() {
   };
 
   const handleSaveGame = async () => {
+    const { user } = useAuth();
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+
     try {
       const gameState = { /* your game state data */ };
-      const response = await axios.patch(`/api/user/gamestate/${userId}`, gameState, {
+      const response = await axios.patch(`/api/user/gamestate/${user.userId}`, gameState, {
         headers: {
-          Authorization: `Bearer ${yourAuthToken}`, // Replace with your actual token
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
       });
       console.log('Game state saved', response.data);
@@ -47,36 +56,30 @@ function App() {
     }
   };
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    console.log('User registered');
-  };
-
-  const handleSignIn = async (event) => {
-    event.preventDefault();
-    setUserId('user-id'); // Replace with actual user ID after sign in
-    console.log('User signed in');
-  };
-
   return (
     <AuthProvider>
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={
-              startGame === null ? 
-              <StartPage onStartGame={handleStartGame} /> : 
-              startGame ? 
-              <Game /> : 
-              <NoPlayPage />
-            } />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/"
+              element={
+                startGame === null ? (
+                  <StartPage onStartGame={handleStartGame} />
+                ) : startGame ? (
+                  <Game />
+                ) : (
+                  <NoPlayPage />
+                )
+              }
+            />
+            <Route path="/signin" element={<SignInForm />} />
             <Route path="/register" element={<RegisterForm />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
           </Routes>
-          <SignInSaveButton 
-            onSaveGame={handleSaveGame} 
-            onSignIn={handleSignIn}
-          />
+          <SignInDashButton />
         </div>
       </Router>
     </AuthProvider>
