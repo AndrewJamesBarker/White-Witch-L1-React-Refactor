@@ -2,16 +2,12 @@ import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-const SignInDashButton = ({ onSaveGame }) => {
-  const { isAuthenticated, logout } = useAuth();
+const SignInDashButton = () => {
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    } else {
-      navigate('/signin');
-    }
+    navigate(isAuthenticated ? '/dashboard' : '/signin');
   };
 
   return (

@@ -2,21 +2,34 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserGameState from '../models/User.js';
 
+// For logging in
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await UserGameState.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Invalid email or password.' });
+      return res.status(401).json({ message: 'Authentication failed' });
     }
     
     // Generate a token
     const token = jwt.sign(
-      { userId: user._id, email: user.email, username: user.username },
-      process.env.JWT_SECRET, // Secret key for encoding
-      { expiresIn: '1h' }     // Token expires in 1 hour
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
     );
-    res.json({ token, userId: user._id, username: user.username });
+
+    // Return user data along with token
+    res.json({
+      token,
+      user: {
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+        gameState: user.gameState,
+        notes: user.notes
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

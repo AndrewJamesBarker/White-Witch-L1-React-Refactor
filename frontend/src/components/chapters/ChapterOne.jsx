@@ -5,9 +5,9 @@ import MultipleChoiceButtons from "../ui/MultipleChoiceButtons";
 import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
 import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
+import Register from "../pages/Register";
 
 // Images
-
 import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
 import ConchShore from "../../assets/images/environment/Conch-Shore.png";
@@ -51,7 +51,7 @@ function ChapterOne({
   setCurrentScene,
 }) {
   // Define the total number of steps in ChapterOne
-  const totalSteps = 7;
+  const totalSteps = 8; 
   // Define whether the user has completed the introduction
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   // Define the user's choice, starting at null
@@ -72,7 +72,7 @@ function ChapterOne({
   const [allowDirectionChange, setAllowDirectionChange] = useState(true);
 
   // On/Off switch for explore scenes
-  const [nuetralExploreScene, setNuetralExploreScene] = useState(true);
+  const [neutralExploreScene, setNeutralExploreScene] = useState(true);
   const [northScene, setNorthScene] = useState(false);
   const [southScene, setSouthScene] = useState(false);
   const [eastScene, setEastScene] = useState(false);
@@ -220,8 +220,8 @@ function ChapterOne({
     else if (currentStep === 6) {
       nextStep();
     }
-    else if (key === 'c' && currentStep === totalSteps) {
-      onComplete();
+    else if (key === 'c' && currentStep === totalSteps - 1) {
+      nextStep();
     }
     
 
@@ -689,8 +689,11 @@ function ChapterOne({
                 alt="faint image of the white witches face within a magical orb"
                 src={WhiteWitchPearl}
               ></img>
-              <p className="standardText blueText">Press C for your reward!</p>
+              <p className="standardText blueText">Press C to continue</p>
             </>
+          )}
+          {currentStep === 8 && ( // New step for registration
+            <Register />
           )}
         </>
       )}

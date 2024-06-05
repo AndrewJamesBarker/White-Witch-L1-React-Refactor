@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Game from './components/core/Game';
 import StartPage from './components/pages/StartPage';
 import NoPlayPage from './components/utilities/NoPlayPage';
-import SignInDashButton from './components/ui/SignInSaveButton';
+import SignInDashButton from './components/ui/SignInDashButton';
 import Dashboard from './components/pages/Dashboard';
 import PrivateRoute from './components/pages/PrivateRoute';
 import axios from 'axios';

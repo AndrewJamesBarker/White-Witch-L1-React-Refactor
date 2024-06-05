@@ -16,8 +16,8 @@ const SignInForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiBaseUrl}/api/users/auth/login`, { email, password });
-      console.log('Login response:', response.data);
-      login(response.data); // Pass the response data to the login function
+      const { token, user } = response.data;
+      login({ token, ...user });
       navigate('/dashboard');
     } catch (err) {
       setError('Invalid email or password.');
@@ -44,7 +44,7 @@ const SignInForm = () => {
         <button type="submit">Sign In</button>
         
         <p className='boldText paddingMarginReset'>Don't have an account yet?</p>
-        <button type="button" onClick={handleRegisterRedirect}>Register</button>
+        <button onClick={handleRegisterRedirect}>Register</button>
       </form>
     </div>
   );

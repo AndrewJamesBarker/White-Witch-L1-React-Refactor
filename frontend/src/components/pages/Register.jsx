@@ -1,9 +1,16 @@
 import React from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 // Images
 import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
 
-const Register = ({ onRegister, onComplete }) => {
+const Register = () => {
+  const navigate = useNavigate();
+  const onRegister = () => {
+    navigate('/register');
+  };
+  
   return (
     <div id="startBox" className="widthControl">
       <div>

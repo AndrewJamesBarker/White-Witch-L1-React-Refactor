@@ -102,8 +102,7 @@ const Game = () => {
   // Mapping of chapter numbers to names
   const chapterNames = {
     1: 'The Cove',
-    2: 'Register',
-    3: 'The Fields',
+    2: 'The Fields',
     // ... other chapter names
   };
 
@@ -218,14 +217,9 @@ const Game = () => {
           currentScene={currentScene}
           setCurrentScene={setCurrentScene}
          />;
-      
-      case 2:
-        return <Register 
-        onComplete={goToNextChapter} 
-        onRegister={handleRegister}
-        />
+    
 
-      case 3:
+      case 2:
         return <ChapterTwo
           onComplete={goToNextChapter} 
           loseLife={loseLife}
