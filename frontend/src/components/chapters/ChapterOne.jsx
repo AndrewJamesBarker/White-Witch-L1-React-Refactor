@@ -6,6 +6,8 @@ import ConchDrag from "../dragAndDrop/ChapterOneDrag/ConchDrag";
 import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
+import { useAuth } from '../../context/AuthContext';
+
 
 // Images
 import trident from "../../assets/images/environment/trident.png";
@@ -24,9 +26,11 @@ import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
 import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.png";
 import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.png";
 
+
 // Music
 import Listen from "../../assets/audio/listen.mp3";
 import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
+import Dashboard from "../pages/Dashboard";
 
 function ChapterOne({
   currentStep,
@@ -81,6 +85,8 @@ function ChapterOne({
   const [conchListened, setConchListened] = useState(false);
   // Drag and drop items
   const items = ["Conch"];
+
+  const { isAuthenticated } = useAuth();
 
   const handleDragEnd = (event) => {
     // set the conch as listened to true on drag end
@@ -685,15 +691,22 @@ function ChapterOne({
               <p className="standardText">
                 The Siren speaks, and thanks to the creature now living in your ear, her previously indecipherable squeaking transforms into a melodious voice: “You are brave, and it is noble of you to seek help for your people in this dark age… but if you are to succeed, you will need powers beyond your means. Head east, go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot. Take heed that your mirrored reflection may have more substance than you know. The pearl is a crystal ball that allows access to the door of the future, yet it also holds another powerful secret: Use it wisely, or be consumed by its power."
               </p>
-              <img
-                alt="faint image of the white witches face within a magical orb"
+              <img className="paddingMarginReset standardImage"
+                alt="faint image of the white witches face within a magical orb" 
                 src={WhiteWitchPearl}
               ></img>
               <p className="standardText blueText">Press C to continue</p>
             </>
           )}
-          {currentStep === 8 && ( // New step for registration
-            <Register />
+          {currentStep === 8 && ( // This is the end of the chapter
+          <>
+            {isAuthenticated ? (
+              <Dashboard />
+            ) : (  
+              <Register />
+            )}  
+          </>
+           
           )}
         </>
       )}

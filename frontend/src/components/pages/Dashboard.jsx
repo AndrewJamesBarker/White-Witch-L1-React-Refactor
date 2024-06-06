@@ -16,7 +16,7 @@ const Dashboard = () => {
     if (user && user.gameState) {
       const currentChapter = user.gameState.currentChapter.level;
       // Navigate to the current chapter
-      navigate(`/chapter/${currentChapter}`);
+      navigate(`/`);
     } else {
       console.error('No game state found for the user.');
     }

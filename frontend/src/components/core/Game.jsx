@@ -95,7 +95,7 @@ const Game = () => {
   }
 
   const handleSatchelClick = () => {
-    // console.log("Satchel clicked");
+    
     setShowInventory(prev => !prev);
   }
   
