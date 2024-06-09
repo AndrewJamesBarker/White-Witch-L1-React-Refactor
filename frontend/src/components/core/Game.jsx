@@ -6,7 +6,6 @@ import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
-import Register from '../pages/Register';
 import RegisterForm from '../forms/RegisterForm';
 import { useAuth } from '../../context/AuthContext';
 

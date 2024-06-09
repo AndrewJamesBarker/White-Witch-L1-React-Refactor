@@ -11,11 +11,14 @@ const Register = () => {
     navigate('/register');
   };
   
+const onDeclineRegister = () => {
+    navigate('/'); // This condition needs to be decided upon, possible warning message and then navigate to the next chapter
+};
   return (
     <div id="startBox" className="widthControl">
       <div>
         <h3 id="startPrompt">
-          Want to register?
+          Great job so far! Do you want to register?
         </h3>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}
@@ -24,6 +27,7 @@ const Register = () => {
         <img className="borderRadius" alt="The bandcamp music distributionicon" src={Bandcamp} width="110" height="50"></img>
       </div> */}
       <button onClick={onRegister} className="btn">Register</button>
+      <button onClick={onDeclineRegister} className="btn">No thanks!</button>
 
     </div>
   );

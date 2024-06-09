@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserGameState from '../models/User.js';
 
+
 // For logging in
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -11,7 +12,7 @@ export const loginUser = async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Authentication failed' });
     }
-    
+
     // Generate a token
     const token = jwt.sign(
       { userId: user._id, email: user.email },
@@ -19,13 +20,18 @@ export const loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // Return user data along with token
+    // Set HttpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      sameSite: 'Strict',
+    });
+
+    // Return user data (excluding email)
     res.json({
-      token,
       user: {
         userId: user._id,
         username: user.username,
-        email: user.email,
         gameState: user.gameState,
         notes: user.notes
       }
@@ -34,7 +40,6 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 // For registering
 export const createUser = async (req, res) => {

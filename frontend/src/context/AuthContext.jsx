@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -7,25 +8,24 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const login = (userData) => {
+    const { email, password, ...userSafeData } = userData; // Exclude email and password from user data
     setIsAuthenticated(true);
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', userData.token);
-    console.log('User logged in and stored in localStorage:', userData);
+    setUser(userSafeData);
+    localStorage.setItem('user', JSON.stringify(userSafeData));
+    console.log('User logged in and stored in localStorage:', userSafeData);
   };
 
-  const logout = () => {
+  const logout = async () => {
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
     console.log('User logged out and removed from localStorage');
+    await api.post('/api/users/auth/logout'); // Ensure server-side logout handling
   };
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
-    if (storedUser && storedToken) {
+    if (storedUser) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
       console.log('User loaded from localStorage:', JSON.parse(storedUser));

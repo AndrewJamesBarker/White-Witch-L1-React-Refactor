@@ -123,7 +123,7 @@ function ChapterOne({
       text: "What a glorious feeling! For a flash, you feel an electric pulse of pleasure ripple up your arm and into your brain, after which you have a momentary vision of a magical door opening and spilling a radiant white light out into the void of space. The image subsides, but the sensation lingers.",
       imageSrc: DoorVision,
       imageAlt: "A magical door opening into a brilliant white light.",
-      imageCSS: "imageMaterialize environImage",
+      imageCSS: "imageMaterialize environImage padding-all-1",
       textCSS: "standardText",
       buttonText: "Continue",
     },
@@ -131,7 +131,7 @@ function ChapterOne({
       text: "The Siren smiles and nods her head in the direction of the conch shell. You feel a strange compulsion to pick it up.",
       imageSrc: Conch,
       imageAlt: "A mystifyingly beautiful conch shell.",
-      imageCSS: "imageMaterialize environImage",
+      imageCSS: "imageMaterialize environImage padding-all-1",
       textCSS: "standardText",
       buttonText: "Continue",
     },
@@ -139,7 +139,7 @@ function ChapterOne({
       text: "The Siren speaks in a tongue you still cannot understand. With a smile and a wave of an arm, she gestures that you explore her beach paradise.",
       imageSrc: Sundial,
       imageAlt: "An elaborate sundial protruding from the shore.",
-      imageCSS: "environImage",
+      imageCSS: "environImage padding-all-1",
       textCSS: "standardText",
       buttonText: "Continue",
     },
@@ -147,7 +147,7 @@ function ChapterOne({
       text: "Two of the Sirens soldiers block your path as if materializing from thin air. The soldier on your left stares you in the eye, and from within in your head, you hear his watery voice say, 'You shall not pass until your business with our queen is finished!'",
       imageSrc: SoldierBlock,
       imageAlt: "Intimidating image of the merman soldiers blocking your path.",
-      imageCSS: "imageMaterialize environImage",
+      imageCSS: "imageMaterialize environImage padding-all-1",
       textCSS: "standardText",
       buttonText: "Go Back",
     },
@@ -553,7 +553,7 @@ function ChapterOne({
           <p className="standardText">
             {dynamicSceneData[currentDynamicSceneKey].text}
           </p>
-          <button onClick={handleDynamicSceneClose}>
+          <button className="margin-btm-1" onClick={handleDynamicSceneClose}>
             {dynamicSceneData[currentDynamicSceneKey].buttonText}
           </button>
         </div>

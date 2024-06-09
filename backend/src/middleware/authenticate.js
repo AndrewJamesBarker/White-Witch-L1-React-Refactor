@@ -2,7 +2,10 @@ import jwt from 'jsonwebtoken';
 
 const authenticate = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1]; // Assuming token is sent as "Bearer <token>"
+    const token = req.cookies.token; // Get token from cookies
+    if (!token) {
+      throw new Error('Authentication failed');
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userData = decoded; // Store user data (from token) in request
     next();

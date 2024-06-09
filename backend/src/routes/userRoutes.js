@@ -11,4 +11,9 @@ router.patch('/auth/info', authenticate, updateUserInfo); // Update personal inf
 router.patch('/auth/gamestate', authenticate, updateGameState); // Update game state
 router.delete('/:id', authenticate, deleteUser);
 
+// Add a protected route for testing
+router.get('/protected', authenticate, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.userData });
+});
+
 export default router;

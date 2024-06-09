@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const SignInForm = () => {
-  const apiBaseUrl = import.meta.env.VITE_API_URL;
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,10 +12,12 @@ const SignInForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const lowerCaseEmail = email.toLowerCase();
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/users/auth/login`, { email, password });
-      const { token, user } = response.data;
-      login({ token, ...user });
+      const response = await api.post('/api/users/auth/login', { email: lowerCaseEmail, password });
+      const { user } = response.data;
+      console.log('User data received:', user); // Log the user data for debugging
+      login(user); // Call the login function with the user data
       navigate('/dashboard');
     } catch (err) {
       setError('Invalid email or password.');
@@ -28,6 +28,10 @@ const SignInForm = () => {
     navigate('/register');
   };
 
+  const handleNoReg = () => {
+    navigate('/');
+  };
+
   return (
     <div className="flexContainer">
       <h2>Sign In</h2>
@@ -35,16 +39,29 @@ const SignInForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="inputGroup">
           <label>Email:</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input 
+            type="email" 
+            autoComplete="username" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
         </div>
         <div className="inputGroup">
           <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input 
+            type="password" 
+            autoComplete="current-password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
         </div>
-        <button type="submit">Sign In</button>
-        
+        <button className='margin-btm-1' type="submit">Sign In</button>  
         <p className='boldText paddingMarginReset'>Don't have an account yet?</p>
-        <button onClick={handleRegisterRedirect}>Register</button>
+        <button className='margin-btm-1' type="button" onClick={handleRegisterRedirect}>Register</button>
+        {/* <p className='boldText paddingMarginReset'>Back to game.</p> */}
+        <button type="button" onClick={handleNoReg}>Back</button>
       </form>
     </div>
   );
