@@ -1,3 +1,4 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 
@@ -20,7 +21,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('user');
     console.log('User logged out and removed from localStorage');
-    await api.post('/api/users/auth/logout'); // Ensure server-side logout handling
+    try {
+      await api.post('/api/users/auth/logout', {}, { withCredentials: true }); // Ensure server-side logout handling
+    } catch (err) {
+      console.error('Error during logout:', err);
+    }
   };
 
   useEffect(() => {
@@ -33,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );

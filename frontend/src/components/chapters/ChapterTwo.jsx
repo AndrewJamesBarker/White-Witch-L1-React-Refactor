@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import '../../assets/CSS/layout.css';
 
-function ChapterTwo() {
+function ChapterTwo({ 
+  currentChapter, 
+  setCurrentChapter}
+) {
   const handleKeyDown = (event) => {
     console.log("Key pressed:", event.key);
     if (event.key === "Enter") {
@@ -24,7 +27,8 @@ function ChapterTwo() {
   }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
-    <div id="ChapterOnePage">
+    <div id="ChapterTwoPage" className="widthControl">
+      
       <h2 id="headLine">Chapter Two: The Fields</h2>
       <div className="cursorBox">
         <h3 id="displayBlock">Press C to continue</h3>

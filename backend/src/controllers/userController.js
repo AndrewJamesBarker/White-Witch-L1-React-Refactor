@@ -41,6 +41,12 @@ export const loginUser = async (req, res) => {
   }
 };
 
+export const logoutUser = (req, res) => {
+  res.clearCookie('token'); // Clear the authentication cookie
+  res.json({ message: 'Logged out successfully' });
+};
+
+
 // For registering
 export const createUser = async (req, res) => {
   const { username, email, password, gameState, notes } = req.body;  
@@ -90,10 +96,11 @@ export const updateUserInfo = async (req, res) => {
 
 // Update user game state for Save Game
 export const updateGameState = async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.userData; // Extract userId from the token data
   const { gameState } = req.body; // Only accept gameState changes
+
   try {
-    const user = await UserGameState.findById(id);
+    const user = await UserGameState.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -107,7 +114,6 @@ export const updateGameState = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
 
 // For deleting user
 

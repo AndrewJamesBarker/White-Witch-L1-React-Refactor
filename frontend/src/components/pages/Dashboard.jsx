@@ -12,7 +12,7 @@ const Dashboard = () => {
     navigate('/signin');
   };
 
-  const handleResume = () => {
+  const handleContinue = () => {
     if (user && user.gameState) {
       const currentChapter = user.gameState.currentChapter.level;
       // Navigate to the current chapter
@@ -39,7 +39,7 @@ const Dashboard = () => {
   return (
     <div>
       <h1>Greetings {user.username}!</h1>
-      <button className="button" onClick={handleResume}>Resume Game</button>
+      <button className="button" onClick={handleContinue}>Continue</button>
       <button className="button" onClick={handleSave}>Save Game</button>
       <button className="button" onClick={handleLogout}>Logout</button>
     </div>

@@ -13,6 +13,9 @@ const RegisterForm = () => {
 
   const emailRegex = /\S+@\S+\.\S+/;
 
+  const onDeclineRegister = () => {
+    navigate('/signin');
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     const lowerCaseEmail = email.toLowerCase();
@@ -85,6 +88,9 @@ const RegisterForm = () => {
           />
         </div>
         <button type="submit">Register</button>
+        
+        <button onClick={onDeclineRegister}>Back</button>
+        
       </form>
     </div>
   );

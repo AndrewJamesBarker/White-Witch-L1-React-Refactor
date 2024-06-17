@@ -33,6 +33,8 @@ import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
 import Dashboard from "../pages/Dashboard";
 
 function ChapterOne({
+  currentChapter,
+  setCurrentChaper,
   currentStep,
   setCurrentStep,
   nextStep,
@@ -48,8 +50,8 @@ function ChapterOne({
   showHelp,
   showInventory,
   obtainConch,
-  conchTaken,
-  setConchTaken,
+  hasConch,
+  setHasConch,
   showCrystal,
   currentScene,
   setCurrentScene,
@@ -85,6 +87,8 @@ function ChapterOne({
   const [conchListened, setConchListened] = useState(false);
   // Drag and drop items
   const items = ["Conch"];
+  // Update items in db with hook
+
 
   const { isAuthenticated } = useAuth();
 
@@ -103,7 +107,7 @@ function ChapterOne({
 
   // Update the choices for step 3 depending on whether the conch has been taken
   const updateChoices = () => {
-    if (conchTaken) {
+    if (hasConch) {
       setChoices([
         { label: "Greet the Siren.", value: 1 },
         { label: "Attack the Siren!", value: 2 },
@@ -157,7 +161,7 @@ function ChapterOne({
 
   const handleKeyDown = (event) => {
     // console.log(`Key pressed: ${event.key}`);
-
+    
     // conditions to prevent back and continue from working
     // An overlay is visible
     if (showHelp || showLifeLost || showInventory) return;
@@ -239,7 +243,7 @@ function ChapterOne({
     setUserChoice(choice);
     switch (choice.value) {
       case 1:
-        if (!conchTaken) {
+        if (!hasConch) {
           setDynamicSceneVisible(true);
           setCurrentDynamicSceneKey("sirenGreetNoConch");
         } else {
@@ -253,7 +257,7 @@ function ChapterOne({
         break;
       case 3:
         // makes the conch option disappear
-        setConchTaken(true);
+        setHasConch(true);
         // for inventory
         obtainConch();
         // show pick up conch scene
@@ -509,6 +513,12 @@ function ChapterOne({
     }
   }, [resetSignal]);
 
+  // useEffect to track current step and trigger chapter completion
+  useEffect(() => {
+    if (currentStep === 8) {
+      onComplete(); // Call onComplete when chapter is completed
+    }
+  }, [currentStep]);
   // Keydown listener and dependency array
 
   useEffect(() => {
@@ -526,7 +536,7 @@ function ChapterOne({
     repetitiveMoves,
     dynamicSceneVisible,
     currentDynamicSceneKey,
-    conchTaken,
+    hasConch,
     currentStep,
     setCurrentStep,
     nextStep,
@@ -538,7 +548,7 @@ function ChapterOne({
   // Update choices for multiple choice section when conch is taken
   useEffect(() => {
     updateChoices();
-  }, [conchTaken]);
+  }, [hasConch]);
 
   return (
     <div id="ChapterOnePage" className="widthControl">
@@ -620,7 +630,7 @@ function ChapterOne({
           {currentStep === 3 && (
             <div>
               <h3>Choose wisely.</h3>
-              {!conchTaken && (
+              {!hasConch && (
                 <img
                   className="conchItem"
                   src={Conch}
@@ -629,7 +639,7 @@ function ChapterOne({
                   height="250"
                 />
               )}
-              {conchTaken && (
+              {hasConch && (
                 <img
                   className="environImage"
                   src={ConchInSatchel}
@@ -699,7 +709,7 @@ function ChapterOne({
             </>
           )}
           {currentStep === 8 && ( // This is the end of the chapter
-          <>
+          <>  
             {isAuthenticated ? (
               <Dashboard />
             ) : (  

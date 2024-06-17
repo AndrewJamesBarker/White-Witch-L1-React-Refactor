@@ -61,7 +61,7 @@ const SignInForm = () => {
         <p className='boldText paddingMarginReset'>Don't have an account yet?</p>
         <button className='margin-btm-1' type="button" onClick={handleRegisterRedirect}>Register</button>
         {/* <p className='boldText paddingMarginReset'>Back to game.</p> */}
-        <button type="button" onClick={handleNoReg}>Back</button>
+        <button type="button" onClick={handleNoReg}>Play</button>
       </form>
     </div>
   );

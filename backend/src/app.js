@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import userRoutes from './routes/userRoutes.js'; // Adjust the path as necessary
 
 // Load environment variables
@@ -16,7 +17,7 @@ app.use(express.json());
 
 // Middleware to parse cookies
 app.use(cookieParser());
-
+app.use(bodyParser.json());
 // Setup CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN, // Allow only this origin to connect
