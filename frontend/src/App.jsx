@@ -11,9 +11,28 @@ import axios from 'axios';
 import { AuthProvider } from './context/AuthContext';
 import RegisterForm from './components/forms/RegisterForm';
 import SignInForm from './components/forms/SignInForm';
+import { useAuth } from './context/AuthContext';
 
-function App() {
+const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
+  const { logout, user } = useAuth();
+
+  // Clear guest user data on page load
+  useEffect(() => {
+    localStorage.removeItem('guestUser');
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      logout();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [logout]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -37,7 +56,6 @@ function App() {
   };
 
   const handleSaveGame = async () => {
-    const { user } = useAuth();
     if (!user) {
       console.error('User not authenticated');
       return;
@@ -57,33 +75,39 @@ function App() {
   };
 
   return (
+    <div className="App">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            startGame === null ? (
+              <StartPage onStartGame={handleStartGame} />
+            ) : startGame ? (
+              <Game />
+            ) : (
+              <NoPlayPage />
+            )
+          }
+        />
+        <Route path="/signin" element={<SignInForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+      </Routes>
+      <SignInDashButton />
+    </div>
+  );
+};
+
+const App = () => {
+  return (
     <AuthProvider>
       <Router>
-        <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                startGame === null ? (
-                  <StartPage onStartGame={handleStartGame} />
-                ) : startGame ? (
-                  <Game />
-                ) : (
-                  <NoPlayPage />
-                )
-              }
-            />
-            <Route path="/signin" element={<SignInForm />} />
-            <Route path="/register" element={<RegisterForm />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Route>
-          </Routes>
-          <SignInDashButton />
-        </div>
+        <AppContent />
       </Router>
     </AuthProvider>
   );
-}
+};
 
 export default App;

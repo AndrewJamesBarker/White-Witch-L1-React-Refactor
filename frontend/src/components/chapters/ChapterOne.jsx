@@ -7,7 +7,7 @@ import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
-
+import Dashboard from "../pages/Dashboard";
 
 // Images
 import trident from "../../assets/images/environment/trident.png";
@@ -26,15 +26,13 @@ import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
 import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.png";
 import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.png";
 
-
 // Music
 import Listen from "../../assets/audio/listen.mp3";
 import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
-import Dashboard from "../pages/Dashboard";
 
 function ChapterOne({
   currentChapter,
-  setCurrentChaper,
+  setCurrentChapter,
   currentStep,
   setCurrentStep,
   nextStep,
@@ -56,56 +54,36 @@ function ChapterOne({
   currentScene,
   setCurrentScene,
 }) {
-  // Define the total number of steps in ChapterOne
-  const totalSteps = 8; 
-  // Define whether the user has completed the introduction
+  const totalSteps = 8;
   const [isIntroComplete, setIsIntroComplete] = useState(false);
-  // Define the user's choice, starting at null
   const [userChoice, setUserChoice] = useState(null);
-  // Define whether the user has completed step 4
   const [stepFourCompleted, setStepFourCompleted] = useState(false);
-  // Define whether the user has completed step 3
   const [stepThreeCompleted, setStepThreeCompleted] = useState(false);
-  // Track the last direction the user moved
   const [lastDirection, setLastDirection] = useState(null);
-  // Track the number of repetitive moves
   const [repetitiveMoves, setRepetitiveMoves] = useState(0);
-  // Define the dynamic scene and whether it is visible
   const [dynamicSceneVisible, setDynamicSceneVisible] = useState(false);
-  // track the current dynamic scene
   const [currentDynamicSceneKey, setCurrentDynamicSceneKey] = useState(null);
-  // allow directional event listening to be active or not
   const [allowDirectionChange, setAllowDirectionChange] = useState(true);
-
-  // On/Off switch for explore scenes
   const [neutralExploreScene, setNeutralExploreScene] = useState(true);
   const [northScene, setNorthScene] = useState(false);
   const [southScene, setSouthScene] = useState(false);
   const [eastScene, setEastScene] = useState(false);
   const [westScene, setWestScene] = useState(false);
-  // State for conch drag and drop success
   const [conchListened, setConchListened] = useState(false);
-  // Drag and drop items
+  const [chapterComplete, setChapterComplete] = useState(false); // New state for chapter completion
   const items = ["Conch"];
-  // Update items in db with hook
-
-
   const { isAuthenticated } = useAuth();
 
   const handleDragEnd = (event) => {
-    // set the conch as listened to true on drag end
     setConchListened(true);
-    // nextStep();
   };
 
-  // Define the choices for step 3
   const [choices, setChoices] = useState([
     { label: "Greet the Siren.", value: 1 },
     { label: "Attack the Siren!", value: 2 },
     { label: "Take the Conch Shell.", value: 3 },
   ]);
 
-  // Update the choices for step 3 depending on whether the conch has been taken
   const updateChoices = () => {
     if (hasConch) {
       setChoices([
@@ -157,24 +135,13 @@ function ChapterOne({
     },
   };
 
-  // Handle keydown events
-
   const handleKeyDown = (event) => {
-    // console.log(`Key pressed: ${event.key}`);
-    
-    // conditions to prevent back and continue from working
-    // An overlay is visible
     if (showHelp || showLifeLost || showInventory) return;
-    // Intro is not complete and user presses 'c'
     if (currentStep === 0 && !isIntroComplete && event.key === "c") {
       setIsIntroComplete(true);
       return;
     }
-
-    // Multiple choice section is not complete
     if (currentStep === 3 && !stepThreeCompleted) return;
-
-    // Allows key listener for arrows but not c and b during step 4
     if (
       (event.key.toLowerCase() === "c" || event.key.toLowerCase() === "b") &&
       currentStep === 4 &&
@@ -182,23 +149,18 @@ function ChapterOne({
     ) {
       return;
     }
-    // Remove ability to go back to previous step after step 4
     if (event.key.toLowerCase() === "b" && currentStep > 4) {
       return;
     }
-
     if (event.key.toLowerCase() === "c" && currentStep === 5) {
       return;
     }
-    // Handle keydown events for exploration
-
     if (
       ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) &&
       currentStep > 4
     ) {
       return;
     }
-
     if (
       ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key) &&
       currentStep === 4
@@ -211,33 +173,21 @@ function ChapterOne({
       }
       handleExplore(event.key);
     }
-
-    // Handle keydown events for Continue and Back
-   
     const key = event.key.toLowerCase();
     if (
-       // C and B Temp disabled during multiple choice section
       key === "c" &&
       currentStep < totalSteps - 1 &&
       (currentStep !== 3 || stepThreeCompleted)
     ) {
-      nextStep(); // Use nextStep function passed from Game component
-    }
-    // Check for 'b' key to go back to the previous step
-    else if (key === "b" && currentStep > 0) {
-      previousStep(); // Use previousStep function passed from Game component
-    }
-    else if (currentStep === 6) {
+      nextStep();
+    } else if (key === "b" && currentStep > 0) {
+      previousStep();
+    } else if (currentStep === 6) {
+      nextStep();
+    } else if (key === "c" && currentStep === totalSteps - 1) {
       nextStep();
     }
-    else if (key === 'c' && currentStep === totalSteps - 1) {
-      nextStep();
-    }
-    
-
   };
-
-  // Handle multiple choice selection
 
   const handleChoiceSelect = (choice) => {
     setUserChoice(choice);
@@ -256,11 +206,8 @@ function ChapterOne({
         loseLife("sirenAttack");
         break;
       case 3:
-        // makes the conch option disappear
         setHasConch(true);
-        // for inventory
         obtainConch();
-        // show pick up conch scene
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("pickUpConch");
         break;
@@ -274,23 +221,17 @@ function ChapterOne({
     }
   };
 
-  // Handle dynamic scene close
   const handleDynamicSceneClose = () => {
     setDynamicSceneVisible(false);
-    // allow directional tracking to resume
     resetExplorationState();
-    // Re-enable direction change when dynamic scene is closed
     setAllowDirectionChange(true);
   };
-
-  // Handle exploration
 
   const resetExplorationState = () => {
     setRepetitiveMoves(0);
     setLastDirection(null);
   };
 
-  // Update repetitive moves
   const updateRepetitiveMoves = (direction) => {
     if (lastDirection === direction) {
       const newRepetitiveMoves = repetitiveMoves + 1;
@@ -306,9 +247,7 @@ function ChapterOne({
     }
   };
 
-  // Handle exploration moves
   const handleExplore = (direction) => {
-    // Check if in soldierBlock scene and direction change is not allowed
     if (
       dynamicSceneVisible &&
       currentDynamicSceneKey === "soldierBlock" &&
@@ -321,19 +260,15 @@ function ChapterOne({
         setDynamicSceneVisible(false);
         setAllowDirectionChange(true);
       }
-      return; // Important to return here to stop further processing
+      return;
     }
-
-    // If the direction has changed or this is the first move
     if (lastDirection !== direction || repetitiveMoves === 0) {
       setRepetitiveMoves(1);
       setLastDirection(direction);
     } else {
-      // Increment repetitive moves
       const newRepetitiveMoves = repetitiveMoves + 1;
       setRepetitiveMoves(newRepetitiveMoves);
 
-      // Check if it's time to move to step 5
       if (
         !stepFourCompleted &&
         direction === "ArrowLeft" &&
@@ -341,18 +276,14 @@ function ChapterOne({
       ) {
         setStepFourCompleted(true);
         setCurrentStep(5);
-        return; // Stop further processing
+        return;
       }
-
-      // Check for soldier block scene
       if (newRepetitiveMoves === 2) {
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("soldierBlock");
         setAllowDirectionChange(false);
       }
     }
-
-    // Update the current scene
     setCurrentScene(
       direction === "ArrowUp"
         ? "north"
@@ -384,7 +315,6 @@ function ChapterOne({
                 height="35"
               ></img>
             </p>
-
             <img
               className="environImage"
               src={Sundial}
@@ -501,11 +431,9 @@ function ChapterOne({
               height="500"
             ></img>
           </div>
-        ); // Should never happen
+        );
     }
   };
-
-  // Reset steps on all lives lost
 
   useEffect(() => {
     if (resetSignal) {
@@ -513,13 +441,12 @@ function ChapterOne({
     }
   }, [resetSignal]);
 
-  // useEffect to track current step and trigger chapter completion
   useEffect(() => {
     if (currentStep === 8) {
-      onComplete(); // Call onComplete when chapter is completed
+      onComplete();
+      setChapterComplete(true); // Mark chapter as complete
     }
   }, [currentStep]);
-  // Keydown listener and dependency array
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -542,10 +469,9 @@ function ChapterOne({
     nextStep,
     previousStep,
     isIntroComplete,
-    totalSteps
+    totalSteps,
   ]);
 
-  // Update choices for multiple choice section when conch is taken
   useEffect(() => {
     updateChoices();
   }, [hasConch]);
@@ -553,7 +479,6 @@ function ChapterOne({
   return (
     <div id="ChapterOnePage" className="widthControl">
       {dynamicSceneVisible && currentDynamicSceneKey ? (
-        // Render only the dynamic scene content
         <div className="dynamicScenes">
           <img
             src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
@@ -567,6 +492,14 @@ function ChapterOne({
             {dynamicSceneData[currentDynamicSceneKey].buttonText}
           </button>
         </div>
+      ) : chapterComplete ? (
+        <>
+          {isAuthenticated ? (
+            <Dashboard />
+          ) : (
+            <Register />
+          )}
+        </>
       ) : (
         <>
           {currentStep === 0 && !isIntroComplete ? (
@@ -578,9 +511,9 @@ function ChapterOne({
                 <span className="blueText">The Siren In The Cove</span>
               </h2>
               <h3>
-                Press <span className="blueText">C</span> to continue.
-                You can also press<span className="blueText"> H</span> at
-                anytime for help
+                Press <span className="blueText">C</span> to continue. You can
+                also press<span className="blueText"> H</span> at anytime for
+                help
               </h3>
               <img
                 id="trident"
@@ -607,7 +540,6 @@ function ChapterOne({
                 ></img>
               </div>
               <p className="boldText blueText">C to continue.</p>
-              {/* <p className="boldText">B for back.</p> */}
             </div>
           )}
           {currentStep === 2 && (
@@ -693,30 +625,35 @@ function ChapterOne({
               <p className="standardText blueText">Press C to continue</p>
               <p className="boldText">'I grew up inside of it,</p>
               <p className="boldText">I grew up in the light of it.'</p>
-              
             </>
           )}
           {currentStep === 7 && (
             <>
               <p className="standardText">
-                The Siren speaks, and thanks to the creature now living in your ear, her previously indecipherable squeaking transforms into a melodious voice: “You are brave, and it is noble of you to seek help for your people in this dark age… but if you are to succeed, you will need powers beyond your means. Head east, go to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free my sister, The White Witch. Only she can match the evil that is afoot. Take heed that your mirrored reflection may have more substance than you know. The pearl is a crystal ball that allows access to the door of the future, yet it also holds another powerful secret: Use it wisely, or be consumed by its power."
+                The Siren speaks, and thanks to the creature now living in your
+                ear, her previously indecipherable squeaking transforms into a
+                melodious voice: “You are brave, and it is noble of you to seek
+                help for your people in this dark age… but if you are to
+                succeed, you will need powers beyond your means. Head east, go
+                to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free
+                my sister, The White Witch. Only she can match the evil that is
+                afoot. Take heed that your mirrored reflection may have more
+                substance than you know. The pearl is a crystal ball that allows
+                access to the door of the future, yet it also holds another
+                powerful secret: Use it wisely, or be consumed by its power."
               </p>
-              <img className="paddingMarginReset standardImage"
-                alt="faint image of the white witches face within a magical orb" 
+              <img
+                className="paddingMarginReset standardImage"
+                alt="faint image of the white witches face within a magical orb"
                 src={WhiteWitchPearl}
               ></img>
               <p className="standardText blueText">Press C to continue</p>
             </>
           )}
-          {currentStep === 8 && ( // This is the end of the chapter
-          <>  
-            {isAuthenticated ? (
-              <Dashboard />
-            ) : (  
-              <Register />
-            )}  
-          </>
-           
+          {currentStep === 8 && (
+            <>
+              {isAuthenticated ? <Dashboard /> : <Register />}
+            </>
           )}
         </>
       )}

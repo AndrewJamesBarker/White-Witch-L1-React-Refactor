@@ -2,15 +2,10 @@
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 
-
 const useCompleteChapter = () => {
   const { user, setUser } = useAuth();
 
   const completeChapter = async (chapter) => {
-    if (!user) {
-      return; 
-    }
-
     const chapterMap = {
       1: 'chapterOne',
       2: 'chapterTwo',
@@ -28,13 +23,23 @@ const useCompleteChapter = () => {
     }
 
     const updatedGameState = {
-      ...user.gameState,
+      ...user?.gameState,
       currentChapter: { level: chapter + 1, completed: false },
       chaptersCompleted: {
-        ...user.gameState.chaptersCompleted,
+        ...user?.gameState.chaptersCompleted,
         [chapterName]: true,
       },
+      items: chapter === 1 ? [...(user?.gameState.items || []), 'Conch'] : user?.gameState.items,
     };
+
+    if (!user) {
+      // If the user is not logged in, update local storage only
+      const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+      guestUser.gameState = updatedGameState;
+      localStorage.setItem('guestUser', JSON.stringify(guestUser));
+      console.log('Updated guest user state:', guestUser); // Log the updated guest user state
+      return;
+    }
 
     try {
       const response = await api.patch('/api/users/auth/gamestate', { gameState: updatedGameState }, { withCredentials: true });

@@ -37,7 +37,9 @@ const Game = () => {
   const completeChapter = useCompleteChapter(); // update chapter in db
   const updateItem = useUpdateItem(); // update item in db
 
-const handleClickOutside = (event) => {
+
+
+  const handleClickOutside = (event) => {
     if (livesLeft === 0) {
       resetGame();
     } else {
@@ -82,10 +84,25 @@ const handleClickOutside = (event) => {
 
   const obtainConch = () => {
     setHasConch(true);
+  
     if (isAuthenticated) {
-      updateItem('Conch'); // Update the game state with the new item
+      updateItem('Conch');
+    } else {
+      const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+  
+      // Ensure items array is defined
+      if (!guestUser.gameState.items) {
+        guestUser.gameState.items = [];
+      }
+  
+      if (!guestUser.gameState.items.includes('Conch')) {
+        guestUser.gameState.items.push('Conch');
+        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log('Updated guest user state:', guestUser); // Log the updated guest user state
+      }
     }
   };
+  
 
   const obtainPearl = () => {
     setHasPearl(true);
@@ -129,11 +146,12 @@ const handleClickOutside = (event) => {
 
   const resetGame = () => {
     setLivesLeft(3);
-    setCurrentChapter(user.gameState.currentChapter.level);
+    setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);
     setConchTaken(false);
     setHasConch(false);
+    localStorage.removeItem('guestUser');
   };
 
   useEffect(() => {
@@ -184,10 +202,7 @@ const handleClickOutside = (event) => {
       case 1:
         return (
           <ChapterOne
-            onComplete={() => {
-              completeChapter(1)
-              setCurrentChapter(2)
-            }}
+            onComplete={() => completeChapter(1)}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}
@@ -218,10 +233,7 @@ const handleClickOutside = (event) => {
       case 2:
         return (
           <ChapterTwo
-          onComplete={() => {
-            completeChapter(2)
-            setCurrentChapter(3)
-          }}
+          onComplete={() => completeChapter(2)}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}

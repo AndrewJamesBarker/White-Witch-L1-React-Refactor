@@ -22,7 +22,7 @@ const Register = () => {
         </h2>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}
-      <p className="standardText ">By registering, not only will you be able to store your progress, you will receive a free download code for the album 'White Witch'!</p>
+      <p className="standardText ">Registering will automatically update your progress as you play. You will also receive a free download code for my album White Witch! I will not share your info with third parties, but you will receive occasional emails regarding the progress of this game (which you can opt out of.)</p>
       {/* <div className="imageMaterialize imagePulse">
         <img className="borderRadius" alt="The bandcamp music distributionicon" src={Bandcamp} width="110" height="50"></img>
       </div> */}

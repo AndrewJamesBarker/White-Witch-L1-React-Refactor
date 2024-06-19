@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     console.log('User logged out and removed from localStorage');
     try {
-      await api.post('/api/users/auth/logout', {}, { withCredentials: true }); // Ensure server-side logout handling
+      await api.post('/api/users/auth/logout', {}, { withCredentials: true }); 
     } catch (err) {
       console.error('Error during logout:', err);
     }

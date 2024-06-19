@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
@@ -15,7 +15,8 @@ const RegisterForm = () => {
 
   const onDeclineRegister = () => {
     navigate('/signin');
-};
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const lowerCaseEmail = email.toLowerCase();
@@ -23,27 +24,44 @@ const RegisterForm = () => {
       setError('Please enter a valid email address.');
       return;
     }
+
+    const defaultGameState = {
+      currentChapter: { level: 1, completed: false },
+      items: ['laser pistol'],
+      livesLeft: 3,
+      chaptersCompleted: {
+        chapterOne: false,
+        chapterTwo: false,
+        chapterThree: false,
+        chapterFour: false,
+        chapterFive: false,
+        chapterSix: false,
+        chapterSeven: false,
+        chapterEight: false
+      },
+    };
+
+    const guestUser = JSON.parse(localStorage.getItem('guestUser'));
+
+    const mergedGameState = guestUser ? {
+      ...defaultGameState,
+      currentChapter: guestUser.gameState.currentChapter || defaultGameState.currentChapter,
+      items: Array.from(new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])),
+      livesLeft: guestUser.gameState.livesLeft || defaultGameState.livesLeft,
+      chaptersCompleted: {
+        ...defaultGameState.chaptersCompleted,
+        ...guestUser.gameState.chaptersCompleted,
+      },
+    } : defaultGameState;
+
     try {
       const response = await axios.post(`${apiBaseUrl}/api/users/register`, {
         username,
         email: lowerCaseEmail,
         password,
-        gameState: {
-          currentChapter: { level: 1, completed: false },
-          items: ['laser pistol'],
-          livesLeft: 3,
-          chaptersCompleted: {
-            chapterOne: false,
-            chapterTwo: false,
-            chapterThree: false,
-            chapterFour: false,
-            chapterFive: false,
-            chapterSix: false,
-            chapterSeven: false,
-            chapterEight: false
-          },
-        }
+        gameState: mergedGameState,
       });
+      localStorage.removeItem('guestUser'); // Clear guest user data after registration
       navigate('/dashboard');
     } catch (err) {
       console.error('Submission error:', err);
@@ -89,7 +107,7 @@ const RegisterForm = () => {
         </div>
         <button type="submit">Register</button>
         
-        <button onClick={onDeclineRegister}>Back</button>
+        <button type="button" onClick={onDeclineRegister}>Back</button>
         
       </form>
     </div>
