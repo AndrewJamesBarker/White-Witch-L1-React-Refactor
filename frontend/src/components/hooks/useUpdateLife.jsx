@@ -14,7 +14,7 @@ const useUpdateLife = () => {
       return;
     }
 
-    const updatedGameState = {
+    let updatedGameState = {
       ...user.gameState,
       livesLeft: lives,
     };

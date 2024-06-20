@@ -42,10 +42,12 @@ const Game = () => {
   useEffect(() => {
     const guestUser = JSON.parse(localStorage.getItem('guestUser'));
     if (user && user.gameState) {
+      // setCurrentChapter(user.gameState.currentChapter.level);
       setLivesLeft(user.gameState.livesLeft);
       if (user.gameState.items.includes('Conch')) setHasConch(true);
       if (user.gameState.items.includes('Pearl')) setHasPearl(true);
     } else if (guestUser && guestUser.gameState) {
+      // setCurrentChapter(guestUser.gameState.currentChapter.level);
       setLivesLeft(guestUser.gameState.livesLeft);
       if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
       if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
@@ -132,9 +134,15 @@ const Game = () => {
   const loseLife = (cause) => {
     if (livesLeft > 0) {
       const newLivesLeft = livesLeft - 1;
-      setLivesLeft(newLivesLeft);
+      if (newLivesLeft === 0) {
+        setLivesLeft(3);
+        updateLife(3);
+        resetGame();
+      } else {
+        setLivesLeft(newLivesLeft);
+        updateLife(newLivesLeft);
+      }
       setDeathCause(cause);
-      updateLife(newLivesLeft);
     }
   };
 
