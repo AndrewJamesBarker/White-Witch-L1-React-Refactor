@@ -9,6 +9,7 @@ import InventoryPage from '../pages/InventoryPage';
 import RegisterForm from '../forms/RegisterForm';
 import useCompleteChapter from '../hooks/useCompleteChapter'; 
 import useUpdateItem from '../hooks/useUpdateItem';
+import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
 
 const Game = () => {
@@ -36,8 +37,20 @@ const Game = () => {
   const { isAuthenticated, user } = useAuth();
   const completeChapter = useCompleteChapter(); // update chapter in db
   const updateItem = useUpdateItem(); // update item in db
+  const updateLife = useUpdateLife(); // update life in db
 
-
+  useEffect(() => {
+    const guestUser = JSON.parse(localStorage.getItem('guestUser'));
+    if (user && user.gameState) {
+      setLivesLeft(user.gameState.livesLeft);
+      if (user.gameState.items.includes('Conch')) setHasConch(true);
+      if (user.gameState.items.includes('Pearl')) setHasPearl(true);
+    } else if (guestUser && guestUser.gameState) {
+      setLivesLeft(guestUser.gameState.livesLeft);
+      if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
+      if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
+    }
+  }, [user]);
 
   const handleClickOutside = (event) => {
     if (livesLeft === 0) {
@@ -84,25 +97,23 @@ const Game = () => {
 
   const obtainConch = () => {
     setHasConch(true);
-  
+
     if (isAuthenticated) {
       updateItem('Conch');
     } else {
       const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
-  
-      // Ensure items array is defined
+
       if (!guestUser.gameState.items) {
         guestUser.gameState.items = [];
       }
-  
+
       if (!guestUser.gameState.items.includes('Conch')) {
         guestUser.gameState.items.push('Conch');
         localStorage.setItem('guestUser', JSON.stringify(guestUser));
-        console.log('Updated guest user state:', guestUser); // Log the updated guest user state
+        console.log('Updated guest user state:', guestUser);
       }
     }
   };
-  
 
   const obtainPearl = () => {
     setHasPearl(true);
@@ -120,8 +131,10 @@ const Game = () => {
 
   const loseLife = (cause) => {
     if (livesLeft > 0) {
-      setLivesLeft((prevLives) => prevLives - 1);
+      const newLivesLeft = livesLeft - 1;
+      setLivesLeft(newLivesLeft);
       setDeathCause(cause);
+      updateLife(newLivesLeft);
     }
   };
 
@@ -138,10 +151,12 @@ const Game = () => {
 
   const gainLife = (cause) => {
     if (livesLeft < 3) {
-      setLivesLeft((prevLives) => prevLives + 1);
+      const newLivesLeft = livesLeft + 1;
+      setLivesLeft(newLivesLeft);
+      setLifeCause(cause);
+      setShowLifeGain(true);
+      updateLife(newLivesLeft);
     }
-    setLifeCause(cause);
-    setShowLifeGain(true);
   };
 
   const resetGame = () => {
@@ -233,7 +248,7 @@ const Game = () => {
       case 2:
         return (
           <ChapterTwo
-          onComplete={() => completeChapter(2)}
+            onComplete={() => completeChapter(2)}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}

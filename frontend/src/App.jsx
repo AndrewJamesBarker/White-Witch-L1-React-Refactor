@@ -17,6 +17,7 @@ const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
 
+  
   // Clear guest user data on page load
   useEffect(() => {
     localStorage.removeItem('guestUser');
