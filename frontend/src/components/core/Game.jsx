@@ -7,7 +7,7 @@ import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 import RegisterForm from '../forms/RegisterForm';
-import useCompleteChapter from '../hooks/useCompleteChapter'; 
+import useCompleteChapter from '../hooks/useCompleteChapter';
 import useUpdateItem from '../hooks/useUpdateItem';
 import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
@@ -42,13 +42,11 @@ const Game = () => {
   useEffect(() => {
     const guestUser = JSON.parse(localStorage.getItem('guestUser'));
     if (user && user.gameState) {
-      // setCurrentChapter(user.gameState.currentChapter.level);
-      setLivesLeft(user.gameState.livesLeft);
+      setLivesLeft(user.gameState.livesLeft ?? 3); // Ensure livesLeft is not undefined
       if (user.gameState.items.includes('Conch')) setHasConch(true);
       if (user.gameState.items.includes('Pearl')) setHasPearl(true);
     } else if (guestUser && guestUser.gameState) {
-      // setCurrentChapter(guestUser.gameState.currentChapter.level);
-      setLivesLeft(guestUser.gameState.livesLeft);
+      setLivesLeft(guestUser.gameState.livesLeft ?? 3); // Ensure livesLeft is not undefined
       if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
       if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
     }
@@ -133,16 +131,17 @@ const Game = () => {
 
   const loseLife = (cause) => {
     if (livesLeft > 0) {
-      const newLivesLeft = livesLeft - 1;
-      if (newLivesLeft === 0) {
-        setLivesLeft(3);
-        updateLife(3);
-        resetGame();
-      } else {
-        setLivesLeft(newLivesLeft);
-        updateLife(newLivesLeft);
-      }
+      const newLives = livesLeft - 1;
+      setLivesLeft(newLives);
       setDeathCause(cause);
+      if (!isAuthenticated) {
+        const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        guestUser.gameState.livesLeft = newLives;
+        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log('Updated guest user state:', guestUser);
+      } else {
+        updateLife(newLives);
+      }
     }
   };
 
@@ -159,16 +158,24 @@ const Game = () => {
 
   const gainLife = (cause) => {
     if (livesLeft < 3) {
-      const newLivesLeft = livesLeft + 1;
-      setLivesLeft(newLivesLeft);
-      setLifeCause(cause);
-      setShowLifeGain(true);
-      updateLife(newLivesLeft);
+      const newLives = livesLeft + 1;
+      setLivesLeft(newLives);
+      if (!isAuthenticated) {
+        const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        guestUser.gameState.livesLeft = newLives;
+        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log('Updated guest user state:', guestUser);
+      } else {
+        updateLife(newLives);
+      }
     }
+    setLifeCause(cause);
+    setShowLifeGain(true);
   };
 
   const resetGame = () => {
-    setLivesLeft(3);
+    const defaultLives = user?.gameState?.livesLeft || 3;
+    setLivesLeft(defaultLives);
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);

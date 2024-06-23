@@ -19,9 +19,10 @@ const AppContent = () => {
 
   
   // Clear guest user data on page load
-  useEffect(() => {
-    localStorage.removeItem('guestUser');
-  }, []);
+
+  // useEffect(() => {
+  //   localStorage.removeItem('guestUser');
+  // }, []);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -56,24 +57,6 @@ const AppContent = () => {
     setStartGame(start);
   };
 
-  const handleSaveGame = async () => {
-    if (!user) {
-      console.error('User not authenticated');
-      return;
-    }
-
-    try {
-      const gameState = { /* your game state data */ };
-      const response = await axios.patch(`/api/user/gamestate/${user.userId}`, gameState, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-      });
-      console.log('Game state saved', response.data);
-    } catch (err) {
-      console.error('Error saving game state', err);
-    }
-  };
 
   return (
     <div className="App">

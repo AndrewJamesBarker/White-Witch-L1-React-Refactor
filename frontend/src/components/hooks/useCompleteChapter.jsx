@@ -1,9 +1,9 @@
-// src/hooks/useCompleteChapter.js
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 
 const useCompleteChapter = () => {
   const { user, setUser } = useAuth();
+  const guestUser = JSON.parse(localStorage.getItem('guestUser'));
 
   const completeChapter = async (chapter) => {
     const chapterMap = {
@@ -26,18 +26,27 @@ const useCompleteChapter = () => {
       ...user?.gameState,
       currentChapter: { level: chapter + 1, completed: false },
       chaptersCompleted: {
-        ...user?.gameState.chaptersCompleted,
+        ...user?.gameState?.chaptersCompleted,
         [chapterName]: true,
       },
-      items: chapter === 1 ? [...(user?.gameState.items || []), 'Conch'] : user?.gameState.items,
+    };
+
+    const updatedLocalGameState = {
+      ...guestUser,
+      gameState: {
+        ...guestUser?.gameState,
+        currentChapter: { level: chapter + 1, completed: false },
+        chaptersCompleted: {
+          ...guestUser?.gameState?.chaptersCompleted,
+          [chapterName]: true,
+        },
+      }
     };
 
     if (!user) {
-      // If the user is not logged in, update local storage only
-      const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
-      guestUser.gameState = updatedGameState;
-      localStorage.setItem('guestUser', JSON.stringify(guestUser));
-      console.log('Updated guest user state:', guestUser); // Log the updated guest user state
+      // Update local storage for guest users  
+      localStorage.setItem('guestUser', JSON.stringify(updatedLocalGameState));
+      console.log('Updated guest user state:', updatedLocalGameState); // Log the updated guest user state
       return;
     }
 

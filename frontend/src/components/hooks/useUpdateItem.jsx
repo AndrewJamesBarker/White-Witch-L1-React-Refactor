@@ -6,11 +6,7 @@ const useUpdateItem = () => {
   const { user, setUser } = useAuth();
 
   const updateItem = async (item) => {
-    // if (!user) {
-    //   console.error('No user is authenticated.');
-    //   return;
-    // }
-
+   
     // Check if the item already exists in the items array
     if (user.gameState.items.includes(item)) {
       return; 

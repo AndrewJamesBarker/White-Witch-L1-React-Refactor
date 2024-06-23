@@ -7,7 +7,9 @@ const useUpdateLife = () => {
   const updateLife = async (lives) => {
     if (!user) {
       // Update local storage for guest users
-      const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+      let guestUser = JSON.parse(localStorage.getItem('guestUser')) || {
+        gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } }
+      };
       guestUser.gameState.livesLeft = lives;
       localStorage.setItem('guestUser', JSON.stringify(guestUser));
       console.log('Updated guest user state:', guestUser);

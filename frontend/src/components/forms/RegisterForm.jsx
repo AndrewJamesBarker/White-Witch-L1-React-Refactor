@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../../assets/CSS/layout.css";
 
@@ -44,10 +44,9 @@ const RegisterForm = () => {
     const guestUser = JSON.parse(localStorage.getItem('guestUser'));
 
     const mergedGameState = guestUser ? {
-      ...defaultGameState,
       currentChapter: guestUser.gameState.currentChapter || defaultGameState.currentChapter,
       items: Array.from(new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])),
-      livesLeft: guestUser.gameState.livesLeft || defaultGameState.livesLeft,
+      livesLeft: guestUser.gameState.livesLeft !== undefined ? guestUser.gameState.livesLeft : defaultGameState.livesLeft,
       chaptersCompleted: {
         ...defaultGameState.chaptersCompleted,
         ...guestUser.gameState.chaptersCompleted,

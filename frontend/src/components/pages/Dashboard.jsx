@@ -15,6 +15,7 @@ const Dashboard = () => {
   const handleContinue = () => {
     if (user && user.gameState) {
       const currentChapter = user.gameState.currentChapter.level;
+      // const livesLeft = user.gameState.livesLeft;
       // Navigate to the current chapter
       navigate(`/`);
     } else {
