@@ -11,7 +11,7 @@ import useCompleteChapter from '../hooks/useCompleteChapter';
 import useUpdateItem from '../hooks/useUpdateItem';
 import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
-// import { set } from 'mongoose';
+
 
 const Game = () => {
   const [chapOneCompleted, setChapOneCompleted] = useState(false);
@@ -43,10 +43,12 @@ const Game = () => {
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
     if (user && user.gameState) {
+      setCurrentChapter(user.gameState.currentChapter.level || 1);
       setLivesLeft(user.gameState.livesLeft ?? 3); 
       if (user.gameState.items.includes('Conch')) setHasConch(true);
       if (user.gameState.items.includes('Pearl')) setHasPearl(true);
     } else if (guestUser && guestUser.gameState) {
+      setCurrentChapter(guestUser.gameState.currentChapter.level || 1);
       setLivesLeft(guestUser.gameState.livesLeft ?? 3); 
       if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
       if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
