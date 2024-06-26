@@ -11,6 +11,7 @@ import useCompleteChapter from '../hooks/useCompleteChapter';
 import useUpdateItem from '../hooks/useUpdateItem';
 import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
+// import { set } from 'mongoose';
 
 const Game = () => {
   const [chapOneCompleted, setChapOneCompleted] = useState(false);
@@ -40,13 +41,13 @@ const Game = () => {
   const updateLife = useUpdateLife(); // update life in db
 
   useEffect(() => {
-    const guestUser = JSON.parse(localStorage.getItem('guestUser'));
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
     if (user && user.gameState) {
-      setLivesLeft(user.gameState.livesLeft ?? 3); // Ensure livesLeft is not undefined
+      setLivesLeft(user.gameState.livesLeft ?? 3); 
       if (user.gameState.items.includes('Conch')) setHasConch(true);
       if (user.gameState.items.includes('Pearl')) setHasPearl(true);
     } else if (guestUser && guestUser.gameState) {
-      setLivesLeft(guestUser.gameState.livesLeft ?? 3); // Ensure livesLeft is not undefined
+      setLivesLeft(guestUser.gameState.livesLeft ?? 3); 
       if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
       if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
     }
@@ -101,7 +102,7 @@ const Game = () => {
     if (isAuthenticated) {
       updateItem('Conch');
     } else {
-      const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+      const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
 
       if (!guestUser.gameState.items) {
         guestUser.gameState.items = [];
@@ -109,7 +110,7 @@ const Game = () => {
 
       if (!guestUser.gameState.items.includes('Conch')) {
         guestUser.gameState.items.push('Conch');
-        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
         console.log('Updated guest user state:', guestUser);
       }
     }
@@ -135,9 +136,9 @@ const Game = () => {
       setLivesLeft(newLives);
       setDeathCause(cause);
       if (!isAuthenticated) {
-        const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
         guestUser.gameState.livesLeft = newLives;
-        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
         console.log('Updated guest user state:', guestUser);
       } else {
         updateLife(newLives);
@@ -161,9 +162,9 @@ const Game = () => {
       const newLives = livesLeft + 1;
       setLivesLeft(newLives);
       if (!isAuthenticated) {
-        const guestUser = JSON.parse(localStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
         guestUser.gameState.livesLeft = newLives;
-        localStorage.setItem('guestUser', JSON.stringify(guestUser));
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
         console.log('Updated guest user state:', guestUser);
       } else {
         updateLife(newLives);
@@ -181,7 +182,8 @@ const Game = () => {
     setShowLifeLost(false);
     setConchTaken(false);
     setHasConch(false);
-    localStorage.removeItem('guestUser');
+    updateLife(3);
+    sessionStorage.removeItem('guestUser');
   };
 
   useEffect(() => {
@@ -226,6 +228,8 @@ const Game = () => {
       return renderChapter();
     }
   };
+
+  
 
   const renderChapter = () => {
     switch (currentChapter) {
@@ -288,7 +292,7 @@ const Game = () => {
   };
 
   return (
-    <div className='raleway'>
+    <div className='raleway '>
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapterInfo blueText">

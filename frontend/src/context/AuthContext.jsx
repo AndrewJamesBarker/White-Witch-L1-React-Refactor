@@ -1,5 +1,5 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import api from '../services/api';
 
 const AuthContext = createContext(null);
@@ -9,31 +9,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const login = (userData) => {
-    const { email, password, ...userSafeData } = userData; // Exclude email and password from user data
+    const { email, token, ...userSafeData } = userData;
     setIsAuthenticated(true);
     setUser(userSafeData);
-    localStorage.setItem('user', JSON.stringify(userSafeData));
-    console.log('User logged in and stored in localStorage:', userSafeData);
+    sessionStorage.setItem('user', JSON.stringify(userSafeData));
+    Cookies.set('token', token, { secure: true, sameSite: 'Strict' });
+    Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
+    console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
   };
 
   const logout = async () => {
     setIsAuthenticated(false);
     setUser(null);
-    localStorage.removeItem('user');
-    console.log('User logged out and removed from localStorage');
+    sessionStorage.removeItem('user');
+    Cookies.remove('token');
+    Cookies.remove('email');
+    console.log('User logged out and removed from sessionStorage and cookies');
     try {
-      await api.post('/api/users/auth/logout', {}, { withCredentials: true }); 
+      await api.post('/api/users/auth/logout', {}, { withCredentials: true });
     } catch (err) {
       console.error('Error during logout:', err);
     }
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const storedUser = sessionStorage.getItem('user');
+    const token = Cookies.get('token');
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
-      console.log('User loaded from localStorage:', JSON.parse(storedUser));
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log('User loaded from sessionStorage:', JSON.parse(storedUser));
     }
   }, []);
 

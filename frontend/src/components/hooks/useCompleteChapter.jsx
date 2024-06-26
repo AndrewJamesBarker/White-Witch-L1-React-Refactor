@@ -3,7 +3,7 @@ import api from '../../services/api';
 
 const useCompleteChapter = () => {
   const { user, setUser } = useAuth();
-  const guestUser = JSON.parse(localStorage.getItem('guestUser'));
+  const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
 
   const completeChapter = async (chapter) => {
     const chapterMap = {
@@ -44,9 +44,9 @@ const useCompleteChapter = () => {
     };
 
     if (!user) {
-      // Update local storage for guest users  
-      localStorage.setItem('guestUser', JSON.stringify(updatedLocalGameState));
-      console.log('Updated guest user state:', updatedLocalGameState); // Log the updated guest user state
+      // Update session storage for guest users  
+      sessionStorage.setItem('guestUser', JSON.stringify(updatedLocalGameState));
+      console.log('Updated guest user state:', updatedLocalGameState);
       return;
     }
 
@@ -54,8 +54,8 @@ const useCompleteChapter = () => {
       const response = await api.patch('/api/users/auth/gamestate', { gameState: updatedGameState }, { withCredentials: true });
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      console.log('Updated user state:', updatedUser); // Log the updated user state
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      console.log('Updated user state:', updatedUser);
     } catch (err) {
       console.error('Error updating game state', err);
     }

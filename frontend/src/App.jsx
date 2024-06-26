@@ -7,34 +7,22 @@ import NoPlayPage from './components/utilities/NoPlayPage';
 import SignInDashButton from './components/ui/SignInDashButton';
 import Dashboard from './components/pages/Dashboard';
 import PrivateRoute from './components/pages/PrivateRoute';
-import axios from 'axios';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import RegisterForm from './components/forms/RegisterForm';
 import SignInForm from './components/forms/SignInForm';
-import { useAuth } from './context/AuthContext';
 
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
-
-  
-  // Clear guest user data on page load
-
-  // useEffect(() => {
-  //   localStorage.removeItem('guestUser');
-  // }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      logout();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [logout]);
+  useEffect(() => { 
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
+    if (user || guestUser) {
+      setStartGame(true);
+    } else {
+      setStartGame(null);
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -45,7 +33,7 @@ const AppContent = () => {
       ) {
         return;
       }
-      if (event.key === 's') {
+      if (event.key === 'y') {
         setStartGame(true);
       }
     };
@@ -57,9 +45,9 @@ const AppContent = () => {
     setStartGame(start);
   };
 
-
   return (
-    <div className="App">
+    <div className="app ">
+      <h1 className="sr-only">White Witch - A text-based adventure.</h1> {/* Invisible header for accessibility */}
       <Routes>
         <Route
           path="/"

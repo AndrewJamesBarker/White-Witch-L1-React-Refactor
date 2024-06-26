@@ -6,12 +6,12 @@ const useUpdateLife = () => {
 
   const updateLife = async (lives) => {
     if (!user) {
-      // Update local storage for guest users
-      let guestUser = JSON.parse(localStorage.getItem('guestUser')) || {
+      // Update session storage for guest users
+      let guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || {
         gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } }
       };
       guestUser.gameState.livesLeft = lives;
-      localStorage.setItem('guestUser', JSON.stringify(guestUser));
+      sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
       console.log('Updated guest user state:', guestUser);
       return;
     }
@@ -25,7 +25,7 @@ const useUpdateLife = () => {
       const response = await api.patch('/api/users/auth/gamestate', { gameState: updatedGameState }, { withCredentials: true });
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
       console.log('Updated user state:', updatedUser);
     } catch (err) {
       console.error('Error updating game state', err);

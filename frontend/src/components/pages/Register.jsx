@@ -28,7 +28,7 @@ const Register = () => {
       </div> */}
       <button onClick={onRegister} className="btn">Register</button>
       <div>
-        <p className="standardText">Be forewarned, unregistered players cannot preserve their game state.</p>
+        <p className="standardText">Be forewarned, unregistered players may not be able to preserve their game state beyond this stage.</p>
         <button onClick={onDeclineRegister} className="btn">No thanks!</button>
       </div>
       
