@@ -363,7 +363,7 @@ function ChapterOne({
             <img
               className="environImage"
               src={BlackToothMountainSouth}
-              alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head with its chaws wide open. "
+              alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head. "
               width="500"
               height="500"
             ></img>

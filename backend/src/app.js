@@ -18,6 +18,7 @@ app.use(express.json());
 // Middleware to parse cookies
 app.use(cookieParser());
 app.use(bodyParser.json());
+
 // Setup CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN, // Allow only this origin to connect
@@ -40,12 +41,11 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
-
 // Basic error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-export default app;
+// Export app and connectDB for use in the server file
+export { app, connectDB };

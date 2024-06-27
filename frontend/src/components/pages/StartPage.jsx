@@ -25,7 +25,7 @@ const StartPage = ({ onStartGame }) => {
       <div>
         <h2 id="startPrompt">Want to play a game? <span className="blueText">Type Y/N</span></h2>
         <AudioPlayer src={TheDarktower} autoplay={false} />
-        <img className="center titleImage" src={CoverArt} alt="a rugged hero named Caballero in a dystopian world, with a mysterious sun emitting new light above and ominous figures looming in the background. Ethereal and ghostly, a Siren appears in the sky, adding a mystical element." />
+        <img className="center titleImage" src={CoverArt} alt="a rugged hero in a dystopian world." />
       </div>
     </div>
   );

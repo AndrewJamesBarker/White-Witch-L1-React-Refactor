@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserGameState from '../models/User.js';
+import sendVerificationEmail from './emailController.js';
 
 
 // For logging in
@@ -60,6 +61,8 @@ export const createUser = async (req, res) => {
       },
       notes  
     });
+    // Send verification email
+    await sendVerificationEmail(newUser);
     await newUser.save();
     res.status(201).json(newUser);
   } catch (err) {
