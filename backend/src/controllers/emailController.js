@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (user) => {
   
   const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  const verificationUrl = `${process.env.BASE_URL}/verify-email?token=${token}`;
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,

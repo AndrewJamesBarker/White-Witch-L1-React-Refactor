@@ -10,6 +10,7 @@ import PrivateRoute from './components/pages/PrivateRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import RegisterForm from './components/forms/RegisterForm';
 import SignInForm from './components/forms/SignInForm';
+import VerifyEmail from './components/pages/VerifyEmail';
 
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
@@ -63,6 +64,7 @@ const AppContent = () => {
         />
         <Route path="/signin" element={<SignInForm />} />
         <Route path="/register" element={<RegisterForm />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>

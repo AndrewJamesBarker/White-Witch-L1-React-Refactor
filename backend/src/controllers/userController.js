@@ -66,7 +66,8 @@ export const createUser = async (req, res) => {
       gameState: {  
         ...gameState
       },
-      notes  
+      notes,
+      isVerified: false // Add this field to the schema
     });
     
     await newUser.save();
@@ -78,14 +79,12 @@ export const createUser = async (req, res) => {
   }
 };
 
-// For updating user
-
-// Update user personal information
+// For updating user personal information
 export const updateUserInfo = async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.userData; // Extract userId from the token data
   const { username, email, password } = req.body; // Only accept personal info changes
   try {
-    const user = await UserGameState.findById(id);
+    const user = await UserGameState.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -104,7 +103,7 @@ export const updateUserInfo = async (req, res) => {
   }
 };
 
-// Update user game state for Save Game
+// For updating user game state
 export const updateGameState = async (req, res) => {
   const { userId } = req.userData; // Extract userId from the token data
   const { gameState } = req.body; // Only accept gameState changes
@@ -129,8 +128,57 @@ export const updateGameState = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const user = await UserGameState.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     await user.remove();
     res.json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// For verifying email
+export const verifyEmailToken = async (req, res) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await UserGameState.findOne({ email: decoded.email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.isVerified = true; // Update isVerified field
+    await user.save();
+
+    res.status(200).json({ message: 'Email verified successfully' });
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid token' });
+  }
+};
+
+// For resending verification email
+export const resendVerificationEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await UserGameState.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: 'Account is already verified' });
+    }
+
+    await sendVerificationEmail(user);
+    res.status(200).json({ message: 'Verification email sent successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
