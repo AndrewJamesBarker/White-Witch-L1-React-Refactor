@@ -20,7 +20,11 @@ const SignInForm = () => {
       login(user); // Call the login function with the user data
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid email or password.');
+      // Check if the error response contains a message
+      const errorMessage = err.response && err.response.data && err.response.data.message
+        ? err.response.data.message
+        : 'Invalid email or password.';
+      setError(errorMessage);
     }
   };
 

@@ -10,6 +10,8 @@ const router = express.Router();
 router.post('/auth/login', loginUser);
 router.post('/register', createUser); // Registration 
 router.patch('/auth/info', authenticate, updateUserInfo); // Update personal info
+// router.get('/verify-email', verifyEmailToken); // Email verification
+// router.post('/resend-verification-email', resendVerificationEmail); // Resend verification email
 router.patch('/auth/gamestate', authenticate, updateGameState); // Update game state
 router.post('/auth/logout', authenticate, logoutUser); // Logout user
 router.delete('/:id', authenticate, deleteUser);

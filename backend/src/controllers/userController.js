@@ -3,15 +3,23 @@ import bcrypt from 'bcryptjs';
 import UserGameState from '../models/User.js';
 import sendVerificationEmail from './emailController.js';
 
-
 // For logging in
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await UserGameState.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Authentication failed' });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (!user.isVerified) {
+      return res.status(403).json({ message: 'Account not verified. Please check your email for the verification link.' });
     }
 
     // Generate a token
@@ -47,7 +55,6 @@ export const logoutUser = (req, res) => {
   res.json({ message: 'Logged out successfully' });
 };
 
-
 // For registering
 export const createUser = async (req, res) => {
   const { username, email, password, gameState, notes } = req.body;  
@@ -61,9 +68,10 @@ export const createUser = async (req, res) => {
       },
       notes  
     });
+    
+    await newUser.save();
     // Send verification email
     await sendVerificationEmail(newUser);
-    await newUser.save();
     res.status(201).json(newUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -73,7 +81,6 @@ export const createUser = async (req, res) => {
 // For updating user
 
 // Update user personal information
-
 export const updateUserInfo = async (req, res) => {
   const { id } = req.params;
   const { username, email, password } = req.body; // Only accept personal info changes
@@ -119,7 +126,6 @@ export const updateGameState = async (req, res) => {
 };
 
 // For deleting user
-
 export const deleteUser = async (req, res) => {
   try {
     const user = await UserGameState.findById(req.params.id);
