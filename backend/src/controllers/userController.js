@@ -2,12 +2,35 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserGameState from '../models/User.js';
 import sendVerificationEmail from './emailController.js';
+import dotenv from 'dotenv';
+import axios from 'axios';
+
+
+dotenv.config();
+const  RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
+
+// Helper function to verify reCAPTCHA using axios
+const verifyRecaptcha = async (recaptchaToken) => {
+  const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
+  const response = await axios.post(verifyURL);
+  return response.data;
+};
 
 // For logging in
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, 'g-recaptcha-response': recaptchaToken } = req.body;
+
+  // Verify reCAPTCHA
+  if (!recaptchaToken) {
+    return res.status(400).json({ message: 'reCAPTCHA token is required' });
+  }
 
   try {
+    const recaptchaResponse = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaResponse.success) {
+      return res.status(400).json({ message: 'reCAPTCHA verification failed' });
+    }
+  
     const user = await UserGameState.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -57,8 +80,18 @@ export const logoutUser = (req, res) => {
 
 // For registering
 export const createUser = async (req, res) => {
-  const { username, email, password, gameState, notes } = req.body;  
+  const { username, email, password, gameState, notes, 'g-recaptcha-response': recaptchaToken } = req.body;  
+  if (!recaptchaToken) {
+    return res.status(400).json({ message: 'reCAPTCHA token is required' });
+  }
+
   try {
+
+    const recaptchaResponse = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaResponse.success) {
+      return res.status(400).json({ message: 'reCAPTCHA verification failed' });
+    }
+
     const newUser = new UserGameState({
       username,
       email,
