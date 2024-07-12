@@ -7,12 +7,15 @@ import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
 
 const Register = () => {
   const navigate = useNavigate();
-  const onDeclineRegister = () => {
-    navigate('/');// This condition needs to be decided upon, possible warning message and then navigate to the next chapter
-};
+  
   const onRegister = () => {
     navigate('/register');
   };
+
+  const onDeclineRegister = () => {
+    navigate('/dashboard');
+    // This condition needs to be decided upon, possible warning message and then navigate to the next chapter
+};
   
   return (
     <div id="startBox" className="widthControl">

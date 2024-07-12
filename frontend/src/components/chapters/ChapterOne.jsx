@@ -455,6 +455,7 @@ function ChapterOne({
     };
   }, [
     showHelp,
+    showInventory,
     stepThreeCompleted,
     showLifeLost,
     showLifeGain,
@@ -610,7 +611,7 @@ function ChapterOne({
               />
             </div>
           )}
-          {conchListened && currentStep === 6 && (
+          {currentStep === 6 && (
             <>
               <p className="standardText">
                 Oooouch!! Something slithers down your ear canal, tears through

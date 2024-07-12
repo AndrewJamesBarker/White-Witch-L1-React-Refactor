@@ -1,17 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../assets/CSS/layout.css";
 import validator from "validator";
 
 const RegisterForm = () => {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const apiBaseUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  
+  const recaptchaRef = useRef(null);
+
+  useEffect(() => {
+    const loadRecaptchaScript = () => {
+      if (!document.querySelector('script[src="https://www.google.com/recaptcha/api.js?render=explicit"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.onload = renderRecaptcha;
+        document.body.appendChild(script);
+      } else {
+        renderRecaptcha();
+      }
+    };
+
+    const renderRecaptcha = () => {
+      if (window.grecaptcha && !recaptchaRef.current) {
+        window.grecaptcha.ready(() => {
+          recaptchaRef.current = window.grecaptcha.render('recaptcha', {
+            sitekey: siteKey,
+            callback: (token) => {
+              setRecaptchaToken(token);
+            }
+          });
+        });
+      }
+    };
+
+    loadRecaptchaScript();
+
+    return () => {
+      // Clear reCAPTCHA on component unmount
+      if (recaptchaRef.current) {
+        window.grecaptcha.reset(recaptchaRef.current);
+        recaptchaRef.current = null;
+      }
+    };
+  }, [siteKey]);
+
   const isValidEmail = (email) => validator.isEmail(email);
 
   const onDeclineRegister = () => {
@@ -23,6 +64,11 @@ const RegisterForm = () => {
     const lowerCaseEmail = email.toLowerCase();
     if (!isValidEmail(lowerCaseEmail)) {
       setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA.");
       return;
     }
 
@@ -72,6 +118,7 @@ const RegisterForm = () => {
         email: lowerCaseEmail,
         password,
         gameState: mergedGameState,
+        'g-recaptcha-response': recaptchaToken,
       });
       sessionStorage.removeItem("guestUser"); // Clear guest user data after registration
       navigate("/dashboard");
@@ -93,14 +140,9 @@ const RegisterForm = () => {
   return (
     <div className="flexContainer">
       <h2 className="blueText">Register</h2>
-      <p className="mediumText formTextWidthControl margin-btm-1">
-        Registering will automatically update your progress as you play. You
-        will also receive a free download code for my album White Witch! I will
-        not share your info with third parties, but you will receive occasional
-        emails regarding the progress of this game (which you can opt out of.)
-      </p>
+      
       {error && <p className="errorMessage">{error}</p>}
-      <div className="formFieldWidthControl ">
+      <div className="formFieldWidthControl">
         <form onSubmit={handleSubmit}>
           <div className="inputGroup">
             <label htmlFor="username">Username</label>
@@ -135,11 +177,18 @@ const RegisterForm = () => {
               required
             />
           </div>
+          <div id="recaptcha" className="g-recaptcha"></div>
           <button type="submit">Register</button>
           <button type="button" onClick={onDeclineRegister}>
             Back
           </button>
         </form>
+        <p className="mediumText formTextWidthControl margin-btm-1">
+          Registering will automatically backup your progress as you play. You
+          will also receive a free download code for my album White Witch! I will
+          not share your info with third parties, but you will receive occasional
+          emails regarding the progress of this game (which you can opt out of.)
+        </p>
       </div>
     </div>
   );
