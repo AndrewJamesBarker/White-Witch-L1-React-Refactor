@@ -8,6 +8,7 @@ import SignInDashButton from './components/ui/SignInDashButton';
 import Dashboard from './components/pages/Dashboard';
 import PrivateRoute from './components/pages/PrivateRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import RegisterForm from './components/forms/RegisterForm';
 import SignInForm from './components/forms/SignInForm';
 import VerifyEmail from './components/pages/VerifyEmail';
@@ -15,6 +16,7 @@ import VerifyEmail from './components/pages/VerifyEmail';
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
+
   useEffect(() => { 
     const user = JSON.parse(sessionStorage.getItem('user'));
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
@@ -47,7 +49,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className="app ">
+    <div className="app">
       <h1 className="sr-only">White Witch - A text-based adventure.</h1> {/* Invisible header for accessibility */}
       <Routes>
         <Route
@@ -75,12 +77,16 @@ const AppContent = () => {
 };
 
 const App = () => {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <GoogleReCaptchaProvider reCaptchaKey={siteKey}>
+      <AuthProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </GoogleReCaptchaProvider>
   );
 };
 
