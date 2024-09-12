@@ -6,5 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: process.env.PORT || 5173 // Uses the environment variable or defaults to 3000
+  },
+  resolve: {
+    alias: {
+      '@components': path.resolve(__dirname, './src/components'),
+      '@assets': path.resolve(__dirname, './src/assets')
+    }
   }
 });
