@@ -8,7 +8,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const [puzzleMap, setPuzzleMap] = useState([
-    ['frame', '1', '2'],
+    ['1', '2'],
     ['3', '4', '5'],
     ['6', '7', '8']
   ]);
@@ -37,7 +37,7 @@ const Dashboard = () => {
       <h1>Hello {user.username}</h1>
       <button className="button" onClick={handleContinue}>Continue</button>
       <button className="button" onClick={handleLogout}>Logout</button>
-      <PuzzleMap map={puzzleMap} onTileClick={handleTileClick}/>
+        <PuzzleMap map={puzzleMap} onTileClick={handleTileClick}/>     
     </div>
 
   );

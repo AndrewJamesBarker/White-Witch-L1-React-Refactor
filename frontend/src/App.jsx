@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Game from './components/core/Game';
 import StartPage from './components/pages/StartPage';
 import NoPlayPage from './components/utilities/NoPlayPage';
@@ -16,6 +16,7 @@ import VerifyEmail from './components/pages/VerifyEmail';
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => { 
     const user = JSON.parse(sessionStorage.getItem('user'));
@@ -71,7 +72,7 @@ const AppContent = () => {
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
-      <SignInDashButton />
+      {location.pathname !== '/dashboard' && location.pathname !== '/signin' && <SignInDashButton />}
     </div>
   );
 };
