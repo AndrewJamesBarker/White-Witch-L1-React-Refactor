@@ -1,30 +1,17 @@
 import React from "react";
+import '@assets/CSS/images.css';
+import '@assets/CSS/layout.css';
+import '@assets/CSS/puzzle-map.css';
 
-// Ensure that the images are imported properly
+import puzzleBlack from '@assets/images/dashboard-puzzle-map/puzzleBlack.svg';
+import puzzleBlue from '@assets/images/dashboard-puzzle-map/puzzleBlue.svg';
+import puzzleAqua from '@assets/images/dashboard-puzzle-map/puzzle-aqua.svg';
 
-import puzzle from '@assets/images/dashboard-puzzle-map/puzzle-complete-trans.png';
-
-
-const PuzzleMap = ({ map, onTileClick }) => {
-  const imageMap = {
-    '1': puzzle,
-  };
-
+const PuzzleMap = ({onTileClick }) => {
+  
   return (
-    <div className="puzzle-map">
-      {map.map((row, rowIndex) => (
-        <div key={rowIndex} className="puzzle-row">
-          {row.map((tile, tileIndex) => (
-            <button
-              key={tileIndex}
-              className={`puzzle-tile ${tile}`}
-              onClick={() => onTileClick(rowIndex, tileIndex)}
-            >
-              <img src={imageMap[tile]} alt={`Puzzle piece ${tile}`} />
-            </button>
-          ))}
-        </div>
-      ))}
+    <div className="puzzle-map-container">
+      <img src={puzzleBlue} alt="Puzzle map" className="puzzle-map" />
     </div>
   );
 }

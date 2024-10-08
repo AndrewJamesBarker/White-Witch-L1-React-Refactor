@@ -7,12 +7,6 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [puzzleMap, setPuzzleMap] = useState([
-    ['1', '2'],
-    ['3', '4', '5'],
-    ['6', '7', '8']
-  ]);
-
   const handleTileClick = (row, col) => {
     console.log(`Tile clicked at row ${rowIndex}, column ${tileIndex}`);
   };
@@ -37,7 +31,7 @@ const Dashboard = () => {
       <h1>Hello {user.username}</h1>
       <button className="button" onClick={handleContinue}>Continue</button>
       <button className="button" onClick={handleLogout}>Logout</button>
-        <PuzzleMap map={puzzleMap} onTileClick={handleTileClick}/>     
+        <PuzzleMap onTileClick={handleTileClick}/>     
     </div>
 
   );
