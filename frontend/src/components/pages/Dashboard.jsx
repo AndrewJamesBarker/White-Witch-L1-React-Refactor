@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import PuzzleMap from '../ui/PuzzleMap';
+import ChapterMap from '../utilities/ChapterMap';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  
+  // Get gameState and userGameState from user
+  const { gameState } = user;
+  const { currentChapter, chaptersCompleted } = gameState;
 
   // Map piece IDs to chapters
   const pieceIdToChapterMap = {
@@ -23,21 +28,18 @@ const Dashboard = () => {
     piece12: 12,
   };
 
-  // Handle tile click to update game state and send information to PuzzleMap
+  // Handle tile click (just for navigation, no state change in currentChapter)
   const handleTileClick = (id) => {
-    console.log(`Tile clicked: ${id}`);
-    const chapter = pieceIdToChapterMap[id];
+    const clickedPuzzlePiece = pieceIdToChapterMap[id];
+    const chapterKey = ChapterMap[clickedPuzzlePiece]; // Get chapter key (e.g., "chapterOne")
 
-    const { currentChapter, chaptersCompleted } = user.gameState;
-    const isChapterCompleted = chaptersCompleted[`chapter${chapter}`];
-    const isCurrentChapter = currentChapter.level === chapter;
+    const isChapterCompleted = chaptersCompleted[chapterKey]; // Check if chapter is completed
+    const isCurrentChapter = currentChapter.level === clickedPuzzlePiece;
 
     if (isChapterCompleted || isCurrentChapter) {
-      console.log(`Chapter ${chapter} is unlocked or completed. Setting as current.`);
-      user.gameState.currentChapter.level = chapter; // Update current chapter
-      // Possibly trigger a re-render or update user state
+      console.log(`Chapter ${clickedPuzzlePiece} is accessible.`);
     } else {
-      console.log(`Chapter ${chapter} is locked. Cannot select.`);
+      console.log(`Chapter ${clickedPuzzlePiece} is locked.`);
     }
   };
 
@@ -48,8 +50,8 @@ const Dashboard = () => {
       <button className="button" onClick={() => logout()}>Logout</button>
       
       <PuzzleMap 
-        onTileClick={handleTileClick} 
-        userGameState={user.gameState}  // Pass game state to PuzzleMap
+        onTileClick={handleTileClick}
+        userGameState={gameState} // Pass game state to PuzzleMap
       />
     </div>
   );
