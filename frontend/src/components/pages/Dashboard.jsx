@@ -1,16 +1,30 @@
-import React, { useEffect } from "react";
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import PuzzleMap from '../ui/PuzzleMap';
-import ChapterMap from '../utilities/ChapterMap';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import PuzzleMap from "../ui/PuzzleMap";
+import ChapterMap from "../utilities/ChapterMap";
+import ChapterNames from "../utilities/ChapterNames";
+import ErrorBoundary from "../utilities/ErrorBoundary"; // Error boundary to catch rendering issues
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
-  // Get gameState and userGameState from user
-  const { gameState } = user;
+
+  // Get gameState from user and ensure defaults
+  const { gameState = { currentChapter: { level: 1 }, chaptersCompleted: {} } } = user;
   const { currentChapter, chaptersCompleted } = gameState;
+
+  // State management in Dashboard
+  const [selectedLevel, setSelectedLevel] = useState(currentChapter.level || 1);
+  const [inaccessibleLevel, setInaccessibleLevel] = useState(null);
+  const [chapterName, setChapterName] = useState(ChapterNames[currentChapter.level]);
+  const [selectedPiece, setSelectedPiece] = useState(`piece${currentChapter.level}`);
+  const [tempHighlight, setTempHighlight] = useState(null); // State for temporary red highlight
+
+  // Log when inaccessibleLevel is updated
+  useEffect(() => {
+    console.log("inaccessibleLevel in Dashboard updated:", inaccessibleLevel);
+  }, [inaccessibleLevel]);
 
   // Map piece IDs to chapters
   const pieceIdToChapterMap = {
@@ -28,31 +42,60 @@ const Dashboard = () => {
     piece12: 12,
   };
 
-  // Handle tile click (just for navigation, no state change in currentChapter)
+  // Handle tile click, now everything is centralized in Dashboard
   const handleTileClick = (id) => {
     const clickedPuzzlePiece = pieceIdToChapterMap[id];
-    const chapterKey = ChapterMap[clickedPuzzlePiece]; // Get chapter key (e.g., "chapterOne")
-
-    const isChapterCompleted = chaptersCompleted[chapterKey]; // Check if chapter is completed
+    const chapterKey = ChapterMap[clickedPuzzlePiece];
+    const isChapterCompleted = chaptersCompleted[chapterKey];
     const isCurrentChapter = currentChapter.level === clickedPuzzlePiece;
 
     if (isChapterCompleted || isCurrentChapter) {
       console.log(`Chapter ${clickedPuzzlePiece} is accessible.`);
+      setSelectedLevel(clickedPuzzlePiece);
+      setInaccessibleLevel(null); // Reset when chapter is accessible
+      setChapterName(ChapterNames[clickedPuzzlePiece]);
+      setSelectedPiece(id); // Update selected piece in Dashboard
     } else {
+      setInaccessibleLevel(clickedPuzzlePiece); // Set when chapter is locked
+      setTempHighlight(id); // Temporarily highlight inaccessible piece in red
       console.log(`Chapter ${clickedPuzzlePiece} is locked.`);
+
+      // Reset the highlight after 300 milliseconds
+      setTimeout(() => {
+        setTempHighlight(null);
+      }, 300);
     }
   };
 
   return (
     <div>
       <h1>Hello {user.username}</h1>
-      <button className="button" onClick={() => navigate('/')}>Continue</button>
-      <button className="button" onClick={() => logout()}>Logout</button>
-      
-      <PuzzleMap 
-        onTileClick={handleTileClick}
-        userGameState={gameState} // Pass game state to PuzzleMap
-      />
+      {/* Display the selected level */}
+      <h2>Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}</h2>
+      <h3 className="blueText">"{chapterName}"</h3>
+
+      {inaccessibleLevel && (
+        <div className="inaccessible-level" aria-live="polite">
+          <p>Chapter {inaccessibleLevel} is currently inaccessible.</p>
+        </div>
+      )}
+
+      <button className="button" onClick={() => navigate("/")}>
+        Continue
+      </button>
+      <button className="button" onClick={() => logout()}>
+        Logout
+      </button>
+
+      {/* Wrap PuzzleMap in ErrorBoundary */}
+      <ErrorBoundary>
+        <PuzzleMap
+          onTileClick={handleTileClick} // Only send the click to Dashboard
+          selectedPiece={selectedPiece} // Pass down selectedPiece as a prop
+          tempHighlight={tempHighlight} // Pass down tempHighlight as a prop
+          userGameState={gameState}
+        />
+      </ErrorBoundary>
     </div>
   );
 };

@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
       chapterSix: { type: Boolean, default: false },
       chapterSeven: { type: Boolean, default: false },
       chapterEight: { type: Boolean, default: false },
+      chapterNine: { type: Boolean, default: false },
+      chapterTen: { type: Boolean, default: false },
+      chapterEleven: { type: Boolean, default: false },
+      chapterTwelve: { type: Boolean, default: false },
     },
   },
   notes: [{ type: String }]
