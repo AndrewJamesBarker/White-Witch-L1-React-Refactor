@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
@@ -11,6 +11,23 @@ const SignInForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { executeRecaptcha } = useGoogleReCaptcha();
+
+  useEffect(() => {
+    // Wait for reCAPTCHA to render and target the textarea field
+    const addRecaptchaLabels = () => {
+      const recaptchaTextareas = document.querySelectorAll('.g-recaptcha-response');
+      recaptchaTextareas.forEach((textarea, index) => {
+        // Add aria-label for accessibility
+        textarea.setAttribute('aria-label', `Recaptcha verification field ${index + 1}`);
+      });
+    };
+
+    // Ensure it's only run once reCAPTCHA has fully loaded
+    const timeoutId = setTimeout(addRecaptchaLabels, 1000);
+
+    // Cleanup timeout if the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,14 +59,6 @@ const SignInForm = () => {
     }
   };
 
-  const handleRegisterRedirect = () => {
-    navigate("/register");
-  };
-
-  const handleNoReg = () => {
-    navigate("/");
-  };
-
   return (
     <div className="flexContainer">
       <h2 className="blueText">Sign In</h2>
@@ -57,8 +66,9 @@ const SignInForm = () => {
       <div className="formFieldWidthControl">
         <form onSubmit={handleSubmit}>
           <div className="inputGroup">
-            <label>Email</label>
+            <label htmlFor="email">Email</label>
             <input
+              id="email"
               type="email"
               autoComplete="username"
               value={email}
@@ -67,8 +77,9 @@ const SignInForm = () => {
             />
           </div>
           <div className="inputGroup">
-            <label>Password</label>
+            <label htmlFor="password">Password</label>
             <input
+              id="password"
               type="password"
               autoComplete="current-password"
               value={password}
@@ -79,10 +90,7 @@ const SignInForm = () => {
           <small>
             This site is protected by reCAPTCHA and the Google
             <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-            <a href="https://policies.google.com/terms">
-              Terms of Service
-            </a>{" "}
-            apply.
+            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
           </small>
           <button className="margin-btm-1" type="submit">
             Sign In
@@ -93,11 +101,11 @@ const SignInForm = () => {
           <button
             className="margin-btm-1"
             type="button"
-            onClick={handleRegisterRedirect}
+            onClick={() => navigate("/register")}
           >
             Register
           </button>
-          <button type="button" onClick={handleNoReg}>
+          <button type="button" onClick={() => navigate("/")}>
             Play
           </button>
         </form>

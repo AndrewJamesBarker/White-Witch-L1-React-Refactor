@@ -76,26 +76,24 @@ const Dashboard = () => {
 
       {inaccessibleLevel && (
         <div className="inaccessible-level" aria-live="polite">
-          <p>Chapter {inaccessibleLevel} is currently inaccessible.</p>
+          <p>Chapter {inaccessibleLevel} is currently locked.</p>
         </div>
       )}
 
       <button className="button" onClick={() => navigate("/")}>
         Continue
       </button>
-      <button className="button" onClick={() => logout()}>
+      <button className="button topRight" onClick={() => logout()}>
         Logout
       </button>
 
-      {/* Wrap PuzzleMap in ErrorBoundary */}
-      <ErrorBoundary>
         <PuzzleMap
           onTileClick={handleTileClick} // Only send the click to Dashboard
           selectedPiece={selectedPiece} // Pass down selectedPiece as a prop
           tempHighlight={tempHighlight} // Pass down tempHighlight as a prop
           userGameState={gameState}
         />
-      </ErrorBoundary>
+
     </div>
   );
 };

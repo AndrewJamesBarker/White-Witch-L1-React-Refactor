@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../assets/CSS/layout.css";
@@ -15,6 +15,24 @@ const RegisterForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const isValidEmail = (email) => validator.isEmail(email);
+
+  useEffect(() => {
+    // Wait for reCAPTCHA to render and target the textarea field
+    const addRecaptchaLabels = () => {
+      const recaptchaTextareas = document.querySelectorAll('.g-recaptcha-response');
+      recaptchaTextareas.forEach((textarea, index) => {
+        // Add aria-label for accessibility
+        textarea.setAttribute('aria-label', `Recaptcha verification field ${index + 1}`);
+      });
+    };
+  
+    // Add a delay to ensure the reCAPTCHA has rendered
+    const timeoutId = setTimeout(addRecaptchaLabels, 1000);
+  
+    // Cleanup timeout if the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []);
+  
 
   const onDeclineRegister = () => {
     navigate("/signin");
@@ -139,11 +157,11 @@ const RegisterForm = () => {
               required
             />
             <small>
-              This site is protected by reCAPTCHA and the Google
+              This site is protected by reCAPTCHA and the Google {" "}
               <a href="https://policies.google.com/privacy">
                 Privacy Policy
               </a>{" "}
-              and
+              and {" "}
               <a href="https://policies.google.com/terms">
                 Terms of Service
               </a>{" "}
