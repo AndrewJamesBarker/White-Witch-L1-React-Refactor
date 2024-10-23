@@ -69,7 +69,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Hello {user.username}</h1>
+      <h1>Greetings {user.username}</h1>
       {/* Display the selected level */}
       <h2>Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}</h2>
       <h3 className="blueText">"{chapterName}"</h3>
