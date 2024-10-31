@@ -76,7 +76,7 @@ const Dashboard = () => {
 
       {inaccessibleLevel && (
         <div className="inaccessible-level" aria-live="polite">
-          <p>Chapter {inaccessibleLevel} is currently locked.</p>
+          <p className="errorMessage">Chapter {inaccessibleLevel} is currently locked.</p>
         </div>
       )}
 
