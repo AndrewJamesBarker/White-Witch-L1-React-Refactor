@@ -47,7 +47,7 @@ function ChapterOne({
   resetSignal,
   showHelp,
   showInventory,
-  obtainConch,
+  obtainItem,
   hasConch,
   setHasConch,
   showCrystal,
@@ -207,7 +207,7 @@ function ChapterOne({
         break;
       case 3:
         setHasConch(true);
-        obtainConch();
+        obtainItem("Conch");
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("pickUpConch");
         break;

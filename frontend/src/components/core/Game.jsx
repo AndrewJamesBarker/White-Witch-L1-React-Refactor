@@ -98,29 +98,29 @@ const Game = () => {
     setShowRegisterForm(true);
   };
 
-  const obtainConch = () => {
-    setHasConch(true);
-
+  const obtainItem = (itemName) => {
+    // Update local state to indicate item obtained
+    if (itemName === 'Conch') setHasConch(true);
+    if (itemName === 'Pearl') setHasPearl(true);
+  
+    // Handle item update for authenticated users
     if (isAuthenticated) {
-      updateItem('Conch');
+      updateItem(itemName);
     } else {
-      const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
-
-      if (!guestUser.gameState.items) {
-        guestUser.gameState.items = [];
-      }
-
-      if (!guestUser.gameState.items.includes('Conch')) {
-        guestUser.gameState.items.push('Conch');
+      // Manage item for guest users
+      const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
+        gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
+      };
+  
+      // Ensure items array exists and add item if not already present
+      if (!guestUser.gameState.items.includes(itemName)) {
+        guestUser.gameState.items.push(itemName);
         sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-        console.log('Updated guest user state:', guestUser);
+        console.log(`Updated guest user state with ${itemName}:`, guestUser);
       }
     }
   };
-
-  const obtainPearl = () => {
-    setHasPearl(true);
-  };
+  
 
   const handleSatchelClick = () => {
     setShowInventory((prev) => !prev);
@@ -249,7 +249,7 @@ const Game = () => {
             resetSignal={resetSignal}
             showHelp={showHelp}
             showInventory={showInventory}
-            obtainConch={obtainConch}
+            obtainItem={obtainItem}
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
             nextStep={nextStep}
@@ -273,6 +273,7 @@ const Game = () => {
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}
+            obtainItem={obtainItem}
             setShowLifeLost={setShowLifeLost}
             showLifeGain={showLifeGain}
             setShowLifeGain={setShowLifeGain}

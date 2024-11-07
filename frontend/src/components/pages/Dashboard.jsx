@@ -50,15 +50,14 @@ const Dashboard = () => {
     const isCurrentChapter = currentChapter.level === clickedPuzzlePiece;
 
     if (isChapterCompleted || isCurrentChapter) {
-      console.log(`Chapter ${clickedPuzzlePiece} is accessible.`);
       setSelectedLevel(clickedPuzzlePiece);
       setInaccessibleLevel(null); // Reset when chapter is accessible
       setChapterName(ChapterNames[clickedPuzzlePiece]);
       setSelectedPiece(id); // Update selected piece in Dashboard
+      setViewingChapter(clickedPuzzlePiece); // Temporary view without updating currentChapter
     } else {
       setInaccessibleLevel(clickedPuzzlePiece); // Set when chapter is locked
       setTempHighlight(id); // Temporarily highlight inaccessible piece in red
-      console.log(`Chapter ${clickedPuzzlePiece} is locked.`);
 
       // Reset the highlight after 300 milliseconds
       setTimeout(() => {
