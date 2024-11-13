@@ -14,7 +14,6 @@ import { useAuth } from '../../context/AuthContext';
 
 
 const Game = () => {
-  const [chapOneCompleted, setChapOneCompleted] = useState(false);
   const [livesLeft, setLivesLeft] = useState(3);
   const [currentChapter, setCurrentChapter] = useState(1);
   const [showHelp, setShowHelp] = useState(false);

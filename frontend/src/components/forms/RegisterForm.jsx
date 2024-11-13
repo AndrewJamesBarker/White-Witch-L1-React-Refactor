@@ -4,6 +4,7 @@ import axios from "axios";
 import "../../assets/CSS/layout.css";
 import validator from "validator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { defaultGameState } from "../../context/GameStateContext"; // Adjust the path as needed
 
 const RegisterForm = () => {
   const apiBaseUrl = import.meta.env.VITE_API_URL;
@@ -17,22 +18,16 @@ const RegisterForm = () => {
   const isValidEmail = (email) => validator.isEmail(email);
 
   useEffect(() => {
-    // Wait for reCAPTCHA to render and target the textarea field
     const addRecaptchaLabels = () => {
       const recaptchaTextareas = document.querySelectorAll('.g-recaptcha-response');
       recaptchaTextareas.forEach((textarea, index) => {
-        // Add aria-label for accessibility
         textarea.setAttribute('aria-label', `Recaptcha verification field ${index + 1}`);
       });
     };
   
-    // Add a delay to ensure the reCAPTCHA has rendered
     const timeoutId = setTimeout(addRecaptchaLabels, 1000);
-  
-    // Cleanup timeout if the component unmounts
     return () => clearTimeout(timeoutId);
   }, []);
-  
 
   const onDeclineRegister = () => {
     navigate("/signin");
@@ -53,39 +48,15 @@ const RegisterForm = () => {
 
     const recaptchaToken = await executeRecaptcha("register");
 
-    const defaultGameState = {
-      currentChapter: { level: 1, completed: false },
-      items: ["laser pistol"],
-      livesLeft: 3,
-      chaptersCompleted: {
-        chapterOne: false,
-        chapterTwo: false,
-        chapterThree: false,
-        chapterFour: false,
-        chapterFive: false,
-        chapterSix: false,
-        chapterSeven: false,
-        chapterEight: false,
-      },
-    };
-
+    // Load guest user data if available
     const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
 
+    // Merge guest user state with default state if available, otherwise use defaultGameState
     const mergedGameState = guestUser
       ? {
-          currentChapter:
-            guestUser.gameState.currentChapter ||
-            defaultGameState.currentChapter,
-          items: Array.from(
-            new Set([
-              ...defaultGameState.items,
-              ...(guestUser.gameState.items || []),
-            ])
-          ),
-          livesLeft:
-            guestUser.gameState.livesLeft !== undefined
-              ? guestUser.gameState.livesLeft
-              : defaultGameState.livesLeft,
+          currentChapter: guestUser.gameState.currentChapter || defaultGameState.currentChapter,
+          items: Array.from(new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])),
+          livesLeft: guestUser.gameState.livesLeft !== undefined ? guestUser.gameState.livesLeft : defaultGameState.livesLeft,
           chaptersCompleted: {
             ...defaultGameState.chaptersCompleted,
             ...guestUser.gameState.chaptersCompleted,
@@ -105,11 +76,7 @@ const RegisterForm = () => {
       navigate("/dashboard");
     } catch (err) {
       console.error("Submission error:", err);
-      setError(
-        err.response && err.response.data
-          ? err.response.data.message
-          : err.message || "Error creating user"
-      );
+      setError(err.response?.data?.message || err.message || "Error creating user");
     }
   };
 
@@ -158,13 +125,9 @@ const RegisterForm = () => {
             />
             <small>
               This site is protected by reCAPTCHA and the Google {" "}
-              <a href="https://policies.google.com/privacy">
-                Privacy Policy
-              </a>{" "}
+              <a href="https://policies.google.com/privacy">Privacy Policy</a>{" "}
               and {" "}
-              <a href="https://policies.google.com/terms">
-                Terms of Service
-              </a>{" "}
+              <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
               apply.
             </small>
           </div>
