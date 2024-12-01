@@ -1,101 +1,216 @@
-import React, { useEffect, useRef } from "react";
-import ItemsAndLives from "../ui/ItemsAndLives";
-import ChapterOne from "../chapters/ChapterOne";
-import ChapterTwo from "../chapters/ChapterTwo";
-import HelpScreen from "../pages/HelpScreen";
-import LifeLostPage from "../pages/LifeLostPage";
-import LifeGainPage from "../pages/LifeGainPage";
-import InventoryPage from "../pages/InventoryPage";
-import RegisterForm from "../forms/RegisterForm";
-import { useGameState } from "../../context/GameStateContext";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState, useEffect, useRef } from 'react';
+import ItemsAndLives from '../ui/ItemsAndLives';
+import ChapterOne from '../chapters/ChapterOne';
+import ChapterTwo from '../chapters/ChapterTwo';
+import HelpScreen from '../pages/HelpScreen';
+import LifeLostPage from '../pages/LifeLostPage';
+import LifeGainPage from '../pages/LifeGainPage';
+import InventoryPage from '../pages/InventoryPage';
+import RegisterForm from '../forms/RegisterForm';
+import useCompleteChapter from '../hooks/useCompleteChapter';
+import useUpdateItem from '../hooks/useUpdateItem';
+import useUpdateLife from '../hooks/useUpdateLife';
+import { useAuth } from '../../context/AuthContext';
+
 
 const Game = () => {
-  const {
-    currentChapter,
-    livesLeft,
-    showHelp,
-    showLifeLost,
-    showLifeGain,
-    showInventory,
-    resetSignal,
-    deathCause,
-    lifeCause,
-    showCrystal,
-    hasConch,
-    hasPearl,
-    currentScene,
-    currentStep,
-    showRegisterForm,
-    setShowHelp,
-    setShowLifeLost,
-    setShowLifeGain,
-    setShowInventory,
-    setShowRegisterForm,
-    loseLife,
-    gainLife,
-    resetGame,
-    obtainItem,
-    nextStep,
-    previousStep,
-    changeStep,
-  } = useGameState();
-
-  const { user } = useAuth();
-
+  const [livesLeft, setLivesLeft] = useState(3);
+  const [currentChapter, setCurrentChapter] = useState(1);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showLifeLost, setShowLifeLost] = useState(false);
+  const [showLifeGain, setShowLifeGain] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
+  const [resetSignal, setResetSignal] = useState(false);
+  const [deathCause, setDeathCause] = useState('');
+  const [lifeCause, setLifeCause] = useState('');
+  const [showCrystal, setShowCrystal] = useState(true);
+  const [hasConch, setHasConch] = useState(false);
+  const [hasPearl, setHasPearl] = useState(false);
+  const [conchTaken, setConchTaken] = useState(false);
+  const [currentScene, setCurrentScene] = useState("");
+  const [currentStep, setCurrentStep] = useState(0);
   const helpRef = useRef(null);
   const inventoryRef = useRef(null);
   const lifeLostRef = useRef(null);
   const lifeGainRef = useRef(null);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const { isAuthenticated, user } = useAuth();
+  const completeChapter = useCompleteChapter(); // update chapter in db
+  const updateItem = useUpdateItem(); // update item in db
+  const updateLife = useUpdateLife(); // update life in db
 
-  
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (livesLeft === 0) {
-        resetGame();
-      } else {
-        if (showHelp && helpRef.current && !helpRef.current.contains(event.target)) {
-          setShowHelp(false);
-        }
-        if (showInventory && inventoryRef.current && !inventoryRef.current.contains(event.target)) {
-          setShowInventory(false);
-        }
-        if (showLifeLost && lifeLostRef.current && !lifeLostRef.current.contains(event.target)) {
-          setShowLifeLost(false);
-        }
-        if (showLifeGain && lifeGainRef.current && !lifeGainRef.current.contains(event.target)) {
-          setShowLifeGain(false);
-        }
-      }
-    };
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
+    if (user && user.gameState) {
+      setCurrentChapter(user.gameState.currentChapter.level || 1);
+      setLivesLeft(user.gameState.livesLeft ?? 3); 
+      if (user.gameState.items.includes('Conch')) setHasConch(true);
+      if (user.gameState.items.includes('Pearl')) setHasPearl(true);
+    } else if (guestUser && guestUser.gameState) {
+      setCurrentChapter(guestUser.gameState.currentChapter.level || 1);
+      setLivesLeft(guestUser.gameState.livesLeft ?? 3); 
+      if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
+      if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
+    }
+  }, [user]);
 
-    document.addEventListener("mousedown", handleClickOutside);
+  const handleClickOutside = (event) => {
+    if (livesLeft === 0) {
+      resetGame();
+    } else {
+      if (showHelp && helpRef.current && !helpRef.current.contains(event.target)) {
+        setShowHelp(false);
+      }
+      if (showInventory && inventoryRef.current && !inventoryRef.current.contains(event.target)) {
+        setShowInventory(false);
+      }
+      if (showLifeLost && lifeLostRef.current && !lifeLostRef.current.contains(event.target)) {
+        setShowLifeLost(false);
+      }
+      if (showLifeGain && lifeGainRef.current && !lifeGainRef.current.contains(event.target)) {
+        setShowLifeGain(false);
+        lifeGainClose(currentScene);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showHelp, showInventory, showLifeLost, showLifeGain, livesLeft]);
+  }, [showHelp, showInventory, showLifeLost, showLifeGain]);
+
+  const nextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const previousStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const changeStep = (step) => {
+    setCurrentStep(step);
+  };
+
+  const handleRegister = () => {
+    setShowRegisterForm(true);
+  };
+
+  const obtainItem = (itemName) => {
+    // Update local state to indicate item obtained
+    if (itemName === 'Conch') setHasConch(true);
+    if (itemName === 'Pearl') setHasPearl(true);
+  
+    // Handle item update for authenticated users
+    if (isAuthenticated) {
+      updateItem(itemName);
+    } else {
+      // Manage item for guest users
+      const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
+        gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
+      };
+  
+      // Ensure items array exists and add item if not already present
+      if (!guestUser.gameState.items.includes(itemName)) {
+        guestUser.gameState.items.push(itemName);
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log(`Updated guest user state with ${itemName}:`, guestUser);
+      }
+    }
+  };
+  
+
+  const handleSatchelClick = () => {
+    setShowInventory((prev) => !prev);
+  };
+
+  const chapterNames = {
+    1: user ? `The Cove - ${user.username}` : 'The Cove',
+    2: user ? `The Fields - ${user.username}` : 'The Fields',
+    3: user ? `The Ark  ${user.username}` : 'The Ark',
+  };
+
+  const loseLife = (cause) => {
+    if (livesLeft > 0) {
+      const newLives = livesLeft - 1;
+      setLivesLeft(newLives);
+      setDeathCause(cause);
+      if (!isAuthenticated) {
+        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        guestUser.gameState.livesLeft = newLives;
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log('Updated guest user state:', guestUser);
+      } else {
+        updateLife(newLives);
+      }
+    }
+  };
+
+  const handleCloseLifeLostPage = () => {
+    setShowLifeLost(false);
+    if (livesLeft === 0) resetGame();
+  };
+
+  const lifeGainClose = (scene) => {
+    setShowLifeGain(false);
+    setShowCrystal(false);
+    setCurrentScene(scene);
+  };
+
+  const gainLife = (cause) => {
+    if (livesLeft < 3) {
+      const newLives = livesLeft + 1;
+      setLivesLeft(newLives);
+      if (!isAuthenticated) {
+        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
+        guestUser.gameState.livesLeft = newLives;
+        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
+        console.log('Updated guest user state:', guestUser);
+      } else {
+        updateLife(newLives);
+      }
+    }
+    setLifeCause(cause);
+    setShowLifeGain(true);
+  };
+
+  const resetGame = () => {
+    const defaultLives = user?.gameState?.livesLeft || 3;
+    setLivesLeft(defaultLives);
+    setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
+    setResetSignal(true);
+    setShowLifeLost(false);
+    setConchTaken(false);
+    setHasConch(false);
+    updateLife(3);
+    sessionStorage.removeItem('guestUser');
+  };
+
+  useEffect(() => {
+    if (resetSignal) {
+      setResetSignal(false);
+    }
+  }, [resetSignal]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (
-        e.target.tagName === "INPUT" ||
-        e.target.tagName === "TEXTAREA" ||
-        e.target.tagName === "SELECT"
-      ) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
         return;
       }
 
-      if (e.key.toLowerCase() === "h") {
+      if (e.key.toLowerCase() === 'h') {
         setShowHelp((prev) => !prev);
       }
-      if (e.key.toLowerCase() === "i") {
+      if (e.key.toLowerCase() === 'i') {
         setShowInventory((prev) => !prev);
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -105,65 +220,85 @@ const Game = () => {
     } else if (showHelp) {
       return <HelpScreen ref={helpRef} />;
     } else if (showInventory) {
-      return (
-        <InventoryPage
-          hasConch={hasConch}
-          hasPearl={hasPearl}
-          ref={inventoryRef}
-        />
-      );
+      return <InventoryPage hasConch={hasConch} hasPearl={hasPearl} ref={inventoryRef} />;
     } else if (showLifeLost) {
-      return (
-        <LifeLostPage
-          resetGame={resetGame}
-          livesLeft={livesLeft}
-          onClose={() => setShowLifeLost(false)}
-          deathCause={deathCause}
-          ref={lifeLostRef}
-        />
-      );
+      return <LifeLostPage resetGame={resetGame} livesLeft={livesLeft} onClose={handleCloseLifeLostPage} deathCause={deathCause} ref={lifeLostRef} />;
     } else if (showLifeGain) {
-      return (
-        <LifeGainPage
-          livesLeft={livesLeft}
-          onClose={() => setShowLifeGain(false)}
-          lifeCause={lifeCause}
-          currentScene={currentScene}
-          ref={lifeGainRef}
-        />
-      );
+      return <LifeGainPage livesLeft={livesLeft} onClose={lifeGainClose} lifeCause={lifeCause} currentScene={currentScene} ref={lifeGainRef} />;
     } else {
       return renderChapter();
     }
   };
 
+  
+
   const renderChapter = () => {
     switch (currentChapter) {
       case 1:
         return (
-          <ChapterOne onComplete={() => completeChapter(1)} />
+          <ChapterOne
+            onComplete={() => completeChapter(1)}
+            loseLife={loseLife}
+            gainLife={gainLife}
+            showLifeLost={showLifeLost}
+            setShowLifeLost={setShowLifeLost}
+            showLifeGain={showLifeGain}
+            setShowLifeGain={setShowLifeGain}
+            livesLeft={livesLeft}
+            resetSignal={resetSignal}
+            showHelp={showHelp}
+            showInventory={showInventory}
+            obtainItem={obtainItem}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            nextStep={nextStep}
+            previousStep={previousStep}
+            hasConch={hasConch}
+            setHasConch={setHasConch}
+            conchTaken={conchTaken}
+            setConchTaken={setConchTaken}
+            showCrystal={showCrystal}
+            currentScene={currentScene}
+            setCurrentScene={setCurrentScene}
+            currentChapter={currentChapter}
+            setCurrentChapter={setCurrentChapter}
+          />
         );
+
       case 2:
         return (
-          <ChapterOne onComplete={() => completeChapter(2)} />
+          <ChapterTwo
+            onComplete={() => completeChapter(2)}
+            loseLife={loseLife}
+            gainLife={gainLife}
+            showLifeLost={showLifeLost}
+            obtainItem={obtainItem}
+            setShowLifeLost={setShowLifeLost}
+            showLifeGain={showLifeGain}
+            setShowLifeGain={setShowLifeGain}
+            livesLeft={livesLeft}
+            resetSignal={resetSignal}
+            showHelp={showHelp}
+            showInventory={showInventory}
+            currentStep={currentStep}
+            changeStep={changeStep}
+            previousStep={previousStep}
+            currentChapter={currentChapter}
+            setCurrentChapter={setCurrentChapter}
+          />
         );
+
       default:
         return <div>Game Completed!</div>;
     }
   };
 
-  const chapterNames = {
-    1: user ? `The Cove - ${user.username}` : "The Cove",
-    2: user ? `The Fields - ${user.username}` : "The Fields",
-    3: user ? `The Ark  ${user.username}` : "The Ark",
-  };
-
   return (
-    <div className="raleway">
+    <div className='raleway '>
       {renderChapterContent()}
-      <ItemsAndLives onSatchelClick={() => setShowInventory((prev) => !prev)} livesLeft={livesLeft} />
+      <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapterInfo blueText">
-        {chapterNames[currentChapter] || "Unknown"}
+        {chapterNames[currentChapter] || 'Unknown'}
       </div>
     </div>
   );
