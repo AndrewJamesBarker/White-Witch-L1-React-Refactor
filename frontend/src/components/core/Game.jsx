@@ -11,11 +11,24 @@ import useCompleteChapter from '../hooks/useCompleteChapter';
 import useUpdateItem from '../hooks/useUpdateItem';
 import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
-
+import { useGameState } from "../../context/GameStateContext";
 
 const Game = () => {
-  const [livesLeft, setLivesLeft] = useState(3);
-  const [currentChapter, setCurrentChapter] = useState(1);
+
+  const {
+    currentChapter,
+    setCurrentChapter,
+    livesLeft,
+    setLivesLeft,
+    items,
+    setItems,
+    chaptersCompleted,
+    setChaptersCompleted,
+    completeChapter,
+    updateItem,
+    updateLife,
+  } = useGameState(); // Context-provided state and functions
+
   const [showHelp, setShowHelp] = useState(false);
   const [showLifeLost, setShowLifeLost] = useState(false);
   const [showLifeGain, setShowLifeGain] = useState(false);
@@ -35,9 +48,7 @@ const Game = () => {
   const lifeGainRef = useRef(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const { isAuthenticated, user } = useAuth();
-  const completeChapter = useCompleteChapter(); // update chapter in db
-  const updateItem = useUpdateItem(); // update item in db
-  const updateLife = useUpdateLife(); // update life in db
+
 
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
@@ -96,6 +107,7 @@ const Game = () => {
   const handleRegister = () => {
     setShowRegisterForm(true);
   };
+
 
   const obtainItem = (itemName) => {
     // Update local state to indicate item obtained

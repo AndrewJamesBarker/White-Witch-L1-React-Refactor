@@ -1,9 +1,8 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
-import { useAuth } from '../context/AuthContext';
-import useCompleteChapter from '../components/hooks/useCompleteChapter';
-import useUpdateItem from '../components/hooks/useUpdateItem';
-import useUpdateLife from '../components/hooks/useUpdateLife';
-
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { useAuth } from "../context/AuthContext";
+import useCompleteChapter from "../components/hooks/useCompleteChapter";
+import useUpdateItem from "../components/hooks/useUpdateItem";
+import useUpdateLife from "../components/hooks/useUpdateLife";
 
 // Default game state for new users or guests
 const defaultGameState = {
@@ -22,36 +21,37 @@ const defaultGameState = {
   },
 };
 
+// Create the GameState context
 const GameStateContext = createContext();
 
+// Custom hook for consuming the context
 export const useGameState = () => useContext(GameStateContext);
 
-  const GameStateProvider = ({ children }) => {
-  const { isAuthenticated, user } = useAuth();
+export const GameStateProvider = ({ children }) => {
+  const { user } = useAuth();
 
-  // State variables initialized from defaultGameState
+  // State variables
   const [currentChapter, setCurrentChapter] = useState(defaultGameState.currentChapter.level);
   const [viewingChapter, setViewingChapter] = useState(defaultGameState.currentChapter.level);
   const [livesLeft, setLivesLeft] = useState(defaultGameState.livesLeft);
   const [items, setItems] = useState(defaultGameState.items);
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
-  
 
-  // Hooks for updating data in the database
+  // Hooks for updating database or session storage
   const completeChapter = useCompleteChapter();
   const updateItem = useUpdateItem();
   const updateLife = useUpdateLife();
 
-  // Initialize state based on user or guest data
+  // Initialize state from user or guest game state
   useEffect(() => {
-    const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
+    const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
 
     if (user && user.gameState) {
       setCurrentChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level);
       setLivesLeft(user.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(user.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...user.gameState.chaptersCompleted });
-    } else if (guestUser && guestUser.gameState) {
+    } else if (guestUser?.gameState) {
       setCurrentChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level);
       setLivesLeft(guestUser.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
@@ -59,65 +59,29 @@ export const useGameState = () => useContext(GameStateContext);
     }
   }, [user]);
 
-
-  // Function to obtain an item
-  const obtainItem = (item) => {
-    if (!items.includes(item)) {
-      setItems((prevItems) => [...prevItems, item]);
-      if (item === 'Conch') setHasConch(true);
-      if (item === 'Pearl') setHasPearl(true);
-
-      if (isAuthenticated) {
-        updateItem(item);
-      } else {
-        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { items: [] } };
-        if (!guestUser.gameState.items.includes(item)) {
-          guestUser.gameState.items.push(item);
-          sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-        }
-      }
-    }
-  };
-
+  // Context value
   return (
-    <GameStateContext.Provider value={{
-      currentChapter,
-      setCurrentChapter,
-      viewingChapter,
-      setViewingChapter,
-      livesLeft,
-      setLivesLeft,
-      items,
-      hasConch,
-      hasPearl,
-      obtainItem,
-      resetSignal,
-      showHelp,
-      setShowHelp,
-      showInventory,
-      setShowInventory,
-      showLifeLost,
-      setShowLifeLost,
-      showLifeGain,
-      setShowLifeGain,
-      deathCause,
-      setDeathCause,
-      lifeCause,
-      setLifeCause,
-      showCrystal,
-      setShowCrystal,
-      currentScene,
-      setCurrentScene,
-      currentStep,
-      setCurrentStep,
-      resetGame,
-      nextStep: () => setCurrentStep((prev) => prev + 1),
-      previousStep: () => setCurrentStep((prev) => prev - 1),
-    }}>
+    <GameStateContext.Provider
+      value={{
+        currentChapter,
+        setCurrentChapter,
+        viewingChapter,
+        setViewingChapter,
+        livesLeft,
+        setLivesLeft,
+        items,
+        setItems,
+        chaptersCompleted,
+        setChaptersCompleted,
+        completeChapter, 
+        updateItem, 
+        updateLife, 
+      }}
+    >
       {children}
     </GameStateContext.Provider>
   );
 };
 
-// Export both the provider and default game state
-export { GameStateProvider, defaultGameState };
+// Named exports for modular usage
+export { defaultGameState };
