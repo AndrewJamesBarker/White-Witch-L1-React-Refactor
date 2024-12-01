@@ -145,6 +145,7 @@ const GameStateProvider = ({ children }) => {
       }
     }
   };
+  
 
   return (
     <GameStateContext.Provider
@@ -185,6 +186,7 @@ const GameStateProvider = ({ children }) => {
         gainLife,
         nextStep: () => setCurrentStep((prev) => prev + 1),
         previousStep: () => setCurrentStep((prev) => prev - 1),
+        changeStep: (step) =>  setCurrentStep(step)
       }}
     >
       {children}

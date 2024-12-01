@@ -38,6 +38,7 @@ const Game = () => {
     obtainItem,
     nextStep,
     previousStep,
+    changeStep,
   } = useGameState();
 
   const { user } = useAuth();
