@@ -141,26 +141,11 @@ const Game = () => {
     switch (currentChapter) {
       case 1:
         return (
-          <ChapterOne
-            loseLife={loseLife}
-            gainLife={gainLife}
-            obtainItem={obtainItem}
-            nextStep={nextStep}
-            previousStep={previousStep}
-            currentStep={currentStep}
-            resetSignal={resetSignal}
-          />
+          <ChapterOne onComplete={() => completeChapter(1)} />
         );
       case 2:
         return (
-          <ChapterTwo
-            loseLife={loseLife}
-            gainLife={gainLife}
-            obtainItem={obtainItem}
-            nextStep={nextStep}
-            previousStep={previousStep}
-            currentStep={currentStep}
-          />
+          <ChapterOne onComplete={() => completeChapter(2)} />
         );
       default:
         return <div>Game Completed!</div>;
