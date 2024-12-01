@@ -34,19 +34,8 @@ export const useGameState = () => useContext(GameStateContext);
   const [viewingChapter, setViewingChapter] = useState(defaultGameState.currentChapter.level);
   const [livesLeft, setLivesLeft] = useState(defaultGameState.livesLeft);
   const [items, setItems] = useState(defaultGameState.items);
-  const [hasConch, setHasConch] = useState(false);
-  const [hasPearl, setHasPearl] = useState(false);
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
-  const [resetSignal, setResetSignal] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [showInventory, setShowInventory] = useState(false);
-  const [showLifeLost, setShowLifeLost] = useState(false);
-  const [showLifeGain, setShowLifeGain] = useState(false);
-  const [deathCause, setDeathCause] = useState('');
-  const [lifeCause, setLifeCause] = useState('');
-  const [showCrystal, setShowCrystal] = useState(true);
-  const [currentScene, setCurrentScene] = useState('');
-  const [currentStep, setCurrentStep] = useState(0);
+  
 
   // Hooks for updating data in the database
   const completeChapter = useCompleteChapter();
@@ -62,34 +51,14 @@ export const useGameState = () => useContext(GameStateContext);
       setLivesLeft(user.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(user.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...user.gameState.chaptersCompleted });
-      setHasConch(user.gameState.items.includes('Conch'));
-      setHasPearl(user.gameState.items.includes('Pearl'));
     } else if (guestUser && guestUser.gameState) {
       setCurrentChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level);
       setLivesLeft(guestUser.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...guestUser.gameState.chaptersCompleted });
-      setHasConch(guestUser.gameState.items.includes('Conch'));
-      setHasPearl(guestUser.gameState.items.includes('Pearl'));
     }
   }, [user]);
 
-  // Function to reset the game
-  const resetGame = () => {
-    setLivesLeft(defaultGameState.livesLeft);
-    setCurrentChapter(defaultGameState.currentChapter.level);
-    setResetSignal(true);
-    setShowLifeLost(false);
-    setHasConch(false);
-    setHasPearl(false);
-    setItems(defaultGameState.items);
-    setChaptersCompleted(defaultGameState.chaptersCompleted);
-    if (isAuthenticated) {
-      updateLife(3);
-    } else {
-      sessionStorage.removeItem('guestUser');
-    }
-  };
 
   // Function to obtain an item
   const obtainItem = (item) => {
