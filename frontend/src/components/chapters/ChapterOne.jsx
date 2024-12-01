@@ -7,6 +7,7 @@ import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
+import { useGameState } from '../../context/GameStateContext';
 import Dashboard from "../pages/Dashboard";
 
 // Images

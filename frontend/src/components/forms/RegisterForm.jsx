@@ -4,7 +4,7 @@ import axios from "axios";
 import "../../assets/CSS/layout.css";
 import validator from "validator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { defaultGameState } from "../../context/GameStateContext"; // Adjust the path as needed
+import { defaultGameState } from "../../context/GameStateContext"; 
 
 const RegisterForm = () => {
   const apiBaseUrl = import.meta.env.VITE_API_URL;

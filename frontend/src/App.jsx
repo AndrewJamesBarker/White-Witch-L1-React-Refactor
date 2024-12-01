@@ -17,6 +17,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import RegisterForm from "./components/forms/RegisterForm";
 import SignInForm from "./components/forms/SignInForm";
 import VerifyEmail from "./components/pages/VerifyEmail";
+import { GameStateProvider } from "./context/GameStateContext";
 
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
@@ -104,9 +105,11 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <GameStateProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </GameStateProvider>
     </AuthProvider>
   );
 };

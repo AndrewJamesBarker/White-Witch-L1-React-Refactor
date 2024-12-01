@@ -42,7 +42,7 @@ const Dashboard = () => {
     piece12: 12,
   };
 
-  // Handle tile click, now everything is centralized in Dashboard
+  // Handle tile click
   const handleTileClick = (id) => {
     const clickedPuzzlePiece = pieceIdToChapterMap[id];
     const chapterKey = ChapterMap[clickedPuzzlePiece];
@@ -51,7 +51,7 @@ const Dashboard = () => {
 
     if (isChapterCompleted || isCurrentChapter) {
       setSelectedLevel(clickedPuzzlePiece);
-      setInaccessibleLevel(null); // Reset when chapter is accessible
+      setInaccessibleLevel(null); 
       setChapterName(ChapterNames[clickedPuzzlePiece]);
       setSelectedPiece(id); // Update selected piece in Dashboard
       setViewingChapter(clickedPuzzlePiece); // Temporary view without updating currentChapter
