@@ -7,9 +7,6 @@ import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
 import InventoryPage from '../pages/InventoryPage';
 import RegisterForm from '../forms/RegisterForm';
-import useCompleteChapter from '../hooks/useCompleteChapter';
-import useUpdateItem from '../hooks/useUpdateItem';
-import useUpdateLife from '../hooks/useUpdateLife';
 import { useAuth } from '../../context/AuthContext';
 import { useGameState } from "../../context/GameStateContext";
 
