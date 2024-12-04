@@ -109,8 +109,11 @@ const Game = () => {
   const obtainItem = (itemName) => {
     if (!items.includes(itemName)) {
       // Update the items array in the database or session storage
+      const updatedItems = [...items, itemName];
+      setItems(updatedItems); // Update state immediately
+  
       if (isAuthenticated) {
-        updateItem(itemName);
+        updateItem(itemName); // Update backend for authenticated users
       } else {
         const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
           gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
@@ -119,12 +122,10 @@ const Game = () => {
         // Add the item to guestUser's items array
         guestUser.gameState.items.push(itemName);
         sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-        console.log(`Updated guest user state with ${itemName}:`, guestUser);
       }
     }
   };
-  
-  
+    
 
   const handleSatchelClick = () => {
     setShowInventory((prev) => !prev);
