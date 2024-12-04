@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ItemsAndLives from '../ui/ItemsAndLives';
+import RemoveLevelSpecificItems from '../utilities/gameUtils';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
 import HelpScreen from '../pages/HelpScreen';
@@ -34,9 +35,8 @@ const Game = () => {
   const [deathCause, setDeathCause] = useState('');
   const [lifeCause, setLifeCause] = useState('');
   const [showCrystal, setShowCrystal] = useState(true);
-  const [hasConch, setHasConch] = useState(false);
-  const [hasPearl, setHasPearl] = useState(false);
-  const [conchTaken, setConchTaken] = useState(false);
+  const hasConch = items.includes("Conch");
+  const hasPearl = items.includes("Pearl");
   const [currentScene, setCurrentScene] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const helpRef = useRef(null);
@@ -49,18 +49,18 @@ const Game = () => {
 
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
+
     if (user && user.gameState) {
-      setCurrentChapter(user.gameState.currentChapter.level || 1);
-      setLivesLeft(user.gameState.livesLeft ?? 3); 
-      if (user.gameState.items.includes('Conch')) setHasConch(true);
-      if (user.gameState.items.includes('Pearl')) setHasPearl(true);
+        setCurrentChapter(user.gameState.currentChapter.level || 1);
+        setLivesLeft(user.gameState.livesLeft ?? 3);
+        setItems(user.gameState.items || []); // Update items directly
     } else if (guestUser && guestUser.gameState) {
-      setCurrentChapter(guestUser.gameState.currentChapter.level || 1);
-      setLivesLeft(guestUser.gameState.livesLeft ?? 3); 
-      if (guestUser.gameState.items.includes('Conch')) setHasConch(true);
-      if (guestUser.gameState.items.includes('Pearl')) setHasPearl(true);
+        setCurrentChapter(guestUser.gameState.currentChapter.level || 1);
+        setLivesLeft(guestUser.gameState.livesLeft ?? 3);
+        setItems(guestUser.gameState.items || []); // Update items directly
     }
-  }, [user]);
+}, [user]);
+
 
   const handleClickOutside = (event) => {
     if (livesLeft === 0) {
@@ -107,27 +107,23 @@ const Game = () => {
 
 
   const obtainItem = (itemName) => {
-    // Update local state to indicate item obtained
-    if (itemName === 'Conch') setHasConch(true);
-    if (itemName === 'Pearl') setHasPearl(true);
+    if (!items.includes(itemName)) {
+      // Update the items array in the database or session storage
+      if (isAuthenticated) {
+        updateItem(itemName);
+      } else {
+        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
+          gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
+        };
   
-    // Handle item update for authenticated users
-    if (isAuthenticated) {
-      updateItem(itemName);
-    } else {
-      // Manage item for guest users
-      const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
-        gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
-      };
-  
-      // Ensure items array exists and add item if not already present
-      if (!guestUser.gameState.items.includes(itemName)) {
+        // Add the item to guestUser's items array
         guestUser.gameState.items.push(itemName);
         sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
         console.log(`Updated guest user state with ${itemName}:`, guestUser);
       }
     }
   };
+  
   
 
   const handleSatchelClick = () => {
@@ -190,8 +186,8 @@ const Game = () => {
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);
-    setConchTaken(false);
-    setHasConch(false);
+    // setHasConch(false);
+    RemoveLevelSpecificItems(currentChapter, items)
     updateLife(3);
     sessionStorage.removeItem('guestUser');
   };
@@ -263,9 +259,6 @@ const Game = () => {
             nextStep={nextStep}
             previousStep={previousStep}
             hasConch={hasConch}
-            setHasConch={setHasConch}
-            conchTaken={conchTaken}
-            setConchTaken={setConchTaken}
             showCrystal={showCrystal}
             currentScene={currentScene}
             setCurrentScene={setCurrentScene}

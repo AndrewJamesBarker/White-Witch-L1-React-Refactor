@@ -8,6 +8,8 @@ import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
 import Dashboard from "../pages/Dashboard";
+import { useGameState } from "../../context/GameStateContext";
+
 
 // Images
 import trident from "../../assets/images/environment/trident.png";
@@ -48,12 +50,14 @@ function ChapterOne({
   showHelp,
   showInventory,
   obtainItem,
-  hasConch,
-  setHasConch,
   showCrystal,
   currentScene,
   setCurrentScene,
 }) {
+  const { items } = useGameState(); // Access the items from context
+  const hasConch = items.includes("Conch"); // Derive if the user has the Conch
+  const { isAuthenticated } = useAuth();
+
   const totalSteps = 8;
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   const [userChoice, setUserChoice] = useState(null);
@@ -71,8 +75,7 @@ function ChapterOne({
   const [westScene, setWestScene] = useState(false);
   const [conchListened, setConchListened] = useState(false);
   const [chapterComplete, setChapterComplete] = useState(false); // New state for chapter completion
-  const items = ["Conch"];
-  const { isAuthenticated } = useAuth();
+
 
   const handleDragEnd = (event) => {
     setConchListened(true);
@@ -189,25 +192,22 @@ function ChapterOne({
     }
   };
 
+  
   const handleChoiceSelect = (choice) => {
     setUserChoice(choice);
     switch (choice.value) {
       case 1:
-        if (!hasConch) {
-          setDynamicSceneVisible(true);
-          setCurrentDynamicSceneKey("sirenGreetNoConch");
-        } else {
-          setDynamicSceneVisible(true);
-          setCurrentDynamicSceneKey("sirenGreetWithConch");
-        }
+        setDynamicSceneVisible(true);
+        setCurrentDynamicSceneKey(
+          hasConch ? "sirenGreetWithConch" : "sirenGreetNoConch"
+        );
         break;
       case 2:
         setShowLifeLost(true);
         loseLife("sirenAttack");
         break;
       case 3:
-        setHasConch(true);
-        obtainItem("Conch");
+        obtainItem("Conch"); // Use context's obtainItem method
         setDynamicSceneVisible(true);
         setCurrentDynamicSceneKey("pickUpConch");
         break;
@@ -220,6 +220,7 @@ function ChapterOne({
         setCurrentStep(1);
     }
   };
+
 
   const handleDynamicSceneClose = () => {
     setDynamicSceneVisible(false);
@@ -436,6 +437,10 @@ function ChapterOne({
   };
 
   useEffect(() => {
+    updateChoices();
+  }, [hasConch]);
+
+  useEffect(() => {
     if (resetSignal) {
       setCurrentStep(0);
     }
@@ -473,9 +478,6 @@ function ChapterOne({
     totalSteps,
   ]);
 
-  useEffect(() => {
-    updateChoices();
-  }, [hasConch]);
 
   return (
     <div id="ChapterOnePage" className="widthControl">
