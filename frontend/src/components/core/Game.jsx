@@ -195,6 +195,8 @@ const Game = () => {
 
   useEffect(() => {
     if (resetSignal) {
+      setLivesLeft(3);
+      updateLife(3);
       setResetSignal(false);
     }
   }, [resetSignal]);
