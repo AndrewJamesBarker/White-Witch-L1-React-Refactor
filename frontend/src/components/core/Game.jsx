@@ -182,17 +182,14 @@ const Game = () => {
   };
 
   const resetGame = () => {
-    const defaultLives = user?.gameState?.livesLeft || 3;
-    setLivesLeft(defaultLives);
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);
-    // setHasConch(false);
     RemoveLevelSpecificItems(currentChapter, items)
-    updateLife(3);
     sessionStorage.removeItem('guestUser');
   };
 
+  // This helps execute state changes that were inoperable directly in the resetGame function
   useEffect(() => {
     if (resetSignal) {
       setLivesLeft(3);
