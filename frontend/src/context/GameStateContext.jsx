@@ -57,7 +57,7 @@ export const GameStateProvider = ({ children }) => {
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...guestUser.gameState.chaptersCompleted });
     }
-  }, [user]);
+  }, [user, items, chaptersCompleted, livesLeft]);
 
   // Context value
   return (
