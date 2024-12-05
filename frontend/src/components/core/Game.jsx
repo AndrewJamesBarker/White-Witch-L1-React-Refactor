@@ -185,7 +185,7 @@ const Game = () => {
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);
-    RemoveLevelSpecificItems(currentChapter, items)
+    // RemoveLevelSpecificItems(currentChapter.level, items)
     sessionStorage.removeItem('guestUser');
   };
 
