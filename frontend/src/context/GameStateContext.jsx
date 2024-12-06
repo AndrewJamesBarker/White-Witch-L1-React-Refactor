@@ -41,9 +41,18 @@ export const GameStateProvider = ({ children }) => {
   const [hasPearl, setHasPearl] = useState(items.includes("Pearl")); // Initialize from items
 
   useEffect(() => {
-    // Update `hasConch` whenever `items` changes
-    setHasConch(items.includes("Conch"));
-    setHasPearl(items.includes("Pearl"));
+    // Update `hasConch` and `hasPearl` whenever `items` changes
+    if (items.includes("Conch")) {
+      setHasConch(true);
+    } else {
+      setHasConch(false);
+    }
+  
+    if (items.includes("Pearl")) {
+      setHasPearl(true);
+    } else {
+      setHasPearl(false);
+    }
   }, [items]);
 
   // Hooks for updating database or session storage

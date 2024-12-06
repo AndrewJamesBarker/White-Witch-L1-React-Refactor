@@ -165,6 +165,7 @@ const Game = () => {
   };
 
   const lifeGainClose = (scene) => {
+    
     setShowLifeGain(false);
     setShowCrystal(false);
     setCurrentScene(scene);
@@ -173,6 +174,7 @@ const Game = () => {
   const gainLife = (cause) => {
     if (livesLeft < 3) {
       const newLives = livesLeft + 1;
+   
       setLivesLeft(newLives);
       if (!isAuthenticated) {
         const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
@@ -187,21 +189,39 @@ const Game = () => {
     setShowLifeGain(true);
   };
 
-  // allows singling out level specific items for granular removal on thier correlated chapter, upon 3 lives lost.
-  const levelSpecificItems = LevelItemsMap[currentChapter] || [];
-
-  const resetGame = () => {
+  const resetGame = async () => {
+    // Step 1: Get level-specific items for the current chapter
+    const levelSpecificItems = LevelItemsMap[currentChapter] || [];
+  
+    // Step 2: Remove level-specific items from the backend
+    if (isAuthenticated) {
+      for (const item of levelSpecificItems) {
+        await removeItem(item); // Ensure items are removed one by one before proceeding
+      }
+    } else {
+      // For guest users, remove items locally
+      const guestUser = JSON.parse(sessionStorage.getItem("guestUser")) || {
+        gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } },
+      };
+      guestUser.gameState.items = guestUser.gameState.items.filter((item) => !levelSpecificItems.includes(item));
+      sessionStorage.setItem("guestUser", JSON.stringify(guestUser));
+    }
+  
+    // Step 3: Reset state variables
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
+    setLivesLeft(3); // Reset lives to default
+    updateLife(3); // Update lives in the backend
     setResetSignal(true);
     setShowLifeLost(false);
-    sessionStorage.removeItem('guestUser');
+  
+    // Optional: Clear guest user data from session storage
+    sessionStorage.removeItem("guestUser");
   };
-
+  
   // This helps execute state changes that were inoperable directly in the resetGame function
   useEffect(() => {
     if (resetSignal) {
       setLivesLeft(3);
-      levelSpecificItems.forEach((item) => { removeItem(item); });
       updateLife(3);
       setResetSignal(false);
     }
