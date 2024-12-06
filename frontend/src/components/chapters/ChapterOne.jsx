@@ -33,8 +33,6 @@ import Listen from "../../assets/audio/listen.mp3";
 import deniseSirenVocal from "../../assets/audio/deniseSirenVocal.mp3";
 
 function ChapterOne({
-  currentChapter,
-  setCurrentChapter,
   currentStep,
   setCurrentStep,
   nextStep,
@@ -45,7 +43,6 @@ function ChapterOne({
   setShowLifeLost,
   showLifeLost,
   showLifeGain,
-  livesLeft,
   resetSignal,
   showHelp,
   showInventory,
@@ -54,8 +51,13 @@ function ChapterOne({
   currentScene,
   setCurrentScene,
 }) {
-  const { items } = useGameState(); // Access the items from context
-  const hasConch = items.includes("Conch"); // Derive if the user has the Conch
+  const {
+    currentChapter,
+    setCurrentChapter,
+    livesLeft,
+    hasConch,
+  } = useGameState();
+
   const { isAuthenticated } = useAuth();
 
   const totalSteps = 8;

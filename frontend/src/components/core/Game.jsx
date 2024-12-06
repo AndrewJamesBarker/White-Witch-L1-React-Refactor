@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ItemsAndLives from '../ui/ItemsAndLives';
-import RemoveLevelSpecificItems from '../utilities/gameUtils';
+import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapterTwo from '../chapters/ChapterTwo';
 import HelpScreen from '../pages/HelpScreen';
@@ -25,6 +25,12 @@ const Game = () => {
     completeChapter,
     updateItem,
     updateLife,
+    removeItem,
+    hasConch,
+    setHasConch,
+    hasPearl,
+    setHasPearl,
+    
   } = useGameState(); // Context-provided state and functions
 
   const [showHelp, setShowHelp] = useState(false);
@@ -35,8 +41,6 @@ const Game = () => {
   const [deathCause, setDeathCause] = useState('');
   const [lifeCause, setLifeCause] = useState('');
   const [showCrystal, setShowCrystal] = useState(true);
-  const hasConch = items.includes("Conch");
-  const hasPearl = items.includes("Pearl");
   const [currentScene, setCurrentScene] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const helpRef = useRef(null);
@@ -45,7 +49,7 @@ const Game = () => {
   const lifeGainRef = useRef(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const { isAuthenticated, user } = useAuth();
-
+  
 
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
@@ -131,6 +135,7 @@ const Game = () => {
     setShowInventory((prev) => !prev);
   };
 
+  // Displays the chapter name with the user's username if authenticated
   const chapterNames = {
     1: user ? `The Cove - ${user.username}` : 'The Cove',
     2: user ? `The Fields - ${user.username}` : 'The Fields',
@@ -155,7 +160,8 @@ const Game = () => {
 
   const handleCloseLifeLostPage = () => {
     setShowLifeLost(false);
-    if (livesLeft === 0) resetGame();
+    if (livesLeft === 0) {
+      resetGame()};
   };
 
   const lifeGainClose = (scene) => {
@@ -181,11 +187,13 @@ const Game = () => {
     setShowLifeGain(true);
   };
 
+  // allows singling out level specific items for granular removal on thier correlated chapter, upon 3 lives lost.
+  const levelSpecificItems = LevelItemsMap[currentChapter] || [];
+
   const resetGame = () => {
     setCurrentChapter(user?.gameState?.currentChapter?.level || 1);
     setResetSignal(true);
     setShowLifeLost(false);
-    // RemoveLevelSpecificItems(currentChapter.level, items)
     sessionStorage.removeItem('guestUser');
   };
 
@@ -193,6 +201,7 @@ const Game = () => {
   useEffect(() => {
     if (resetSignal) {
       setLivesLeft(3);
+      levelSpecificItems.forEach((item) => { removeItem(item); });
       updateLife(3);
       setResetSignal(false);
     }
@@ -258,7 +267,6 @@ const Game = () => {
             setCurrentStep={setCurrentStep}
             nextStep={nextStep}
             previousStep={previousStep}
-            hasConch={hasConch}
             showCrystal={showCrystal}
             currentScene={currentScene}
             setCurrentScene={setCurrentScene}

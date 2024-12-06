@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import useCompleteChapter from "../components/hooks/useCompleteChapter";
 import useUpdateItem from "../components/hooks/useUpdateItem";
 import useUpdateLife from "../components/hooks/useUpdateLife";
+import useRemoveItem from "../components/hooks/useRemoveItem";
 
 // Default game state for new users or guests
 const defaultGameState = {
@@ -36,11 +37,20 @@ export const GameStateProvider = ({ children }) => {
   const [livesLeft, setLivesLeft] = useState(defaultGameState.livesLeft);
   const [items, setItems] = useState(defaultGameState.items);
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
+  const [hasConch, setHasConch] = useState(items.includes("Conch")); // Initialize from items
+  const [hasPearl, setHasPearl] = useState(items.includes("Pearl")); // Initialize from items
+
+  useEffect(() => {
+    // Update `hasConch` whenever `items` changes
+    setHasConch(items.includes("Conch"));
+    setHasPearl(items.includes("Pearl"));
+  }, [items]);
 
   // Hooks for updating database or session storage
   const completeChapter = useCompleteChapter();
   const updateItem = useUpdateItem();
   const updateLife = useUpdateLife();
+  const removeItem = useRemoveItem();
 
   // Initialize state from user or guest game state
   useEffect(() => {
@@ -75,7 +85,12 @@ export const GameStateProvider = ({ children }) => {
         setChaptersCompleted,
         completeChapter, 
         updateItem, 
-        updateLife, 
+        updateLife,
+        removeItem, 
+        hasConch,
+        setHasConch,
+        hasPearl,
+        setHasPearl,
       }}
     >
       {children}
