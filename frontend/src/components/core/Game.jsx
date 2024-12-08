@@ -30,7 +30,7 @@ const Game = () => {
     setHasConch,
     hasPearl,
     setHasPearl,
-    
+    hasLaser,
   } = useGameState(); // Context-provided state and functions
 
   const [showHelp, setShowHelp] = useState(false);

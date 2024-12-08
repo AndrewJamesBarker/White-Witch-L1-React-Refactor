@@ -5,6 +5,10 @@ const useRemoveItem = () => {
   const { user, setUser } = useAuth();
 
   const removeItem = async (item) => {
+    if (item === "Laser Pistol") {
+      return; // Prevent removal
+    }
+  
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || {
       gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } }
     };

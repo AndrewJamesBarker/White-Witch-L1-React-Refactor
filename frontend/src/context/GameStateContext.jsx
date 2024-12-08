@@ -8,7 +8,7 @@ import useRemoveItem from "../components/hooks/useRemoveItem";
 // Default game state for new users or guests
 const defaultGameState = {
   currentChapter: { level: 1, completed: false },
-  items: ["laser pistol"], // Starting item
+  items: ["Laser Pistol"], // Starting item
   livesLeft: 3,
   chaptersCompleted: {
     chapterOne: false,
@@ -39,6 +39,17 @@ export const GameStateProvider = ({ children }) => {
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
   const [hasConch, setHasConch] = useState(items.includes("Conch")); // Initialize from items
   const [hasPearl, setHasPearl] = useState(items.includes("Pearl")); // Initialize from items
+  const [hasLaser, setHasLaser] = useState(items.includes("Laser Pistol"));
+
+  useEffect(() => {
+    // Update `hasLaser` whenever `items` changes
+    if (items.includes("Laser Pistol")) {
+      setHasLaser(true);
+    } else {
+      setHasLaser(false);
+    }
+  }, [items]);
+  
 
   useEffect(() => {
     // Update `hasConch` and `hasPearl` whenever `items` changes
@@ -100,6 +111,7 @@ export const GameStateProvider = ({ children }) => {
         setHasConch,
         hasPearl,
         setHasPearl,
+        hasLaser,
       }}
     >
       {children}
