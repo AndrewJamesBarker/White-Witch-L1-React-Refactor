@@ -10,6 +10,9 @@ import { useAuth } from '../../context/AuthContext';
 import Dashboard from "../pages/Dashboard";
 import ChapOneAltState from "./altStateChapters/ChapOneAltState";
 import { useGameState } from "../../context/GameStateContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 // Images
@@ -78,7 +81,7 @@ function ChapterOne({
   const [westScene, setWestScene] = useState(false);
   const [conchListened, setConchListened] = useState(false);
   const [chapterComplete, setChapterComplete] = useState(false); // New state for chapter completion
-
+  const navigate = useNavigate();
 
   const handleDragEnd = (event) => {
     setConchListened(true);
@@ -456,6 +459,15 @@ function ChapterOne({
     }
   }, [currentStep]);
 
+
+  useEffect(() => {
+    if (chapterComplete) {
+      if (isAuthenticated) {
+        navigate("/dashboard"); // Redirect to Dashboard
+      }
+    }
+  }, [chapterComplete, isAuthenticated, navigate]);
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -498,14 +510,6 @@ function ChapterOne({
             {dynamicSceneData[currentDynamicSceneKey].buttonText}
           </button>
         </div>
-      ) : chapterComplete ? (
-        <>
-          {isAuthenticated ? (
-            <Dashboard />
-          ) : (
-            <Register />
-          )}
-        </>
       ) : (
         <>
           {currentStep === 0 && !isIntroComplete ? (
@@ -656,11 +660,7 @@ function ChapterOne({
               <p className="standardText blueText">Press C to continue</p>
             </>
           )}
-          {/* {currentStep === 8 && (
-            <>
-              {isAuthenticated ? <Dashboard /> : <Register />}
-            </>
-          )} */}
+          {currentStep === 8 && !isAuthenticated && <Register />}
         </>
       )}
     </div>

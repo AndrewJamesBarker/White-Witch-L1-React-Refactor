@@ -76,18 +76,14 @@ const AppContent = () => {
           {/* Only apply reCAPTCHA to SignInForm and RegisterForm */}
           <Route
             path="/signin"
-            element={
-    
+            element={ 
                 <SignInForm />
-
             }
           />
           <Route
             path="/register"
             element={
-    
                 <RegisterForm />
-
             }
           />
           <Route path="/verify-email" element={<VerifyEmail />} />
