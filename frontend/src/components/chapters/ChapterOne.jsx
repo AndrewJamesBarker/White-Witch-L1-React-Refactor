@@ -7,13 +7,9 @@ import AudioPlayer from "../ui/AudioPlayer";
 import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
-import Dashboard from "../pages/Dashboard";
 import ChapOneAltState from "./altStateChapters/ChapOneAltState";
 import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
-
-
-
 
 // Images
 import trident from "../../assets/images/environment/trident.png";
