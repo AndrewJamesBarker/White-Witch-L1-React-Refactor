@@ -8,6 +8,7 @@ import IntroductionSynopsis from "../pages/IntroductionSynopsis";
 import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
 import Dashboard from "../pages/Dashboard";
+import ChapOneAltState from "./altStateChapters/ChapOneAltState";
 import { useGameState } from "../../context/GameStateContext";
 
 
@@ -655,11 +656,11 @@ function ChapterOne({
               <p className="standardText blueText">Press C to continue</p>
             </>
           )}
-          {currentStep === 8 && (
+          {/* {currentStep === 8 && (
             <>
               {isAuthenticated ? <Dashboard /> : <Register />}
             </>
-          )}
+          )} */}
         </>
       )}
     </div>

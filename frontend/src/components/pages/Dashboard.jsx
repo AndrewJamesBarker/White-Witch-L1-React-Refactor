@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
 import PuzzleMap from "../ui/PuzzleMap";
 import ChapterMap from "../utilities/ChapterMap";

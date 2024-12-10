@@ -77,17 +77,17 @@ const AppContent = () => {
           <Route
             path="/signin"
             element={
-              <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
+    
                 <SignInForm />
-              </GoogleReCaptchaProvider>
+
             }
           />
           <Route
             path="/register"
             element={
-              <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
+    
                 <RegisterForm />
-              </GoogleReCaptchaProvider>
+
             }
           />
           <Route path="/verify-email" element={<VerifyEmail />} />
@@ -104,13 +104,15 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <GameStateProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </GameStateProvider>
-    </AuthProvider>
+    <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
+      <AuthProvider>
+        <GameStateProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </GameStateProvider>
+      </AuthProvider>
+    </GoogleReCaptchaProvider>
   );
 };
 

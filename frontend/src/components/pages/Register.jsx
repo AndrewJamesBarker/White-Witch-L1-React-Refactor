@@ -25,13 +25,13 @@ const Register = () => {
         </h2>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}
-      <p className="standardText ">Registering will automatically update your progress as you play. You will also receive a free download code for my album White Witch! I will not share your info with third parties, but you will receive occasional emails regarding the progress of this game (which you can opt out of.)</p>
+      <p className="standardText ">Registering is free and will automatically update your progress as you play. You will also receive a free download code for my album White Witch! I will not share your info with third parties, but you will receive occasional emails regarding the progress of this game (which you can opt out of.)</p>
       {/* <div className="imageMaterialize imagePulse">
         <img className="borderRadius" alt="The bandcamp music distributionicon" src={Bandcamp} width="110" height="50"></img>
       </div> */}
       <button onClick={onRegister} className="btn">Register</button>
       <div>
-        <p className="standardText">Be forewarned, unregistered players may not be able to preserve their game state beyond this stage.</p>
+        <p className="standardText">Be forewarned, unregistered players will not be able to preserve their game state beyond this stage and will have limited features.</p>
         <button onClick={onDeclineRegister} className="btn">No thanks!</button>
       </div>
       
