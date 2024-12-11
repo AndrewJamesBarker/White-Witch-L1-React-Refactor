@@ -290,8 +290,6 @@ const Game = () => {
             showCrystal={showCrystal}
             currentScene={currentScene}
             setCurrentScene={setCurrentScene}
-            currentChapter={currentChapter}
-            setCurrentChapter={setCurrentChapter}
           />
         );
 

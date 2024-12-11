@@ -78,11 +78,13 @@ export const GameStateProvider = ({ children }) => {
 
     if (user && user.gameState) {
       setCurrentChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level);
+      setViewingChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
       setLivesLeft(user.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(user.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...user.gameState.chaptersCompleted });
     } else if (guestUser?.gameState) {
       setCurrentChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level);
+      setViewingChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
       setLivesLeft(guestUser.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
       setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...guestUser.gameState.chaptersCompleted });

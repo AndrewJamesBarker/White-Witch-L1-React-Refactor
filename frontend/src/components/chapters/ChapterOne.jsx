@@ -76,7 +76,7 @@ function ChapterOne({
   const [eastScene, setEastScene] = useState(false);
   const [westScene, setWestScene] = useState(false);
   const [conchListened, setConchListened] = useState(false);
-  const [chapterComplete, setChapterComplete] = useState(false); // New state for chapter completion
+  const [chapterComplete, setChapterComplete] = useState(false); 
   const navigate = useNavigate();
 
   const handleDragEnd = (event) => {

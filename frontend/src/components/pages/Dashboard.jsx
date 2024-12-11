@@ -11,16 +11,25 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const { viewingChapter, setViewingChapter, currentChapter, chaptersCompleted } = useGameState();
+
   // Get gameState from user and ensure defaults
-  const { gameState = { currentChapter: { level: 1 }, chaptersCompleted: {} } } = user;
-  const { currentChapter, chaptersCompleted } = gameState;
+  // const { gameState = { currentChapter: { level: 1 }, chaptersCompleted: {} } } = user;
+
 
   // State management in Dashboard
-  const [selectedLevel, setSelectedLevel] = useState(currentChapter.level || 1);
+  const [selectedLevel, setSelectedLevel] = useState(currentChapter || 1);
   const [inaccessibleLevel, setInaccessibleLevel] = useState(null);
-  const [chapterName, setChapterName] = useState(ChapterNames[currentChapter.level]);
-  const [selectedPiece, setSelectedPiece] = useState(`piece${currentChapter.level}`);
+  const [chapterName, setChapterName] = useState(ChapterNames[currentChapter]);
+  const [selectedPiece, setSelectedPiece] = useState(`piece${currentChapter}`);
   const [tempHighlight, setTempHighlight] = useState(null); // State for temporary red highlight
+
+  // Set the default selected piece and chapter name when the currentChapter changes
+  useEffect(() => {
+    setSelectedPiece(`piece${currentChapter}`);
+    setSelectedLevel(currentChapter);
+    setChapterName(ChapterNames[currentChapter]);
+}, [currentChapter]);
 
   // Log when inaccessibleLevel is updated
   useEffect(() => {
@@ -48,7 +57,7 @@ const Dashboard = () => {
     const clickedPuzzlePiece = pieceIdToChapterMap[id];
     const chapterKey = ChapterMap[clickedPuzzlePiece];
     const isChapterCompleted = chaptersCompleted[chapterKey];
-    const isCurrentChapter = currentChapter.level === clickedPuzzlePiece;
+    const isCurrentChapter = currentChapter === clickedPuzzlePiece;
 
     if (isChapterCompleted || isCurrentChapter) {
       setSelectedLevel(clickedPuzzlePiece);
@@ -91,7 +100,6 @@ const Dashboard = () => {
           onTileClick={handleTileClick} // Only send the click to Dashboard
           selectedPiece={selectedPiece} // Pass down selectedPiece as a prop
           tempHighlight={tempHighlight} // Pass down tempHighlight as a prop
-          userGameState={gameState}
         />
 
     </div>
