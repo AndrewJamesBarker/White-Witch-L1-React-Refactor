@@ -11,25 +11,30 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const { viewingChapter, setViewingChapter, currentChapter, chaptersCompleted } = useGameState();
+  const {
+    viewingChapter,
+    setViewingChapter,
+    currentChapter,
+    chaptersCompleted,
+  } = useGameState();
 
   // Get gameState from user and ensure defaults
   // const { gameState = { currentChapter: { level: 1 }, chaptersCompleted: {} } } = user;
 
-
   // State management in Dashboard
-  const [selectedLevel, setSelectedLevel] = useState(currentChapter || 1);
+  const [selectedLevel, setSelectedLevel] = useState(viewingChapter);
+  const [selectedPiece, setSelectedPiece] = useState(`piece${viewingChapter}`);
+  const [chapterName, setChapterName] = useState(ChapterNames[viewingChapter]);
+
   const [inaccessibleLevel, setInaccessibleLevel] = useState(null);
-  const [chapterName, setChapterName] = useState(ChapterNames[currentChapter]);
-  const [selectedPiece, setSelectedPiece] = useState(`piece${currentChapter}`);
   const [tempHighlight, setTempHighlight] = useState(null); // State for temporary red highlight
 
-  // Set the default selected piece and chapter name when the currentChapter changes
+  // Set the default selected piece and chapter name when the viewingChapter changes
   useEffect(() => {
-    setSelectedPiece(`piece${currentChapter}`);
-    setSelectedLevel(currentChapter);
-    setChapterName(ChapterNames[currentChapter]);
-}, [currentChapter]);
+    setSelectedPiece(`piece${viewingChapter}`);
+    setSelectedLevel(viewingChapter);
+    setChapterName(ChapterNames[viewingChapter]);
+  }, [viewingChapter]);
 
   // Log when inaccessibleLevel is updated
   useEffect(() => {
@@ -52,7 +57,6 @@ const Dashboard = () => {
     piece12: 12,
   };
 
-  // Handle tile click
   const handleTileClick = (id) => {
     const clickedPuzzlePiece = pieceIdToChapterMap[id];
     const chapterKey = ChapterMap[clickedPuzzlePiece];
@@ -61,13 +65,13 @@ const Dashboard = () => {
 
     if (isChapterCompleted || isCurrentChapter) {
       setSelectedLevel(clickedPuzzlePiece);
-      setInaccessibleLevel(null); 
+      setInaccessibleLevel(null);
       setChapterName(ChapterNames[clickedPuzzlePiece]);
-      setSelectedPiece(id); // Update selected piece in Dashboard
-      setViewingChapter(clickedPuzzlePiece); // Temporary view without updating currentChapter
+      setSelectedPiece(id);
+      setViewingChapter(clickedPuzzlePiece);
     } else {
-      setInaccessibleLevel(clickedPuzzlePiece); // Set when chapter is locked
-      setTempHighlight(id); // Temporarily highlight inaccessible piece in red
+      setInaccessibleLevel(clickedPuzzlePiece);
+      setTempHighlight(id);
 
       // Reset the highlight after 300 milliseconds
       setTimeout(() => {
@@ -80,12 +84,16 @@ const Dashboard = () => {
     <div>
       <h1>Greetings {user.username}</h1>
       {/* Display the selected level */}
-      <h2>Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}</h2>
+      <h2>
+        Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}
+      </h2>
       <h3 className="blueText">"{chapterName}"</h3>
 
       {inaccessibleLevel && (
         <div className="inaccessible-level" aria-live="polite">
-          <p className="errorMessage">Chapter {inaccessibleLevel} is currently locked.</p>
+          <p className="errorMessage">
+            Chapter {inaccessibleLevel} is currently locked.
+          </p>
         </div>
       )}
 
@@ -96,12 +104,11 @@ const Dashboard = () => {
         Logout
       </button>
 
-        <PuzzleMap
-          onTileClick={handleTileClick} // Only send the click to Dashboard
-          selectedPiece={selectedPiece} // Pass down selectedPiece as a prop
-          tempHighlight={tempHighlight} // Pass down tempHighlight as a prop
-        />
-
+      <PuzzleMap
+        onTileClick={handleTileClick}
+        selectedPiece={`piece${viewingChapter}`} // Highlight the viewingChapter by default
+        tempHighlight={tempHighlight}
+      />
     </div>
   );
 };
