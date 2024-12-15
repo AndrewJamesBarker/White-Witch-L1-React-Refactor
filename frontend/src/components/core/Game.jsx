@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ItemsAndLives from '../ui/ItemsAndLives';
 import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
+import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
@@ -22,6 +23,8 @@ const Game = () => {
     setItems,
     chaptersCompleted,
     setChaptersCompleted,
+    viewingChapter,
+    setViewingChapter,
     completeChapter,
     updateItem,
     updateLife,
@@ -267,9 +270,11 @@ const Game = () => {
   
 
   const renderChapter = () => {
-    switch (currentChapter) {
+    switch (viewingChapter) {
       case 1:
-        return (
+        return chaptersCompleted.chapterOne ? (
+          <ChapOneAltState />
+        ) : (
           <ChapterOne
             onComplete={() => completeChapter(1)}
             loseLife={loseLife}
