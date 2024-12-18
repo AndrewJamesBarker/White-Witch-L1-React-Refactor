@@ -1,6 +1,8 @@
 import React from "react";
 import Sundial from "../../../assets/images/environment/Sundial.png";
+import ChapterNames from "../../utilities/ChapterNames";
 import { useGameState } from "../../../context/GameStateContext";
+import chapterNames from "../../utilities/ChapterNames";
 
 function ChapOneAltState() {
   const { currentChapter, 
@@ -12,10 +14,10 @@ function ChapOneAltState() {
 
   return (
     <div className="chapter-one">
-      <h2>Chapter One</h2>
-      <img src={Sundial} alt="Sundial" />
+      <h2>{chapterNames[viewingChapter]}</h2>
+      <img className="environImage imageMaterialize" src={Sundial} alt="Sundial" />
       <p>
-        You are standing in front of a sundial. The shadow points to the number{" "}
+      There is a foreboding atmosphere. The Siren is gone, and only a sundial remains. Make haste, time is of the essence! 
         <strong>{level}</strong>.
       </p>
       <p>

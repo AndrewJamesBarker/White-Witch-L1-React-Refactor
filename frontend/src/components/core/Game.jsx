@@ -268,7 +268,6 @@ const Game = () => {
   };
 
   
-
   const renderChapter = () => {
     switch (viewingChapter) {
       case 1:
@@ -331,7 +330,7 @@ const Game = () => {
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapterInfo blueText">
-        {chapterNames[currentChapter] || 'Unknown'}
+        {chapterNames[viewingChapter] || 'Unknown'}
       </div>
     </div>
   );
