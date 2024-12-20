@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -23,6 +24,32 @@ const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
   const location = useLocation();
+  const theme = createTheme({
+    palette: {
+      mode: "dark",
+      background: {
+        default: "#242424", // Global background
+        paper: "#2a2a2a",   // Card or Paper background
+      },
+      text: {
+        primary: "rgba(255, 255, 255, 0.87)", // Default text
+        secondary: "rgba(255, 255, 255, 0.6)", // Secondary text
+      },
+    },
+    typography: {
+      fontFamily: "Raleway, sans-serif",
+      fontWeight: 500,
+      fontSize: 16,
+    },
+  });
+
+
+  // .raleway{
+  //   font-family: "Raleway", sans-serif;
+  //   font-optical-sizing: auto;
+  //   font-weight: 500;
+  //   font-size: 1em;
+  // }
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -59,6 +86,8 @@ const AppContent = () => {
     <div className="app">
       <h1 className="sr-only">White Witch - A text-based adventure.</h1>{" "}
       {/* Invisible header for accessibility */}
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
       <main>
         <Routes>
           <Route
@@ -92,6 +121,7 @@ const AppContent = () => {
           </Route>
         </Routes>
       </main>
+      </ThemeProvider>
       {location.pathname !== "/dashboard" &&
         location.pathname !== "/signin" && <SignInDashButton />}
     </div>

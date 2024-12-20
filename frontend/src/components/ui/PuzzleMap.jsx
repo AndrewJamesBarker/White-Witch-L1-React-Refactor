@@ -27,7 +27,7 @@ const PuzzleMap = ({ onTileClick, selectedPiece, tempHighlight }) => {
 
             // Highlight red if tempHighlight is active
             if (tempHighlight === piece.id) {
-              innerStrokeColor = "#A80000";
+              innerStrokeColor = "#b90101";
             }
             // Highlight green if it's the selected piece
             else if (selectedPiece === piece.id) {
