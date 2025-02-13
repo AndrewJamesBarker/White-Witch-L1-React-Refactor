@@ -137,8 +137,7 @@ const RegisterForm = () => {
           </button>
         </form>
         <p className="mediumText formTextWidthControl margin-btm-1">
-          Registering is free and will automatically backup your progress as you play. You
-          will also receive a free download code for my album White Witch! I
+          Registering is free. Registering will allow you to progress to the next chapters and will save your progress. We
           will not share your info with third parties, but you will receive
           occasional emails regarding the progress of this game (which you can
           opt out of.)

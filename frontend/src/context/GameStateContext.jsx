@@ -19,6 +19,10 @@ const defaultGameState = {
     chapterSix: false,
     chapterSeven: false,
     chapterEight: false,
+    chapterNine: false,
+    chapterTen: false,
+    chapterEleven: false,
+    chapterTwelve: false,
   },
 };
 

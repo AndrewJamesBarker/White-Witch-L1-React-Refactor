@@ -13,25 +13,26 @@ const Register = () => {
   };
 
   const onDeclineRegister = () => {
-    navigate('/dashboard');
-    // This condition needs to be decided upon, possible warning message and then navigate to the next chapter
+   
+    navigate('/register');
+    // This condition needs to be decided upon.
 };
   
   return (
     <div id="startBox" className="widthControl">
       <div>
         <h2 id="startPrompt">
-          Great job so far! Do you want to register?
+          Great job so far! Would you like to continue?
         </h2>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}
-      <p className="standardText ">Registering is free and will automatically update your progress as you play. You will also receive a free download code for my album White Witch! I will not share your info with third parties, but you will receive occasional emails regarding the progress of this game (which you can opt out of.)</p>
+      <p className="standardText ">Registering is free and will automatically update your progress as you play. I will not share your info with third parties, but you will receive occasional emails regarding the progress of this game, which you can opt out of.</p>
       {/* <div className="imageMaterialize imagePulse">
         <img className="borderRadius" alt="The bandcamp music distributionicon" src={Bandcamp} width="110" height="50"></img>
       </div> */}
       <button onClick={onRegister} className="btn">Register</button>
       <div>
-        <p className="standardText">Be forewarned, unregistered players will not be able to preserve their game state beyond this stage and will have limited features.</p>
+        <p className="standardText">Be forewarned, this is the end of the road for unregistered players.</p>
         <button onClick={onDeclineRegister} className="btn">No thanks!</button>
       </div>
       
