@@ -1,0 +1,47 @@
+.
+├── .env
+├── .eslintrc.cjs
+├── .github
+│   └── workflows
+├── .sampleenv
+├── index.html
+├── jsconfig.json
+├── package-lock.json
+├── package.json
+├── playwright-report
+│   └── index.html
+├── public
+│   ├── SkullXBones.png
+│   └── pearlOfTheMoon.png
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   ├── CSS
+│   │   ├── audio
+│   │   ├── download-codes
+│   │   └── images
+│   ├── components
+│   │   ├── chapters
+│   │   ├── core
+│   │   ├── dragAndDrop
+│   │   ├── forms
+│   │   ├── hooks
+│   │   ├── items
+│   │   ├── pages
+│   │   ├── svgPuzzlePieces
+│   │   ├── ui
+│   │   └── utilities
+│   ├── context
+│   │   ├── AuthContext.jsx
+│   │   └── GameStateContext.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   └── services
+│       └── api.jsx
+├── test-results
+│   └── .last-run.json
+├── tree.txt
+└── vite.config.js
+
+25 directories, 20 files

@@ -40,6 +40,9 @@ frontend/public/
 *.sln
 *.sw?
 
+**/.DS_Store
+
+
 # env files/private
 
 /backend/.env
