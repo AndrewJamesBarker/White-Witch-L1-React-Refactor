@@ -1,0 +1,12 @@
+# frontend/.env
+
+VITE_API_URL=http://localhost:3001
+
+
+VITE_REGISTER_URL=http://localhost:3001/api/register
+VITE_LOGIN_URL=http://localhost:3001/api/auth/login
+VITE_LOGOUT_URL=http://localhost:3001/api/auth/logout
+
+# ReCaptcha v3
+
+VITE_RECAPTCHA_SITE_KEY=

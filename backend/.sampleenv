@@ -1,0 +1,29 @@
+# backend/.env
+
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
+# connection string to the database
+
+
+MONGO_URI=
+
+JWT_SECRET=
+
+NODE_ENV=development
+
+# nodemailer email and password
+
+EMAIL_USER=
+
+EMAIL_PASS=
+
+
+BASE_URL=http://localhost:3001
+
+
+# Captcha v3
+
+VITE_RECAPTCHA_SITE_KEY=
+
+RECAPTCHA_SECRET_KEY=
