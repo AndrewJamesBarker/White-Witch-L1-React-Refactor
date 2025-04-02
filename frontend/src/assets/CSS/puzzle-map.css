@@ -1,0 +1,20 @@
+.puzzle-map-container {
+  padding-top: 2rem;
+  width: 100%; /* Full width container */
+  max-width: 1000px; /* You can control the maximum size */
+  height: auto; /* Let the height adjust automatically */
+  margin: 0 auto; /* Center the SVG in its container */
+}
+
+.puzzle-map-svg {
+  width: 100%; /* Make the SVG responsive */
+  height: auto; /* Allow height to scale proportionally */
+}
+
+.puzzle-map-svg:hover {
+  cursor: pointer;
+}
+
+.puzzle-piece:focus {
+  outline: none; /* Disable the default browser focus outline */
+}
