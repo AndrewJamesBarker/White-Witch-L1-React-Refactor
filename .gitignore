@@ -13,6 +13,8 @@ node_modules
 /backend/node_modules/
 # Production build directories
 /dist/
+dist/
+
 /frontend/dist-ssr/
 /frontend/public/
 frontend/src/assets/audio
@@ -48,4 +50,4 @@ frontend/public/
 /backend/.env
 /frontend/.env
 .env
-
+.env.*
