@@ -16,7 +16,7 @@ node_modules
 dist/
 
 /frontend/dist-ssr/
-/frontend/public/
+# /frontend/public/
 
 frontend/src/assets/download-codes
 
