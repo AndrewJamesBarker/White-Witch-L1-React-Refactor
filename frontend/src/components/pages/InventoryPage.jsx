@@ -5,7 +5,7 @@ import "../../assets/CSS/images.css";
 import InventoryItem from "../items/InventoryItem";
 import Conch from "../../assets/images/inventory-items/Conch-Good.png";
 import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.png";
-import Laser from "../../assets/images/inventory-items/laser-pistol.png";
+import Laser from "../../assets/images/inventory-items/Laser-pistol.png";
 
 const itemsData = [
   {
