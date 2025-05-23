@@ -11,7 +11,7 @@ import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
 
 // Images
-import trident from "../../assets/images/environment/trident.webp";
+import trident from "../../assets/images/environment/trident.png";
 import sirenCove from "../../assets/images/environment/Siren-NoConch.webp";
 import ConchShore from "../../assets/images/environment/Conch-Shore.webp";
 import Conch from "../../assets/images/inventory-items/Conch-Good.webp";
