@@ -21,7 +21,6 @@ dist/
 frontend/src/assets/download-codes
 
 
-frontend/public/
 
 # Local configuration files
 *.local
@@ -51,3 +50,7 @@ frontend/public/
 /frontend/.env
 .env
 .env.*
+
+frontend/test-results/*
+
+frontend/test-results
