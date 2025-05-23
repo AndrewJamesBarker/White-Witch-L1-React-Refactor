@@ -36,6 +36,8 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
                   alt="Keyboard directional arrow keys"
                   width="55"
                   height="45"
+                  loading="eager"
+                  decoding="async"
                 />
                 Directional Arrow Keys
               </span>

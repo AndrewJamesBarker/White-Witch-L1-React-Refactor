@@ -42,7 +42,7 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
   return (
     <div ref={ref} className="dynamicScenes widthControl">  
         <p className="boldText blueText">{lifeMessage.title}</p>
-        <img alt="skull and crossbones" src={LifeCrystal} width="200" height="200" />
+        <img alt="skull and crossbones" src={LifeCrystal} width="200" height="200" loading="eager" decoding="async"/>
         <p className="standardText">{lifeMessage.message}</p>
         <p>You now have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
         <p className="boldText">Press Escape to continue.</p>

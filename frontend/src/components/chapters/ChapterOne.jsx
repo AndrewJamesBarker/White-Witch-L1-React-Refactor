@@ -315,6 +315,8 @@ function ChapterOne({
                 alt="keyboard directional arrows"
                 width="45"
                 height="35"
+                loading="eager"
+                decoding="async"
               ></img>
             </p>
             <img
@@ -323,6 +325,8 @@ function ChapterOne({
               alt="A sundial protruding from the shore."
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
           </div>
         );
@@ -335,6 +339,8 @@ function ChapterOne({
               alt="A mystical range of pastel mountains."
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
             <p className="standardText">
               To your north, you see a mystical range of pastel mountains,
@@ -354,6 +360,8 @@ function ChapterOne({
                   alt="A beuatiful rotating and pulsating orb of light"
                   width="100"
                   height="100"
+                  loading="eager"
+                  decoding="async"
                 ></img>
               </button>
             )}
@@ -368,6 +376,8 @@ function ChapterOne({
               alt="The siren and her soldiers onlooking a mountiain on the shore resembling a mounstrous head. "
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
             <p className="standardText">
               To the south, an immense cape extends into the sea, its form
@@ -390,6 +400,8 @@ function ChapterOne({
               alt="A labyrinthine marshland vista."
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
             <p className="standardText">
               To the east lies a vast, wet marsh stretching out for miles. It is
@@ -410,6 +422,8 @@ function ChapterOne({
               alt="The Sirens beautiful face."
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
             <p className="standardText">
               Like the sirens in the stories of old, the Sirens beauty bids you
@@ -431,6 +445,8 @@ function ChapterOne({
               alt="A sundial protruding from the shore."
               width="500"
               height="500"
+              loading="eager"
+              decoding="async"
             ></img>
           </div>
         );
@@ -497,6 +513,8 @@ function ChapterOne({
             src={dynamicSceneData[currentDynamicSceneKey].imageSrc}
             alt={dynamicSceneData[currentDynamicSceneKey].imageAlt}
             className={dynamicSceneData[currentDynamicSceneKey].imageCSS}
+            loading="eager"
+            decoding="async"
           />
           <p className="standardText">
             {dynamicSceneData[currentDynamicSceneKey].text}
@@ -524,6 +542,8 @@ function ChapterOne({
                 id="trident"
                 src={trident}
                 alt="A beautiful shimmering trident"
+                loading="eager"
+                decoding="async"
               />
             </div>
           ) : null}
@@ -542,6 +562,8 @@ function ChapterOne({
                   alt="Siren on a rock, in a cove."
                   width="500"
                   height="250"
+                  loading="eager"
+                  decoding="async"
                 ></img>
               </div>
               <p className="boldText blueText">C to continue.</p>
@@ -560,6 +582,8 @@ function ChapterOne({
                 alt="Siren on a rock, in a cove."
                 width="500"
                 height="500"
+                loading="eager"
+                decoding="async"
               ></img>
               <p className="standardText blueText">Press C to continue</p>
             </div>
@@ -574,6 +598,8 @@ function ChapterOne({
                   alt="A mystifyingly beautiful conch shell."
                   width="260"
                   height="250"
+                  loading="eager"
+                  decoding="async"
                 />
               )}
               {hasConch && (
@@ -581,6 +607,8 @@ function ChapterOne({
                   className="environImage"
                   src={ConchInSatchel}
                   alt="The conch inside of a satchel beside a pistol."
+                  loading="eager"
+                  decoding="async"
                 />
               )}
               <MultipleChoiceButtons
@@ -651,6 +679,8 @@ function ChapterOne({
                 className="paddingMarginReset standardImage"
                 alt="faint image of the white witches face within a magical orb"
                 src={WhiteWitchPearl}
+                loading="eager"
+                decoding="async"
               ></img>
               <p className="standardText blueText">Press C to continue</p>
             </>

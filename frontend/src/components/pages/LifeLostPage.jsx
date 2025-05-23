@@ -39,7 +39,7 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
       {livesLeft > 0 ? (
         <div>
           <p className="boldText blueText">Oh no! You lost a life!</p>
-          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
+          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200"loading="eager" decoding="async"/>
           <p className="standardText">{deathMessage}</p>
           <p>Don't worry, you can keep playing, but you only have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
           <p className="boldText">Press Escape to continue.</p>
@@ -48,7 +48,7 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
       ) : (
         <div>
           <p className="boldText">Oh no! You lost your last life!</p>
-          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" />
+          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async"/>
           <p className="standardText">{deathMessage}</p>
           <p>Game Over</p>
           <p className="boldText">Press Escape to start again.</p>
