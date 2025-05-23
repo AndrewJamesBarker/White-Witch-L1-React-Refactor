@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { DndContext, useDroppable, useDraggable, DragOverlay } from '@dnd-kit/core';
 import "../../../assets/CSS/layout.css";
 import { CSS } from "@dnd-kit/utilities";
-import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.png";
-import CaballeroProfile from "../../../assets/images/portraits/Caballero-Profile.png";
+import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.webp";
+import CaballeroProfile from "../../../assets/images/portraits/Caballero-Profile.webp";
 import DraggableConch from "../SortableItems/DraggableConch";
 
 const ConchDrag = ({ onDragComplete }) => {

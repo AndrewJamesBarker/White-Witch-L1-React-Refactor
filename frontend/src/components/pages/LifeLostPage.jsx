@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import "../../assets/CSS/layout.css";
 import { useEffect } from "react";
-import skullCrossBones from '../../assets/images/ui-elements/SkullXBones.png';
+import skullCrossBones from '../../assets/images/ui-elements/SkullXBones.webp';
 
 const LifeLostPage =  forwardRef(({ livesLeft, onClose, resetGame, deathCause }, ref) => {
 

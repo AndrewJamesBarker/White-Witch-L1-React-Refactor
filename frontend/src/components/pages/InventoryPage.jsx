@@ -3,9 +3,9 @@ import { useGameState } from "../../context/GameStateContext";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import InventoryItem from "../items/InventoryItem";
-import Conch from "../../assets/images/inventory-items/Conch-Good.png";
-import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.png";
-import Laser from "../../assets/images/inventory-items/Laser-pistol.png";
+import Conch from "../../assets/images/inventory-items/Conch-Good.webp";
+import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.webp";
+import Laser from "../../assets/images/inventory-items/Laser-pistol.webp";
 
 const itemsData = [
   {

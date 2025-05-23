@@ -1,6 +1,6 @@
 import React from 'react';
-import satchel from '../../assets/images/ui-elements/satchel.png';
-import caballero from '../../assets/images/ui-elements/Caballero.png';
+import satchel from '../../assets/images/ui-elements/satchel.webp';
+import caballero from '../../assets/images/ui-elements/Caballero.webp';
 import '../../assets/CSS/layout.css';
 
 function ItemsAndLives({ livesLeft, onSatchelClick, satchelRef }) {

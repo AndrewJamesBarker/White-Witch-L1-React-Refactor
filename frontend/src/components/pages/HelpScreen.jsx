@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.png";
+import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.webp";
 
 const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
   // Now you can use `ref` to refer to the component's DOM node and `onHelpScreen` as a regular prop

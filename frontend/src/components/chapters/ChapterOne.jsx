@@ -11,21 +11,21 @@ import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
 
 // Images
-import trident from "../../assets/images/environment/trident.png";
-import sirenCove from "../../assets/images/environment/Siren-NoConch.png";
-import ConchShore from "../../assets/images/environment/Conch-Shore.png";
-import Conch from "../../assets/images/inventory-items/Conch-Good.png";
+import trident from "../../assets/images/environment/trident.webp";
+import sirenCove from "../../assets/images/environment/Siren-NoConch.webp";
+import ConchShore from "../../assets/images/environment/Conch-Shore.webp";
+import Conch from "../../assets/images/inventory-items/Conch-Good.webp";
 import LifeCrystal from "../../assets/images/ui-elements/LifeCrystal.svg";
-import DoorVision from "../../assets/images/environment/PortholeDoorVision.png";
-import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.png";
-import Sundial from "../../assets/images/environment/Sundial.png";
-import SoldierBlock from "../../assets/images/environment/SoldierBlock.png";
-import PastelMountains from "../../assets/images/environment/PastelMountains1.png";
-import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.png";
-import Marsh from "../../assets/images/environment/Marsh1.png";
-import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.png";
-import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.png";
-import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.png";
+import DoorVision from "../../assets/images/environment/PortholeDoorVision.webp";
+import ConchInSatchel from "../../assets/images/environment/Conch-In-Satchel.webp";
+import Sundial from "../../assets/images/environment/Sundial.webp";
+import SoldierBlock from "../../assets/images/environment/SoldierBlock.webp";
+import PastelMountains from "../../assets/images/environment/PastelMountains1.webp";
+import BlackToothMountainSouth from "../../assets/images/environment/BlackToothMountainSouth.webp";
+import Marsh from "../../assets/images/environment/Marsh1.webp";
+import SirenPortrait from "../../assets/images/portraits/Siren-Portrait.webp";
+import WhiteWitchPearl from "../../assets/images/portraits/white-white-in-pearl.webp";
+import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.webp";
 
 // Music
 import Listen from "../../assets/audio/listen.mp3";

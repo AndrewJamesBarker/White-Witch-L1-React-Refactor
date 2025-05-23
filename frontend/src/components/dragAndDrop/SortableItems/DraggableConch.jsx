@@ -3,7 +3,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import "../../../assets/CSS/layout.css";
 import "../../../assets/CSS/images.css";
-import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.png";
+import conchShellImage from "../../../assets/images/inventory-items/Conch-Good.webp";
 
 const DraggableConch = ({ id }) => {
   const {

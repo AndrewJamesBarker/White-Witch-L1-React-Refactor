@@ -1,5 +1,5 @@
 import React from "react";
-import Sundial from "../../../assets/images/environment/Sundial.png";
+import Sundial from "../../../assets/images/environment/Sundial.webp";
 import ChapterNames from "../../utilities/ChapterNames"; // Added as per your note
 import { useGameState } from "../../../context/GameStateContext";
 import { Typography, Box, Card, CardMedia } from "@mui/material";

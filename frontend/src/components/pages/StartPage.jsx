@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import CoverArt from '../../assets/images/Poster/Poster-simple.png';
+import CoverArt from '../../assets/images/Poster/Poster-simple.webp';
 import AudioPlayer from '../ui/AudioPlayer';
 import TheDarktower from '../../assets/audio/Darktower-WhiteWitch-Version.mp3';
 

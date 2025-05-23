@@ -1,7 +1,7 @@
 import React from "react";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
-import Grinn from "../../assets/images/portraits/Grinn.png";
+import Grinn from "../../assets/images/portraits/Grinn.webp";
 
 
 const NoPlayPage = () => {
