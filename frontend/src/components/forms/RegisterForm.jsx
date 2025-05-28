@@ -81,7 +81,7 @@ const RegisterForm = () => {
       : defaultGameState;
 
     try {
-      const response = await api.post("/register", {
+      const response = await api.post("/api/users/register", {
         username,
         email: lowerCaseEmail,
         password,

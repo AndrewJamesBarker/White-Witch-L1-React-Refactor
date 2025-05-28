@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 
 // Images
-import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
+// import Bandcamp from "../../assets/images/socials/bandcamp-icon.png";
 
 const Register = () => {
   const navigate = useNavigate();
