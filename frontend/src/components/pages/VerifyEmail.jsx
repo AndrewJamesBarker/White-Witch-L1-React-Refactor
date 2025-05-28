@@ -17,7 +17,7 @@ const VerifyEmail = () => {
       }
 
       try {
-        const response = await api.get(`verify-email?token=${token}`);
+        const response = await api.get(`/verify-email?token=${token}`);
         setMessage(response.data.message);
         setTimeout(() => navigate('/signin'), 3000); // Redirect to sign-in page after 3 seconds
       } catch (err) {
