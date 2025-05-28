@@ -22,7 +22,7 @@ const useUpdateLife = () => {
     };
 
     try {
-      const response = await api.patch('/api/users/auth/gamestate', { gameState: updatedGameState }, { withCredentials: true });
+      const response = await api.patch('/auth/gamestate', { gameState: updatedGameState }, { withCredentials: true });
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));

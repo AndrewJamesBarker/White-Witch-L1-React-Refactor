@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove('email');
     console.log('User logged out and removed from sessionStorage and cookies');
     try {
-      await api.post('/api/users/auth/logout', {}, { withCredentials: true });
+      await api.post('/auth/logout', {}, { withCredentials: true });
     } catch (err) {
       console.error('Error during logout:', err);
     }
