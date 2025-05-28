@@ -4,10 +4,11 @@ import axios from "axios";
 import "../../assets/CSS/layout.css";
 import validator from "validator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { defaultGameState } from "../../context/GameStateContext"; 
+import { defaultGameState } from "../../context/GameStateContext";
+import api from "../../services/api";
 
 const RegisterForm = () => {
-  const apiBaseUrl = import.meta.env.VITE_API_URL;
+  // const apiBaseUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,12 +20,17 @@ const RegisterForm = () => {
 
   useEffect(() => {
     const addRecaptchaLabels = () => {
-      const recaptchaTextareas = document.querySelectorAll('.g-recaptcha-response');
+      const recaptchaTextareas = document.querySelectorAll(
+        ".g-recaptcha-response"
+      );
       recaptchaTextareas.forEach((textarea, index) => {
-        textarea.setAttribute('aria-label', `Recaptcha verification field ${index + 1}`);
+        textarea.setAttribute(
+          "aria-label",
+          `Recaptcha verification field ${index + 1}`
+        );
       });
     };
-  
+
     const timeoutId = setTimeout(addRecaptchaLabels, 1000);
     return () => clearTimeout(timeoutId);
   }, []);
@@ -54,9 +60,19 @@ const RegisterForm = () => {
     // Merge guest user state with default state if available, otherwise use defaultGameState
     const mergedGameState = guestUser
       ? {
-          currentChapter: guestUser.gameState.currentChapter || defaultGameState.currentChapter,
-          items: Array.from(new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])),
-          livesLeft: guestUser.gameState.livesLeft !== undefined ? guestUser.gameState.livesLeft : defaultGameState.livesLeft,
+          currentChapter:
+            guestUser.gameState.currentChapter ||
+            defaultGameState.currentChapter,
+          items: Array.from(
+            new Set([
+              ...defaultGameState.items,
+              ...(guestUser.gameState.items || []),
+            ])
+          ),
+          livesLeft:
+            guestUser.gameState.livesLeft !== undefined
+              ? guestUser.gameState.livesLeft
+              : defaultGameState.livesLeft,
           chaptersCompleted: {
             ...defaultGameState.chaptersCompleted,
             ...guestUser.gameState.chaptersCompleted,
@@ -65,7 +81,7 @@ const RegisterForm = () => {
       : defaultGameState;
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/users/register`, {
+      const response = await api.post("/api/users/register", {
         username,
         email: lowerCaseEmail,
         password,
@@ -76,7 +92,9 @@ const RegisterForm = () => {
       navigate("/dashboard");
     } catch (err) {
       console.error("Submission error:", err);
-      setError(err.response?.data?.message || err.message || "Error creating user");
+      setError(
+        err.response?.data?.message || err.message || "Error creating user"
+      );
     }
   };
 
@@ -124,9 +142,9 @@ const RegisterForm = () => {
               required
             />
             <small>
-              This site is protected by reCAPTCHA and the Google {" "}
+              This site is protected by reCAPTCHA and the Google{" "}
               <a href="https://policies.google.com/privacy">Privacy Policy</a>{" "}
-              and {" "}
+              and{" "}
               <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
               apply.
             </small>
@@ -137,10 +155,10 @@ const RegisterForm = () => {
           </button>
         </form>
         <p className="mediumText formTextWidthControl margin-btm-1">
-          Registering is free. Registering will allow you to progress to the next chapters and will save your progress. We
-          will not share your info with third parties, but you will receive
-          occasional emails regarding the progress of this game (which you can
-          opt out of.)
+          Registering is free. Registering will allow you to progress to the
+          next chapters and will save your progress. We will not share your info
+          with third parties, but you will receive occasional emails regarding
+          the progress of this game (which you can opt out of.)
         </p>
       </div>
     </div>
