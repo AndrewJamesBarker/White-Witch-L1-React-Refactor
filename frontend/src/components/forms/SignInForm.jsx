@@ -41,7 +41,7 @@ const SignInForm = () => {
 
     try {
       const recaptchaToken = await executeRecaptcha("login");
-      const response = await api.post("/api/users/auth/login", {
+      const response = await api.post("/login", {
         email: lowerCaseEmail,
         password,
         "g-recaptcha-response": recaptchaToken,
