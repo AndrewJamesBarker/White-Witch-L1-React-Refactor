@@ -6,12 +6,12 @@ function ChapterTwo({
   setCurrentChapter}
 ) {
   const handleKeyDown = (event) => {
-    console.log("Key pressed:", event.key);
+    // console.log("Key pressed:", event.key);
     if (event.key === "Enter") {
-      console.log("Enter key was pressed");
+      // console.log("Enter key was pressed");
     }
     if (event.key === "C" || event.key === "c") {
-      console.log("C key was pressed");
+      // console.log("C key was pressed");
       // Add your logic for what happens when 'C' is pressed
     }
   };

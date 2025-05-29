@@ -16,7 +16,7 @@ const useRemoveItem = () => {
     // For guest users
     if (!user) {
       if (!guestUser.gameState.items.includes(item)) {
-        console.log('Item does not exist for guest user:', item);
+        // console.log('Item does not exist for guest user:', item);
         return; // Item not present, nothing to remove
       }
 
@@ -29,7 +29,7 @@ const useRemoveItem = () => {
 
     // For authenticated users
     if (!user.gameState.items.includes(item)) {
-      console.log('Item does not exist for authenticated user:', item);
+      // console.log('Item does not exist for authenticated user:', item);
       return; // Item not present, nothing to remove
     }
 
@@ -46,7 +46,7 @@ const useRemoveItem = () => {
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
-      console.log('Updated user state after item removal:', updatedUser);
+      // console.log('Updated user state after item removal:', updatedUser);
     } catch (err) {
       console.error('Error updating game state for item removal:', err);
     }

@@ -12,7 +12,7 @@ const useUpdateLife = () => {
       };
       guestUser.gameState.livesLeft = lives;
       sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-      console.log('Updated guest user state:', guestUser);
+      // console.log('Updated guest user state:', guestUser);
       return;
     }
 
@@ -26,7 +26,7 @@ const useUpdateLife = () => {
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
-      console.log('Updated user state:', updatedUser);
+      // console.log('Updated user state:', updatedUser);
     } catch (err) {
       console.error('Error updating game state', err);
     }

@@ -154,7 +154,7 @@ const Game = () => {
         const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
         guestUser.gameState.livesLeft = newLives;
         sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-        console.log('Updated guest user state:', guestUser);
+        // console.log('Updated guest user state:', guestUser);
       } else {
         updateLife(newLives);
       }
@@ -183,7 +183,7 @@ const Game = () => {
         const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { gameState: { livesLeft: 3, items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } };
         guestUser.gameState.livesLeft = newLives;
         sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-        console.log('Updated guest user state:', guestUser);
+        // console.log('Updated guest user state:', guestUser);
       } else {
         updateLife(newLives);
       }

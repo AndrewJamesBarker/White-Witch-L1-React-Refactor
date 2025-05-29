@@ -46,7 +46,7 @@ const useCompleteChapter = () => {
     if (!user) {
       // Update session storage for guest users  
       sessionStorage.setItem('guestUser', JSON.stringify(updatedLocalGameState));
-      console.log('Updated guest user state:', updatedLocalGameState);
+      // console.log('Updated guest user state:', updatedLocalGameState);
       return;
     }
 
@@ -55,7 +55,7 @@ const useCompleteChapter = () => {
       const updatedUser = { ...user, gameState: response.data.gameState };
       setUser(updatedUser);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
-      console.log('Updated user state:', updatedUser);
+      // console.log('Updated user state:', updatedUser);
     } catch (err) {
       console.error('Error updating game state', err);
     }

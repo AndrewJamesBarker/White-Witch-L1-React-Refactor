@@ -25,7 +25,7 @@ const logout = async () => {
     await api.post('/auth/logout', {}, { withCredentials: true });
     console.log('Logout API call succeeded.');
   } catch (err) {
-    console.error('Error during logout:', err);
+    // console.error('Error during logout:', err);
   }
 
   // Now clear frontend state
@@ -36,7 +36,7 @@ const logout = async () => {
   Cookies.remove('email');
   delete api.defaults.headers.common['Authorization'];
 
-  console.log('User logged out and removed from sessionStorage and cookies');
+  // console.log('User logged out and removed from sessionStorage and cookies');
 };
 
 
@@ -47,7 +47,7 @@ const logout = async () => {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log('User loaded from sessionStorage:', JSON.parse(storedUser));
+      // console.log('User loaded from sessionStorage:', JSON.parse(storedUser));
     }
   }, []);
 

@@ -8,7 +8,7 @@ cron.schedule('0 0 * * *', async () => {
 
   try {
     const result = await UserGameState.deleteMany({ isVerified: false, registrationDate: { $lt: expirationDate } });
-    console.log(`Deleted ${result.deletedCount} unverified users.`);
+    // console.log(`Deleted ${result.deletedCount} unverified users.`);
   } catch (error) {
     console.error('Error deleting unverified users:', error);
   }
