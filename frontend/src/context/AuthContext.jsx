@@ -34,6 +34,8 @@ const logout = async () => {
   sessionStorage.removeItem('user');
   Cookies.remove('token');
   Cookies.remove('email');
+  delete api.defaults.headers.common['Authorization'];
+
   console.log('User logged out and removed from sessionStorage and cookies');
 };
 
