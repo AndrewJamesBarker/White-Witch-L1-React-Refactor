@@ -65,7 +65,8 @@ export const loginUser = async (req, res) => {
         userId: user._id,
         username: user.username,
         gameState: user.gameState,
-        notes: user.notes
+        notes: user.notes,
+        token 
       }
     });
   } catch (err) {
