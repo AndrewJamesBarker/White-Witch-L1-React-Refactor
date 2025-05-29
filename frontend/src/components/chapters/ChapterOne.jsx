@@ -9,6 +9,7 @@ import Register from "../pages/Register";
 import { useAuth } from '../../context/AuthContext';
 import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
+// import GlassCard from "../atomic/molecules/GlassCard";
 
 // Images
 import trident from "../../assets/images/environment/trident.png";
@@ -506,7 +507,8 @@ function ChapterOne({
 
 
   return (
-    <div id="ChapterOnePage" className="widthControl">
+
+<div id="ChapterOnePage" className="widthControl">
       {dynamicSceneVisible && currentDynamicSceneKey ? (
         <div className="dynamicScenes">
           <img
@@ -689,6 +691,8 @@ function ChapterOne({
         </>
       )}
     </div>
+
+    
   );
 }
 
