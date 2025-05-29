@@ -18,19 +18,23 @@ export const AuthProvider = ({ children }) => {
     console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
   };
 
-  const logout = async () => {
-    setIsAuthenticated(false);
-    setUser(null);
-    sessionStorage.removeItem('user');
-    Cookies.remove('token');
-    Cookies.remove('email');
-    console.log('User logged out and removed from sessionStorage and cookies');
-    try {
-      await api.post('/auth/logout', {}, { withCredentials: true });
-    } catch (err) {
-      console.error('Error during logout:', err);
-    }
-  };
+const logout = async () => {
+  try {
+    await api.post('/auth/logout', {}, { withCredentials: true });
+    console.log('Logout API call succeeded.');
+  } catch (err) {
+    console.error('Error during logout:', err);
+  }
+
+  // Now clear frontend state
+  setIsAuthenticated(false);
+  setUser(null);
+  sessionStorage.removeItem('user');
+  Cookies.remove('token');
+  Cookies.remove('email');
+  console.log('User logged out and removed from sessionStorage and cookies');
+};
+
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
