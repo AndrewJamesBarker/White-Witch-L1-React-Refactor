@@ -15,7 +15,9 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem('user', JSON.stringify(userSafeData));
     Cookies.set('token', token, { secure: true, sameSite: 'Strict' });
     Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
-    console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    // console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
   };
 
 const logout = async () => {
