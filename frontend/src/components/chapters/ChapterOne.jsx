@@ -308,13 +308,13 @@ function ChapterOne({
             <p className="standardText">
               The Siren and her soldiers appear to have become bored by your
               presence. Now's your chance to explore the cove. Use your keyboard{" "}
-              <span className="boldText">'Arrow Keys'</span> and have a look
+              <span className="boldText blueText">'Arrow Keys'</span> and have a look
               around.
               <img
                 className="directionalArrows"
                 src={DirectionalKeys}
                 alt="keyboard directional arrows"
-                width="45"
+                width="50"
                 height="35"
                 loading="eager"
                 decoding="async"
@@ -346,7 +346,8 @@ function ChapterOne({
             <p className="standardText">
               To your north, you see a mystical range of pastel mountains,
               something of a mirage. The Siren and her soldiers watch you
-              carefully.
+              carefully. <span className="blueText">
+              Continue with your arrow keys.</span>
             </p>
             {showCrystal && (
               <button
@@ -388,7 +389,8 @@ function ChapterOne({
               what appears to be a castle. This is the place known to some as
               Black Tooth Mountain, the fortress of the King of the Zealots and
               leader of the Dark Triad, Therionarch. A shiver runs up your
-              spine. The Siren and her soldiers watch you carefully.
+              spine. The Siren and her soldiers watch you carefully. <span className="blueText">
+              Continue with your arrow keys.</span>
             </p>
           </div>
         );
@@ -410,7 +412,8 @@ function ChapterOne({
               natural waterways and muddy banks. Far in the distance, just at
               the edge of this expansive wetland, the silhouette of buildings or
               settlements appears. The Siren and her soldiers keep a close eye
-              on you.
+              on you. <span className="blueText">
+              Continue with your arrow keys.</span>
             </p>
           </div>
         );
@@ -429,7 +432,8 @@ function ChapterOne({
             <p className="standardText">
               Like the sirens in the stories of old, the Sirens beauty bids you
               closer (west). Perhaps you should continue exploring, if you
-              havent already done so.
+              havent already done so. <span className="blueText">
+              Continue with your arrow keys.</span>
             </p>
           </div>
         );
