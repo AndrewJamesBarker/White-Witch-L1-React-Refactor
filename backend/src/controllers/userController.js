@@ -75,6 +75,8 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = (req, res) => {
+  console.log(req.cookies.token)
+  console.log(req.headers.authorization)
   res.clearCookie('token'); // Clear the authentication cookie
   res.json({ message: 'Logged out successfully' });
 };
