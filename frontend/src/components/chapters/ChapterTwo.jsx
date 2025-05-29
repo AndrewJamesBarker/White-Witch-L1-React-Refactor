@@ -31,7 +31,7 @@ function ChapterTwo({
       
       <h2 id="headLine">Chapter Two: The Fields</h2>
       <div className="cursorBox">
-        <h3 id="displayBlock">Press C to continue</h3>
+        <h3 id="displayBlock">To be continued...</h3>
         <p id="bodyText"></p>
       </div>
     </div>
