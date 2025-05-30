@@ -21,8 +21,8 @@ const Register = () => {
   return (
     <div id="startBox" className="widthControl">
       <div>
-        <h2 id="startPrompt">
-          Great job so far! Would you like to continue?
+        <h2 id="startPrompt" className="text-2xl  font-bold">
+          <span className="blue-text">Great job so far!</span> Would you like to continue?
         </h2>
       </div>
       {/* <p className="standardText">Like the music you heard?</p> */}

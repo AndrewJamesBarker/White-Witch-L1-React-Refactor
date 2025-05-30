@@ -1,6 +1,43 @@
+/* Modern dark theme app container using regular CSS */
 #root {
-  max-width: 1280px;
+  max-width: 80rem;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background: var(--primary-bg);
+}
+
+/* Add a subtle gradient overlay for modern feel */
+.app {
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+/* Glassmorphism effect for modern cards */
+.glass-card {
+  border-radius: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  margin: 1.5rem;
+  padding: 1.5rem;
+}
+
+/* Enhanced button hover effects */
+.modern-button {
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.modern-button:hover {
+  transform: scale(1.05);
+}
+
+.modern-button:active {
+  transform: scale(0.95);
 }

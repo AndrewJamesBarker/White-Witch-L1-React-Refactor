@@ -1,7 +1,5 @@
 import React, { forwardRef } from "react";
 import { useGameState } from "../../context/GameStateContext";
-import "../../assets/CSS/layout.css";
-import "../../assets/CSS/images.css";
 import InventoryItem from "../items/InventoryItem";
 import Conch from "../../assets/images/inventory-items/Conch-Good.webp";
 import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.webp";
@@ -35,9 +33,9 @@ const InventoryPage = forwardRef((props, ref) => {
   const { items } = useGameState(); // Access `items` from the context
 
   return (
-    <div ref={ref} className="dynamicScenes standardText widthControl">
-      <h2 className="centerText underline blueText">Inventory</h2>
-      <p>Press <span className="blueText boldText">'i'</span> at anytime to open or close this page.</p>
+    <div ref={ref} className="dynamic-scenes standard-text width-control center">
+      <h2 className="center-text underline-text blue-text">Inventory</h2>
+      <p>Press <span className="blue-text bold-text">'i'</span> at anytime to open or close this page.</p>
       {itemsData.map(item => 
         items.includes(item.key) && (
           <InventoryItem 

@@ -28,7 +28,7 @@ const AppContent = () => {
     palette: {
       mode: "dark",
       background: {
-        default: "#242424", // Global background
+        default: "var(--primary-bg)", // Use CSS variable instead of hardcoded color
         paper: "#2a2a2a",   // Card or Paper background
       },
       text: {

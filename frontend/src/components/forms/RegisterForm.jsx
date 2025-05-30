@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../../assets/CSS/layout.css";
 import validator from "validator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { defaultGameState } from "../../context/GameStateContext";
@@ -104,12 +103,12 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="flexContainer">
-      <h2 className="blueText">Register</h2>
-      {error && <p className="errorMessage">{error}</p>}
-      <div className="formFieldWidthControl">
+    <div className="flex-container">
+      <h2 className="blue-text">Register</h2>
+      {error && <p className="error-message">{error}</p>}
+      <div className="form-field-width-control">
         <form onSubmit={handleSubmit}>
-          <div className="inputGroup">
+          <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
               id="username"
@@ -120,7 +119,7 @@ const RegisterForm = () => {
               required
             />
           </div>
-          <div className="inputGroup">
+          <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -131,7 +130,7 @@ const RegisterForm = () => {
               required
             />
           </div>
-          <div className="inputGroup">
+          <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -154,7 +153,7 @@ const RegisterForm = () => {
             Back
           </button>
         </form>
-        <p className="mediumText formTextWidthControl margin-btm-1">
+        <p className="medium-text form-field-width-control margin-btm-1">
           Registering is free. Registering will allow you to progress to the
           next chapters and will save your progress. We will not share your info
           with third parties, but you will receive occasional emails regarding

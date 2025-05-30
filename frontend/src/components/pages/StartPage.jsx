@@ -23,7 +23,7 @@ const StartPage = ({ onStartGame }) => {
   return (
     <div id="startBox">
       <div>
-        <h2 id="startPrompt">Want to play a game? <span className="blueText">Type Y/N</span></h2>
+        <h2 id="startPrompt">Want to play a game? <span className="blue-text">Type Y/N</span></h2>
         <AudioPlayer src={TheDarktower} autoplay={false} />
         <img className="center titleImage" src={CoverArt} alt="a rugged hero in a dystopian world." loading="eager" decoding="async"/>
       </div>

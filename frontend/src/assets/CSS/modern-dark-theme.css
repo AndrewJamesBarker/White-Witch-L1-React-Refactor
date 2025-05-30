@@ -1,0 +1,432 @@
+/* Modern Dark Theme Utility Classes */
+/* This file replaces layout.css with Tailwind-compatible styles */
+
+/* Font Families */
+.font-raleway {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 1em;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Hide reCAPTCHA badge */
+.g-recaptcha-response,
+.grecaptcha-badge { 
+  visibility: hidden !important;
+  display: none !important;
+}
+
+/* Modern App Container */
+.app {
+  padding-top: 1.5rem;
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+}
+
+/* Light Ball Animation (for special effects) */
+.lightBall {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  background: rgb(255, 255, 234);
+  box-shadow: 0 0 15px rgb(255, 255, 234);
+  animation: floatAndFade 5s infinite;
+}
+
+@keyframes floatAndFade {
+  0% {
+    bottom: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  100% {
+    bottom: 100%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+  }
+}
+
+/* Image Animations and Styles */
+@keyframes materialize {
+  0% {
+      opacity: 0;
+      filter: blur(50px);
+  }
+  100% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+  }
+}
+
+.imageMaterialize {
+  animation: materialize .5s ease-out forwards;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.objectPulse {
+  animation: pulse 4s linear infinite;
+  padding: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Image Size Classes */
+.titleImage {
+  width: 75%;
+  height: 75%;
+  margin: 0 auto;
+  border-radius: 1rem;
+}
+
+.standardImage {
+  width: 50%;
+  height: 50%;
+  margin: 0 auto;
+}
+
+.environImage {
+  width: 60%;
+  height: 60%;
+  margin: 0 auto;
+  border-radius: 1rem;
+}
+
+.mediumImage {
+  width: 60%;
+  height: 60%;
+  margin: 0 auto;
+  border-radius: 1rem;
+}
+
+.conchItem {
+  width: 18rem;
+  height: 16rem;
+}
+
+.pearlItem {
+  width: 18rem;
+  height: 18rem;
+}
+
+.inventoryItem {
+  width: 25%;
+  height: 25%;
+  margin: 0 auto;
+  display: block;
+}
+
+.imageCropper {
+  width: 100%;
+  max-width: 32rem;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  border-radius: 1rem;
+  height: 50%;
+}
+
+.imageCropper img {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 1rem;
+}
+
+/* Text Styles */
+.intro-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.625;
+  text-align: center;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.intro-text:hover {
+  color: inherit;
+}
+
+.blue-text {
+  color: #00d4aa;
+}
+
+.white-text {
+  color: white;
+}
+
+.standard-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.625;
+}
+
+.bold-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.medium-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.625;
+}
+
+.help-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.625;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.underline-text {
+  text-decoration: underline;
+}
+
+/* Layout Components */
+.width-control {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.help-list {
+  display: block;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 42rem;
+  padding-top: 0.5rem;
+}
+
+.help-lives-items {
+  display: block;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 42rem;
+  padding-top: 2rem;
+}
+
+/* Modern Dynamic Scenes */
+.dynamic-scenes {
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #f3f4f6;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease-in-out;
+}
+
+/* Position Classes */
+.position-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 10%;   
+}
+
+.chapter-info {
+  position: fixed;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  padding: 0.5rem;
+  z-index: 10;
+  color: #00d4aa;
+  border: none;
+  /* Transparent chapter info with no border or background */
+}
+
+/* Utility Classes */
+.padding-margin-reset {
+  margin: 0;
+  padding: 0;
+}
+
+.margin-btm-1 {
+  margin-bottom: 1rem;
+}
+
+.padding-all-1 {
+  padding: 1rem;
+}
+
+/* Special Button Styles */
+#lifeCrystalButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Drag and Drop Container */
+.drag-drop-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conch-draggable {
+  width: 9rem;
+  height: 9rem;
+}
+
+/* Custom Lists */
+ul.custom-bullets {
+  list-style: none;
+}
+
+/* Forms */
+.form-field-width-control {
+  max-width: 24rem;
+  margin: 0 auto;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 100%;
+  backdrop-filter: blur(20px);
+  background: rgba(31, 41, 55, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.flex-container h2 {
+  margin-bottom: 1.25rem;
+}
+
+.flex-container form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flex-container .input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flex-container label {
+  margin: 0.25rem 0;
+  font-weight: bold;
+}
+
+.flex-container input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #4b5563;
+  border-radius: 0.25rem;
+  background: rgba(31, 41, 55, 0.5);
+  color: white;
+}
+
+.flex-container input:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.flex-container button {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  margin-top: 1.25rem;
+  transition: background-color 0.2s;
+}
+
+.flex-container button:hover {
+  background: #15803d;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Item Title */
+.item-title {
+  font-size: 1rem;
+}
+
+/* Center utility */
+.center {
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* Border radius utility */
+.borderRadius {
+  border-radius: 2rem;
+}
+
+/* Chapter specific styling */
+#ChapterOnePage p {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Modern Button Styles */
+.modern-button {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  color: white;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  transition: all 0.3s ease-in-out;
+  backdrop-filter: blur(10px);
+}
+
+.modern-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transform: scale(1.02);
+}
+
+.modern-button:active {
+  transform: scale(0.98);
+}
+
+/* Choose Wisely Button Width */
+.choose-wisely-button {
+  width: 32.5rem;
+  max-width: 32.5rem;
+} 

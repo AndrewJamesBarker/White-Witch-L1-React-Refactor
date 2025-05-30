@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/CSS/layout.css";
-import "../../assets/CSS/images.css";
-
 
 const IntroductionSynopsis = () => {
  
@@ -9,10 +6,10 @@ const IntroductionSynopsis = () => {
   return (
     <div>
     <div 
-      className="introText" 
+      className="intro-text" 
 
     >
-      <p className="centerText IntroText">
+      <p className="center-text intro-text">
         The proliferation of new plant life by a new solar life cycle has filled
         the planet with radical new chemical compounds, causing myriad mental
         and physical mutations. With the floods, Tundra's Plague compounds the
@@ -20,7 +17,7 @@ const IntroductionSynopsis = () => {
         susceptible to psychic manipulation. Waring telepathic overlords across
         the globe vie for supremacy. One such leader, Therionarch, has conquered
         two other rival factions, amassing armies from the infected population
-        and his newly formed, fractious alliance, ‘The Dark Triad.’ 
+        and his newly formed, fractious alliance, 'The Dark Triad.' 
       </p>
       <p>
         Your name is Caballero. You are the leader of a ragtag group of men and women. You
@@ -33,7 +30,7 @@ const IntroductionSynopsis = () => {
         where she will guide you on your quest.
       </p>
       <p>
-        <strong className="blueText">Press C to continue.</strong>
+        <strong className="blue-text">Press C to continue.</strong>
       </p>
       
     </div>

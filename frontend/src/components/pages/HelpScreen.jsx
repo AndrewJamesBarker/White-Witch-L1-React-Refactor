@@ -4,30 +4,31 @@ import DirectionalKeys from "../../assets/images/ui-elements/directional-keys.we
 const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
   // Now you can use `ref` to refer to the component's DOM node and `onHelpScreen` as a regular prop
   return (
-    <div ref={ref} className="dynamicScenes">
+    <div ref={ref} className="dynamic-scenes">
       <span>
         <h2>
-          White Witch - <span className="blueText">Help</span>
+          White Witch - <span className="blue-text">Help</span>
         </h2>
         <p>
-          Press <span className="boldText blueText">H</span> at any time to
+          Press <span className="bold-text blue-text">H</span> at any time to
           open or close this screen.
         </p>
       </span>
-      <h4 id="helpText">This is a <span className="blueText">Text Based</span> game involving: </h4>
-      <ol id="helpList">
+      <h4 className="help-text">This is a <span className="blue-text">Text Based</span> game involving: </h4>
+      <ol className="help-list">
         <li>
-        <span className="blueText">Keystroke Commands</span> 
+        <span className="blue-text">Keystroke Commands</span> 
           <ul className="custom-bullets">
-            <li className="whiteText">C = Continue</li>
-            <li className="whiteText">B = Back</li>
-            <li className="whiteText">I = Inventory</li>
-            <li className="whiteText">H = Help</li>
-            <li className="whiteText">
+            <li className="white-text">C = Continue</li>
+            <li className="white-text">B = Back</li>
+            <li className="white-text">I = Inventory</li>
+            <li className="white-text">H = Help</li>
+            <li className="white-text">
               <span
                 style={{
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "10px",
                 }}
               >
@@ -38,30 +39,31 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
                   height="45"
                   loading="eager"
                   decoding="async"
+                  className="center"
                 />
                 Directional Arrow Keys
               </span>
             </li>
           </ul>
         </li>
-        <li><span className="blueText">Multiple Choice Buttons</span></li>
-        <li><span className="blueText">Drag & Drop</span></li>
-        <li><span className="blueText">Clicking on items</span></li>
+        <li><span className="blue-text">Multiple Choice Buttons</span></li>
+        <li><span className="blue-text">Drag & Drop</span></li>
+        <li><span className="blue-text">Clicking on items</span></li>
       </ol>
-      <div id="helpLivesItems standardText">
-        <h3 className="centerText blueText">Lives And Items</h3>
-        <p className="widthControl">
+      <div className="help-lives-items standard-text">
+        <h3 className="center-text blue-text">Lives And Items</h3>
+        <p className="width-control">
           There are 3 lives. Each one represented by a knight in the lower right
           corner. If you lose all 3, you will have to start over.
         </p>
         <br></br>
-        <p className="widthControl">
+        <p className="width-control">
           You can also accumulate items. They are stored in the satchel (lower
-          right screen) and you check your item inventory either by typing <span className="boldText blueText" > I</span>, or
+          right screen) and you check your item inventory either by typing <span className="bold-text blue-text" > I</span>, or
           by clicking on the satchel.
         </p>
       </div>
-      <p className="blueText boldText">Good luck!</p>
+      <p className="blue-text bold-text">Good luck!</p>
     </div>
   );
 });

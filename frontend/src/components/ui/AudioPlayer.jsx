@@ -42,7 +42,7 @@ const AudioPlayer = ({ src, autoplay = true, loop = false, muted = false }) => {
       autoPlay={autoplay}
       loop={loop}
       muted={muted}
-      style={{ width: '75%' }}
+      className="w-3/4 max-w-md shadow-lg mx-auto my-6 block"
     />
   );
 };

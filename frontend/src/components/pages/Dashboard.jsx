@@ -87,7 +87,7 @@ const Dashboard = () => {
       <h2>
         Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}
       </h2>
-      <h3 className="blueText">"{chapterName}"</h3>
+      <h3 className="blue-text">"{chapterName}"</h3>
 
       {inaccessibleLevel && (
         <div className="inaccessible-level" aria-live="polite">

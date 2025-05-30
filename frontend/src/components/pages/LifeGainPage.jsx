@@ -1,5 +1,4 @@
 import React, { useEffect, forwardRef } from "react";
-import "../../assets/CSS/layout.css";
 import LifeCrystal from "../../assets/images/ui-elements/LifeCrystal.svg";
 
 const LifeGainPage = forwardRef(({ livesLeft, onClose, lifeCause, currentScene }, ref) => {
@@ -40,12 +39,12 @@ const lifeMessage = lifeTexts[lifeCause] || "An unknown force has given you a li
   }, [onClose, livesLeft, currentScene]);
 
   return (
-    <div ref={ref} className="dynamicScenes widthControl">  
-        <p className="boldText blueText">{lifeMessage.title}</p>
-        <img alt="skull and crossbones" src={LifeCrystal} width="200" height="200" loading="eager" decoding="async"/>
-        <p className="standardText">{lifeMessage.message}</p>
+    <div ref={ref} className="dynamic-scenes width-control center">  
+        <p className="bold-text blue-text">{lifeMessage.title}</p>
+        <img alt="life crystal" src={LifeCrystal} width="200" height="200" loading="eager" decoding="async" className="center"/>
+        <p className="standard-text">{lifeMessage.message}</p>
         <p>You now have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
-        <p className="boldText">Press Escape to continue.</p>
+        <p className="bold-text">Press Escape to continue.</p>
         <p>Good luck!</p>
     </div>
   );

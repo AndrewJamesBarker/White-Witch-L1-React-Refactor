@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-import "../../assets/CSS/layout.css";
 import { useEffect } from "react";
 import skullCrossBones from '../../assets/images/ui-elements/SkullXBones.webp';
 
@@ -14,7 +13,6 @@ const deathTexts = {
 
 // Get the death message
 const deathMessage = deathTexts[deathCause] || "An unknown force has claimed your life.";
-
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -35,25 +33,25 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
   }, [onClose, livesLeft, resetGame]);
 
   return (
-    <div ref={ref} className="dynamicScenes widthControl">
+    <div ref={ref} className="dynamic-scenes width-control center">  
       {livesLeft > 0 ? (
-        <div>
-          <p className="boldText blueText">Oh no! You lost a life!</p>
-          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200"loading="eager" decoding="async"/>
-          <p className="standardText">{deathMessage}</p>
-          <p>Don't worry, you can keep playing, but you only have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
-          <p className="boldText">Press Escape to continue.</p>
+        <>
+          <p className="bold-text blue-text">Oh no! You lost a life!</p>
+          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async" className="center"/>
+          <p className="standard-text">{deathMessage}</p>
+          <p>You now have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
+          <p className="bold-text">Press Escape to continue.</p>
           <p>Good luck!</p>
-        </div>
+        </>
       ) : (
-        <div>
-          <p className="boldText">Oh no! You lost your last life!</p>
-          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async"/>
-          <p className="standardText">{deathMessage}</p>
-          <p>Game Over</p>
-          <p className="boldText">Press Escape to start again.</p>
+        <>
+          <p className="bold-text blue-text">Oh no! You lost your last life!</p>
+          <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async" className="center"/>
+          <p className="standard-text">{deathMessage}</p>
+          <p>You now have 0 lives left.</p>
+          <p className="bold-text">Press Escape to start again.</p>
           <p>Good luck!</p>
-        </div>
+        </>
       )}
     </div>
   );

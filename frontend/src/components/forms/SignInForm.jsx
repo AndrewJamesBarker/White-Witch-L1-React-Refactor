@@ -60,12 +60,12 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="flexContainer">
-      <h2 className="blueText">Sign In</h2>
-      {error && <p className="errorMessage">{error}</p>}
-      <div className="formFieldWidthControl">
+    <div className="flex-container">
+      <h2 className="blue-text">Sign In</h2>
+      {error && <p className="error-message">{error}</p>}
+      <div className="form-field-width-control">
         <form onSubmit={handleSubmit}>
-          <div className="inputGroup">
+          <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -76,7 +76,7 @@ const SignInForm = () => {
               required
             />
           </div>
-          <div className="inputGroup">
+          <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -95,7 +95,7 @@ const SignInForm = () => {
           <button className="margin-btm-1" type="submit">
             Sign In
           </button>
-          <p className="boldText paddingMarginReset">
+          <p className="bold-text padding-margin-reset">
             Don't have an account yet?
           </p>
           <button

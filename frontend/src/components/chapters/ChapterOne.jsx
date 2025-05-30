@@ -111,7 +111,7 @@ function ChapterOne({
       imageSrc: DoorVision,
       imageAlt: "A magical door opening into a brilliant white light.",
       imageCSS: "imageMaterialize environImage padding-all-1 borderRadius",
-      textCSS: "standardText",
+      textCSS: "standard-text",
       buttonText: "Continue",
     },
     sirenGreetNoConch: {
@@ -119,7 +119,7 @@ function ChapterOne({
       imageSrc: Conch,
       imageAlt: "A mystifyingly beautiful conch shell.",
       imageCSS: "imageMaterialize environImage padding-all-1",
-      textCSS: "standardText",
+      textCSS: "standard-text",
       buttonText: "Continue",
     },
     sirenGreetWithConch: {
@@ -127,7 +127,7 @@ function ChapterOne({
       imageSrc: Sundial,
       imageAlt: "An elaborate sundial protruding from the shore.",
       imageCSS: "environImage padding-all-1 borderRadius imageMaterialize",
-      textCSS: "standardText",
+      textCSS: "standard-text",
       buttonText: "Continue",
     },
     soldierBlock: {
@@ -135,7 +135,7 @@ function ChapterOne({
       imageSrc: SoldierBlock,
       imageAlt: "Intimidating image of the merman soldiers blocking your path.",
       imageCSS: "imageMaterialize environImage padding-all-1 borderRadius",
-      textCSS: "standardText",
+      textCSS: "standard-text",
       buttonText: "Go Back",
     },
   };
@@ -305,13 +305,13 @@ function ChapterOne({
       case "neutral":
         return (
           <div>
-            <p className="standardText">
+            <p className="standard-text">
               The Siren and her soldiers appear to have become bored by your
               presence. Now's your chance to explore the cove. Use your keyboard{" "}
-              <span className="boldText blueText">'Arrow Keys'</span> and have a look
+              <span className="bold-text blue-text">'Arrow Keys'</span> and have a look
               around.
               <img
-                className="directionalArrows"
+                className="directionalArrows center"
                 src={DirectionalKeys}
                 alt="keyboard directional arrows"
                 width="50"
@@ -343,10 +343,10 @@ function ChapterOne({
               loading="eager"
               decoding="async"
             ></img>
-            <p className="standardText">
+            <p className="standard-text">
               To your north, you see a mystical range of pastel mountains,
               something of a mirage. The Siren and her soldiers watch you
-              carefully. <span className="blueText">
+              carefully. <span className="blue-text">
               Continue with your arrow keys.</span>
             </p>
             {showCrystal && (
@@ -381,7 +381,7 @@ function ChapterOne({
               loading="eager"
               decoding="async"
             ></img>
-            <p className="standardText">
+            <p className="standard-text">
               To the south, an immense cape extends into the sea, its form
               merging into the shadow of a massive mountain. The mountain's side
               is marked by a gnarly demonic face intricately carved into its
@@ -389,7 +389,7 @@ function ChapterOne({
               what appears to be a castle. This is the place known to some as
               Black Tooth Mountain, the fortress of the King of the Zealots and
               leader of the Dark Triad, Therionarch. A shiver runs up your
-              spine. The Siren and her soldiers watch you carefully. <span className="blueText">
+              spine. The Siren and her soldiers watch you carefully. <span className="blue-text">
               Continue with your arrow keys.</span>
             </p>
           </div>
@@ -406,13 +406,13 @@ function ChapterOne({
               loading="eager"
               decoding="async"
             ></img>
-            <p className="standardText">
+            <p className="standard-text">
               To the east lies a vast, wet marsh stretching out for miles. It is
               dense with reeds and waterlogged plants, creating a labyrinth of
               natural waterways and muddy banks. Far in the distance, just at
               the edge of this expansive wetland, the silhouette of buildings or
               settlements appears. The Siren and her soldiers keep a close eye
-              on you. <span className="blueText">
+              on you. <span className="blue-text">
               Continue with your arrow keys.</span>
             </p>
           </div>
@@ -429,10 +429,10 @@ function ChapterOne({
               loading="eager"
               decoding="async"
             ></img>
-            <p className="standardText">
+            <p className="standard-text">
               Like the sirens in the stories of old, the Sirens beauty bids you
               closer (west). Perhaps you should continue exploring, if you
-              havent already done so. <span className="blueText">
+              havent already done so. <span className="blue-text">
               Continue with your arrow keys.</span>
             </p>
           </div>
@@ -440,8 +440,8 @@ function ChapterOne({
       default:
         return (
           <div>
-            <p className="standardText">
-              Use your keyboard <span className="boldText">'Arrow Keys'</span>{" "}
+            <p className="standard-text">
+              Use your keyboard <span className="bold-text">'Arrow Keys'</span>{" "}
               and have a look around.
             </p>
             <img
@@ -512,7 +512,7 @@ function ChapterOne({
 
   return (
 
-<div id="ChapterOnePage" className="widthControl">
+<div id="ChapterOnePage" className="width-control">
       {dynamicSceneVisible && currentDynamicSceneKey ? (
         <div className="dynamicScenes">
           <img
@@ -522,7 +522,7 @@ function ChapterOne({
             loading="eager"
             decoding="async"
           />
-          <p className="standardText">
+          <p className="standard-text">
             {dynamicSceneData[currentDynamicSceneKey].text}
           </p>
           <button className="margin-btm-1" onClick={handleDynamicSceneClose}>
@@ -537,11 +537,11 @@ function ChapterOne({
             <div>
               <h2 id="headLine">
                 Chapter One:{" "}
-                <span className="blueText">The Siren In The Cove</span>
+                <span className="blue-text">The Siren In The Cove</span>
               </h2>
               <h3>
-                Press <span className="blueText">C</span> to continue. You can
-                also press<span className="blueText"> H</span> at anytime for
+                Press <span className="blue-text">C</span> to continue. You can
+                also press<span className="blue-text"> H</span> at anytime for
                 help
               </h3>
               <img
@@ -555,7 +555,7 @@ function ChapterOne({
           ) : null}
           {currentStep === 1 && (
             <div>
-              <p className="standardText">
+              <p className="standard-text">
                 You are standing on the beach of a foggy cove. Ten feet out from
                 shore, a beautiful siren sits on a protruding rock. She smiles
                 and her lips move as if singing. Strangely, you hear nothing but
@@ -572,13 +572,13 @@ function ChapterOne({
                   decoding="async"
                 ></img>
               </div>
-              <p className="boldText blueText">C to continue.</p>
+              <p className="bold-text blue-text">C to continue.</p>
             </div>
           )}
           {currentStep === 2 && (
             <div>
-              <p className="standardText">
-                As you struggle to understand the Siren’s song, a conch shell
+              <p className="standard-text">
+                As you struggle to understand the Siren's song, a conch shell
                 washes up on the beach.
               </p>
               <p></p>
@@ -591,7 +591,7 @@ function ChapterOne({
                 loading="eager"
                 decoding="async"
               ></img>
-              <p className="standardText blueText">Press C to continue</p>
+              <p className="standard-text">Press <span className="blue-text">C</span> to continue</p>
             </div>
           )}
           {currentStep === 3 && (
@@ -599,7 +599,7 @@ function ChapterOne({
               <h3>Choose wisely.</h3>
               {!hasConch && (
                 <img
-                  className="conchItem"
+                  className="conchItem center"
                   src={Conch}
                   alt="A mystifyingly beautiful conch shell."
                   width="260"
@@ -626,7 +626,7 @@ function ChapterOne({
           {currentStep === 4 && renderScene()}
           {currentStep === 5 && (
             <div>
-              <p className="standardText">
+              <p className="standard-text">
                 As you approach her, the Siren flashes you a razor tooth smile
                 and appears to speak, though you still cannot hear her voice. Is
                 the ocean getting louder, or is that sound coming from the
@@ -638,9 +638,9 @@ function ChapterOne({
                   nextStep();
                 }}
               />
-              <p className="standardText">
+              <p className="standard-text">
                 Remember, you can press{" "}
-                <strong className="blueText">'H'</strong> at any time for help.
+                <strong className="blue-text">'H'</strong> at any time for help.
               </p>
               <AudioPlayer
                 src={Listen}
@@ -651,7 +651,7 @@ function ChapterOne({
           )}
           {currentStep === 6 && (
             <>
-              <p className="standardText">
+              <p className="standard-text">
                 Oooouch!! Something slithers down your ear canal, tears through
                 your eardrum, and nestles into your cochlea. Overcome with some
                 strange euphoria, you hear a beautiful voice singing:
@@ -661,17 +661,17 @@ function ChapterOne({
                 autoplay={true}
                 alt="A sweet voice singing over the ocean 'I grew up insid of it, I grew up in the light of it."
               />
-              <p className="standardText blueText">Press C to continue</p>
-              <p className="boldText">'I grew up inside of it,</p>
-              <p className="boldText">I grew up in the light of it.'</p>
+              <p className="standard-text">Press <span className="blue-text">C</span> to continue</p>
+              <p className="bold-text">'I grew up inside of it,</p>
+              <p className="bold-text">I grew up in the light of it.'</p>
             </>
           )}
           {currentStep === 7 && (
             <>
-              <p className="standardText">
+              <p className="standard-text">
                 The Siren speaks, and thanks to the creature now living in your
                 ear, her previously indecipherable squeaking transforms into a
-                melodious voice: “You are brave, and it is noble of you to seek
+                melodious voice: "You are brave, and it is noble of you to seek
                 help for your people in this dark age… but if you are to
                 succeed, you will need powers beyond your means. Head east, go
                 to the Cave of Mirrors, retrieve the Pearl Of The Moon, and free
@@ -688,7 +688,7 @@ function ChapterOne({
                 loading="eager"
                 decoding="async"
               ></img>
-              <p className="standardText blueText">Press C to continue</p>
+              <p className="standard-text">Press <span className="blue-text">C</span> to continue</p>
             </>
           )}
           {currentStep === 8 && !isAuthenticated && <Register />}

@@ -326,10 +326,10 @@ const Game = () => {
   };
 
   return (
-    <div className='raleway '>
+    <div className='font-raleway '>
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
-      <div className="chapterInfo blueText">
+      <div className="chapter-info blue-text">
         {chapterNames[viewingChapter] || 'Unknown'}
       </div>
     </div>
