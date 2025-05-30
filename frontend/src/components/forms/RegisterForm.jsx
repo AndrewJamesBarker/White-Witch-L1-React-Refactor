@@ -104,7 +104,7 @@ const RegisterForm = () => {
 
   return (
     <div className="flex-container">
-      <h2 className="blue-text">Register</h2>
+      <h2 className="blue-text">REGISTER</h2>
       {error && <p className="error-message">{error}</p>}
       <div className="form-field-width-control">
         <form onSubmit={handleSubmit}>

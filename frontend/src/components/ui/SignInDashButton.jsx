@@ -21,7 +21,7 @@ const SignInDashButton = () => {
                  transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95
                  focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
     >
-      {isAuthenticated ? 'Dashboard' : 'Sign In'}
+      {isAuthenticated ? 'Dashboard' : 'Login'}
     </button>
   );
 };

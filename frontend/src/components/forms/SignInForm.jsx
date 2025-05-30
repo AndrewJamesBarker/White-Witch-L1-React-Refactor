@@ -61,7 +61,7 @@ const SignInForm = () => {
 
   return (
     <div className="flex-container">
-      <h2 className="blue-text">Sign In</h2>
+      <h2 className="blue-text">LOGIN</h2>
       {error && <p className="error-message">{error}</p>}
       <div className="form-field-width-control">
         <form onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const SignInForm = () => {
             <a href="https://policies.google.com/terms">Terms of Service</a> apply.
           </small>
           <button className="margin-btm-1" type="submit">
-            Sign In
+            Login
           </button>
           <p className="bold-text padding-margin-reset">
             Don't have an account yet?
