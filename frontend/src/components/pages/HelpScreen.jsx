@@ -28,10 +28,11 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "flex-start",
                   gap: "10px",
                 }}
               >
+                <span className="blue-text">Directional Arrow Keys</span>
                 <img
                   src={DirectionalKeys}
                   alt="Keyboard directional arrow keys"
@@ -39,9 +40,8 @@ const HelpScreen = forwardRef(({ onHelpScreen }, ref) => {
                   height="45"
                   loading="eager"
                   decoding="async"
-                  className="center"
+                  className="help-arrow-keys-image"
                 />
-                Directional Arrow Keys
               </span>
             </li>
           </ul>

@@ -104,6 +104,13 @@
   width: 50%;
   height: 50%;
   margin: 0 auto;
+  display: block;
+}
+
+/* Override for paddingMarginReset when combined with standardImage */
+.paddingMarginReset.standardImage {
+  margin: 0 auto !important;
+  padding: 0;
 }
 
 .environImage {
@@ -324,23 +331,29 @@ ul.custom-bullets {
 
 .flex-container h2 {
   margin-bottom: 1.25rem;
+  text-align: center;
 }
 
 .flex-container form {
   display: flex;
   flex-direction: column;
   width: 100%;
+  align-items: center;
 }
 
 .flex-container .input-group {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 24rem;
+  margin-bottom: 1rem;
 }
 
 .flex-container label {
   margin: 0.25rem 0;
   font-weight: bold;
+  text-align: left;
+  width: 100%;
 }
 
 .flex-container input {
@@ -350,6 +363,7 @@ ul.custom-bullets {
   border-radius: 0.25rem;
   background: rgba(31, 41, 55, 0.5);
   color: white;
+  width: 100%;
 }
 
 .flex-container input:focus {
@@ -359,19 +373,22 @@ ul.custom-bullets {
 }
 
 .flex-container button {
-  background: #16a34a;
+  background-color: black;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
   color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
   font-size: 1rem;
+  padding: .75rem 1rem;
+  margin: .5rem;
   cursor: pointer;
-  border-radius: 0.25rem;
-  margin-top: 1.25rem;
-  transition: background-color 0.2s;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 24rem;
 }
 
 .flex-container button:hover {
-  background: #15803d;
+  background-color: white;
+  color: black;
 }
 
 .error-message {
@@ -429,4 +446,318 @@ ul.custom-bullets {
 .choose-wisely-button {
   width: 32.5rem;
   max-width: 32.5rem;
+}
+
+/* Layout.css Integration - Missing Styles Only */
+/* These styles ensure compatibility when layout.css is removed */
+
+/* Legacy Classes for Compatibility */
+.raleway {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 1em;
+}
+
+.introText {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.introText:hover {
+  cursor: pointer;
+}
+
+.blueText {
+  color: #24B7DC;
+}
+
+.whiteText {
+  color: white;
+}
+
+.standardText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.boldText {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.mediumText {
+  font-size: .9rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.widthControl {
+  max-width: 800px;
+  margin: auto;
+}
+
+.positionBottom {
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  width: 100%;
+}
+
+.paddingMarginReset {
+  margin: 0;
+  padding: 0;
+}
+
+.itemTitle {
+  font-size: 1rem;
+}
+
+.topRight {
+  position: fixed;
+  top: 8px;
+  right: 14px;
+}
+
+.chapterInfo {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.directionalArrows {
+  padding-left: 1rem;
+  width: 60px;
+  height: 45px;
+}
+
+.dynamicScenes {
+  background-color: rgba(0, 0, 0, 1);
+  color: #f5f5f5;
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.dragAndDropContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conchDraggable {
+  width: 150px;
+  height: 150px;
+}
+
+.formFieldWidthControl {
+  max-width: 300px;
+  margin: auto;
+}
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 100%;
+  margin: auto;
+  background: rgb(41, 41, 41);
+}
+
+.flexContainer h2 {
+  margin-bottom: 20px;
+}
+
+.flexContainer form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flexContainer .inputGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flexContainer label {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.flexContainer input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.flexContainer button {
+  background-color: black;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  color: white;
+  font-size: 1rem;
+  padding: .5rem 1rem;
+  margin: .5rem;
+  cursor: pointer;
+}
+
+.flexContainer button:hover {
+  background-color: white;
+  color: black;
+}
+
+.errorMessage {
+  color: rgb(185, 1, 1);
+  font-size: 1em;
+  font-weight: 600;
+}
+
+#helpText {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+#helpList {
+  display: block;
+  text-align: left; 
+  margin: auto;
+  max-width: 600px;
+  padding-top: .5rem;
+}
+
+#helpList li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+#helpLivesItems {
+  display: block;
+  text-align: left; 
+  margin: auto;
+  max-width: 600px;
+  padding-top: 2rem;
+}
+
+#itemsAndLives {
+  position: fixed;
+  right: 15px;
+  bottom: 10px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* Default Button Styles - Only apply when no other button class is present */
+button:not(.modern-button):not(.multiple-choice-buttons) {
+  background-color: black;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  color: white;
+  font-size: 1rem;
+  padding: .5rem 1rem;
+  margin: .5rem;
+  cursor: pointer;
+}
+
+button:not(.modern-button):not(.multiple-choice-buttons):hover {
+  background-color: white;
+  color: black;
+}
+
+/* Multiple Choice Components */
+.multiple-choice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 70%;
+  max-width: 600px;
+}
+
+.multiple-choice-buttons {
+  background-color: black;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 600px;
+  padding: .5rem;
+  margin: .5rem;
+  cursor: pointer;
+  color: white;
+}
+
+.multiple-choice-buttons:hover {
+  background-color: #f5f5f5;
+  color: black;
+  border: .8px solid black;
+}
+
+.multiple-choice-buttons:active {
+  background-color: #f5f5f5;
+  color: black;
+  border: .8px solid black;
+}
+
+/* Special Button Overrides */
+#satchelButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+#lifeCrystalButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Critical Override: Ensure images are centered when using both classes */
+img.paddingMarginReset.standardImage,
+.paddingMarginReset.standardImage {
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+/* Help screen arrow keys image - inline with text */
+.help-arrow-keys-image {
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
 } 

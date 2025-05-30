@@ -682,7 +682,7 @@ function ChapterOne({
                 powerful secret: Use it wisely, or be consumed by its power."
               </p>
               <img
-                className="paddingMarginReset standardImage"
+                className="standardImage"
                 alt="faint image of the white witches face within a magical orb"
                 src={WhiteWitchPearl}
                 loading="eager"
