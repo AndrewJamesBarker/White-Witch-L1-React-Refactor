@@ -31,7 +31,7 @@
 /* Modern App Container */
 .app {
   padding-top: 1.5rem;
-  min-height: 100vh;
+  min-height: 80vh;
   position: relative;
   background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
 }
