@@ -1015,4 +1015,44 @@ img.paddingMarginReset.standardImage,
 
 .focus\:ring-offset-gray-900:focus {
   --tw-ring-offset-color: #111827;
+}
+
+/* Additional Margin/Padding/Spacing Utilities */
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
+}
+
+/* Additional Effects for GlassCard */
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.backdrop-saturate-150 {
+  backdrop-filter: saturate(1.5);
+}
+
+.bg-clip-padding {
+  background-clip: padding-box;
+}
+
+.border {
+  border-width: 1px;
+}
+
+/* Additional Typography */
+.transform {
+  transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
 } 
