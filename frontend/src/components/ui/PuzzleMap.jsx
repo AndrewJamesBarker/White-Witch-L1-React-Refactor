@@ -23,7 +23,7 @@ const PuzzleMap = ({ onTileClick, selectedPiece, tempHighlight }) => {
       >
         <g filter="url(#filter0_d_96_6)">
           {sortedPuzzlePieces.map((piece) => {
-            let innerStrokeColor = "ffffff"; // Default inner stroke color
+            let innerStrokeColor = piece.stroke; // Default inner stroke color
 
             // Highlight red if tempHighlight is active
             if (tempHighlight === piece.id) {
@@ -34,9 +34,9 @@ const PuzzleMap = ({ onTileClick, selectedPiece, tempHighlight }) => {
               innerStrokeColor = "#00A55B";
             }
             // else default to dark grey
-            // else {
-            //   innerStrokeColor = "#494949";
-            // }
+            else {
+              innerStrokeColor = "#494949";
+            }
 
             return (
               <g key={piece.id}>
