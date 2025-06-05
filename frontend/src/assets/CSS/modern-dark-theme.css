@@ -796,6 +796,10 @@ img.paddingMarginReset.standardImage,
   color: white;
 }
 
+.text-left {
+  text-align: left;
+}
+
 /* Layout */
 .fixed {
   position: fixed;
