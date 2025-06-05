@@ -23,24 +23,24 @@ const AccountPage = () => {
             <h3 className="text-white font-bold mb-4 text-xl">Profile Details</h3>
             
             <div className="space-y-3 text-white">
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
+              <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Username:</span>
-                <span className="text-blue-200 ml-4">{user.username}</span>
+                <span className="text-blue-200 ml-8">{user.username}</span>
               </div>
               
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
+              <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Current Chapter:</span>
-                <span className="text-blue-200 ml-4">Level {user.gameState?.currentChapter?.level || 1}</span>
+                <span className="text-blue-200 ml-8">Level {user.gameState?.currentChapter?.level || 1}</span>
               </div>
               
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
+              <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Lives Remaining:</span>
-                <span className="text-blue-200 ml-4">{user.gameState?.livesLeft || 3}</span>
+                <span className="text-blue-200 ml-8">{user.gameState?.livesLeft || 3}</span>
               </div>
               
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
+              <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Items Collected:</span>
-                <span className="text-blue-200 ml-4">{user.gameState?.items?.length || 0}</span>
+                <span className="text-blue-200 ml-8">{user.gameState?.items?.length || 0}</span>
               </div>
             </div>
           </div>
