@@ -13,7 +13,7 @@ const SignInDashButton = () => {
   return (
     <button 
       onClick={handleClick} 
-      className="fixed top-4 right-4 z-20
+      className="fixed top-4 right-4 z-30
                  bg-gray-900/80 hover:bg-blue-600/90 active:bg-blue-700/90
                  border border-gray-600/50 hover:border-blue-400/70
                  rounded-lg px-4 py-2 text-sm font-medium text-white

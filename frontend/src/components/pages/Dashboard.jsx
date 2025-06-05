@@ -6,7 +6,6 @@ import PuzzleMap from "../ui/PuzzleMap";
 import ChapterMap from "../utilities/ChapterMap";
 import ChapterNames from "../utilities/ChapterNames";
 import ErrorBoundary from "../utilities/ErrorBoundary"; // Error boundary to catch rendering issues
-import Footer from "../layout/Footer";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -112,7 +111,6 @@ const Dashboard = () => {
           tempHighlight={tempHighlight}
         />
       </div>
-      <Footer />
     </div>
   );
 };

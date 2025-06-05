@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
-import Footer from '../layout/Footer';
 
 const DeleteAccount = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -99,7 +98,6 @@ const DeleteAccount = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -163,7 +161,6 @@ const DeleteAccount = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

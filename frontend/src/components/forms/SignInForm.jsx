@@ -3,7 +3,6 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Footer from "../layout/Footer";
 
 const SignInForm = () => {
   const [email, setEmail] = useState("");
@@ -113,7 +112,6 @@ const SignInForm = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

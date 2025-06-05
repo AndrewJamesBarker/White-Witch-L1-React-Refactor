@@ -22,11 +22,17 @@ import PrivacyPolicyPage from "./components/pages/PrivacyPolicyPage";
 import AccountPage from "./components/pages/AccountPage";
 import DeleteAccount from "./components/account/DeleteAccount";
 import { GameStateProvider } from "./context/GameStateContext";
+import Footer from "./components/layout/Footer";
 
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
   const location = useLocation();
+  
+  // Define pages that should NOT show the footer
+  const pagesWithoutFooter = ["/privacy-policy"];
+  const shouldShowFooter = !pagesWithoutFooter.includes(location.pathname);
+  
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -130,6 +136,7 @@ const AppContent = () => {
       </ThemeProvider>
       {location.pathname !== "/dashboard" &&
         location.pathname !== "/signin" && <SignInDashButton />}
+      {shouldShowFooter && <Footer />}
     </div>
   );
 };
