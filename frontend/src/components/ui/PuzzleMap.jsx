@@ -34,9 +34,9 @@ const PuzzleMap = ({ onTileClick, selectedPiece, tempHighlight }) => {
               innerStrokeColor = "#00A55B";
             }
             // else default to dark grey
-            // else {
-            //   innerStrokeColor = "#494949";
-            // }
+            else {
+              innerStrokeColor = "#494949";
+            }
 
             return (
               <g key={piece.id}>

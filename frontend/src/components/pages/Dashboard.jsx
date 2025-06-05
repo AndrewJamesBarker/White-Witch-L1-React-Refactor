@@ -6,6 +6,7 @@ import PuzzleMap from "../ui/PuzzleMap";
 import ChapterMap from "../utilities/ChapterMap";
 import ChapterNames from "../utilities/ChapterNames";
 import ErrorBoundary from "../utilities/ErrorBoundary"; // Error boundary to catch rendering issues
+import Footer from "../layout/Footer";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -82,33 +83,36 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Greetings {user.username}</h1>
-      {/* Display the selected level */}
-      <h2>
-        Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}
-      </h2>
-      <h3 className="blue-text">"{chapterName}"</h3>
+      <div>
+        <h1>Greetings {user.username}</h1>
+        {/* Display the selected level */}
+        <h2>
+          Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}
+        </h2>
+        <h3 className="blue-text">"{chapterName}"</h3>
 
-      {inaccessibleLevel && (
-        <div className="inaccessible-level" aria-live="polite">
-          <p className="errorMessage">
-            Chapter {inaccessibleLevel} is currently locked.
-          </p>
-        </div>
-      )}
+        {inaccessibleLevel && (
+          <div className="inaccessible-level" aria-live="polite">
+            <p className="errorMessage">
+              Chapter {inaccessibleLevel} is currently locked.
+            </p>
+          </div>
+        )}
 
-      <button className="button" onClick={() => navigate("/")}>
-        Continue
-      </button>
-      <button className="button topRight" onClick={() => logout()}>
-        Logout
-      </button>
+        <button className="button" onClick={() => navigate("/")}>
+          Continue
+        </button>
+        <button className="button topRight" onClick={() => logout()}>
+          Logout
+        </button>
 
-      <PuzzleMap
-        onTileClick={handleTileClick}
-        selectedPiece={`piece${viewingChapter}`} // Highlight the viewingChapter by default
-        tempHighlight={tempHighlight}
-      />
+        <PuzzleMap
+          onTileClick={handleTileClick}
+          selectedPiece={`piece${viewingChapter}`} // Highlight the viewingChapter by default
+          tempHighlight={tempHighlight}
+        />
+      </div>
+      <Footer />
     </div>
   );
 };

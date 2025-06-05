@@ -4,17 +4,28 @@ import api from '../services/api';
 
 const AuthContext = createContext(null);
 
+// Helper function to get cookie options based on environment
+const getCookieOptions = () => {
+  const isDevelopment = import.meta.env.VITE_API_URL?.includes('localhost');
+  return {
+    secure: !isDevelopment, // false for localhost, true for production
+    sameSite: isDevelopment ? 'Strict' : 'None' // Strict for dev, None for production
+  };
+};
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
   const login = (userData) => {
     const { email, token, ...userSafeData } = userData;
+    const cookieOptions = getCookieOptions();
+    
     setIsAuthenticated(true);
     setUser(userSafeData);
     sessionStorage.setItem('user', JSON.stringify(userSafeData));
-    Cookies.set('token', token, { secure: true, sameSite: 'strict' });
-    Cookies.set('email', email, { secure: true, sameSite: 'strict' });
+    Cookies.set('token', token, cookieOptions);
+    Cookies.set('email', email, cookieOptions);
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     // console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
