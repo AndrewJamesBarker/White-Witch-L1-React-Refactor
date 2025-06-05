@@ -165,12 +165,20 @@ export const updateGameState = async (req, res) => {
 // For deleting user
 export const deleteUser = async (req, res) => {
   try {
-    const user = await UserGameState.findById(req.params.id);
+    const { userId } = req.userData; // Use the authenticated user's ID from token
+    
+    const user = await UserGameState.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    await user.remove();
-    res.json({ message: 'User deleted' });
+    
+    // Delete the user using modern Mongoose method
+    await UserGameState.findByIdAndDelete(userId);
+    
+    // Clear any authentication cookies
+    res.clearCookie('token');
+    
+    res.json({ message: 'Account permanently deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

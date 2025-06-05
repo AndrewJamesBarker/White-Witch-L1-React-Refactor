@@ -18,6 +18,6 @@ router.get('/verify-email', verifyEmailToken); // Email verification
 router.post('/resend-verification-email', resendVerificationEmail); // Resend verification email
 
 // Route for deleting user
-router.delete('/:id', authenticate, deleteUser);
+router.delete('/delete-account', authenticate, deleteUser);
 
 export default router;

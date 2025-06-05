@@ -34,6 +34,7 @@
   min-height: 80vh;
   position: relative;
   background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+  padding-bottom: 80px; /* Add space for footer */
 }
 
 /* Light Ball Animation (for special effects) */
@@ -327,6 +328,7 @@ ul.custom-bullets {
   backdrop-filter: blur(20px);
   background: rgba(31, 41, 55, 0.5);
   border: 2px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 80px; /* Add space for footer */
 }
 
 .flex-container h2 {
