@@ -63,7 +63,7 @@ const DeleteAccount = () => {
               
               <div className="text-white space-y-3 mb-6">
                 <p>Deleting your account will permanently remove:</p>
-                <ul className="list-disc list-inside space-y-1 text-base">
+                <ul className="list-disc list-inside space-y-1 text-base list-centered">
                   <li className="text-left">Your username and email</li>
                   <li className="text-left">All game progress and save data</li>
                   <li className="text-left">Chapter completions and current level</li>

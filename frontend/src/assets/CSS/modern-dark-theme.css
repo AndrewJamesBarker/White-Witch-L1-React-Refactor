@@ -1319,4 +1319,9 @@ img.paddingMarginReset.standardImage,
 /* Ensure body content has space for footer */
 body {
   padding-bottom: 60px;
+}
+
+.list-centered {
+  max-width: fit-content;
+  margin: 0 auto;
 } 
