@@ -25,22 +25,22 @@ const AccountPage = () => {
             <div className="space-y-3 text-white">
               <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Username:</span>
-                <span className="text-blue-200" style={{ marginLeft: '0.5rem' }}>{user.username}</span>
+                <span className="text-blue-200 margin-left-1">{user.username}</span>
               </div>
               
               <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Current Chapter:</span>
-                <span className="text-blue-200" style={{ marginLeft: '0.5rem' }}>Level {user.gameState?.currentChapter?.level || 1}</span>
+                <span className="text-blue-200 margin-left-1">Level {user.gameState?.currentChapter?.level || 1}</span>
               </div>
               
               <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Lives Remaining:</span>
-                <span className="text-blue-200" style={{ marginLeft: '0.5rem' }}>{user.gameState?.livesLeft || 3}</span>
+                <span className="text-blue-200 margin-left-1">{user.gameState?.livesLeft || 3}</span>
               </div>
               
               <div className="flex items-center py-2 border-b border-white/10">
                 <span className="font-medium">Items Collected:</span>
-                <span className="text-blue-200" style={{ marginLeft: '0.5rem' }}>{user.gameState?.items?.length || 0}</span>
+                <span className="text-blue-200 margin-left-1">{user.gameState?.items?.length || 0}</span>
               </div>
             </div>
           </div>
