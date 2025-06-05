@@ -55,10 +55,8 @@ export const loginUser = async (req, res) => {
     // Set HttpOnly cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'None', // Use 'None' for cross-site cookies
-      // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      // sameSite: 'Strict',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
     });
 
     // Return user data (excluding email)
