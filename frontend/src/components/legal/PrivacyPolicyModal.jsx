@@ -1,6 +1,9 @@
 import React from 'react';
 
 const PrivacyPolicyModal = ({ isOpen, onClose }) => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+  
   if (!isOpen) return null;
 
   return (
@@ -20,10 +23,10 @@ const PrivacyPolicyModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="p-6 text-white space-y-6">
+        <div className="p-6 text-white space-y-6 privacy-policy-content">
           
           <div className="text-white/70 text-sm">
-            <strong>Effective Date:</strong> December 2024
+            <strong>Effective Date:</strong> {currentMonth} {currentYear}
           </div>
 
           <section>
@@ -74,11 +77,14 @@ const PrivacyPolicyModal = ({ isOpen, onClose }) => {
             <h3 className="text-xl font-bold text-blue-300 mb-3">Your Rights</h3>
             <p className="mb-3">You have the right to:</p>
             <ul className="list-disc list-inside space-y-1 text-white/90 ml-4">
-              <li><strong>Access</strong> your personal data at any time through your account</li>
-              <li><strong>Update</strong> your username, email, or password in account settings</li>
+              <li><strong>Update</strong> your username, email, or password through your account settings</li>
               <li><strong>Delete</strong> your account and all associated data permanently</li>
-              <li><strong>Export</strong> your game data upon request</li>
+              <li><strong>Request information</strong> about what personal data we have stored (contact us via email)</li>
+              <li><strong>Request data correction</strong> if any of your information is inaccurate</li>
             </ul>
+            <p className="mt-3 text-white/80 text-sm">
+              For data access or correction requests, please contact us via email. We will respond within 30 days.
+            </p>
           </section>
 
           <section>
@@ -114,7 +120,7 @@ const PrivacyPolicyModal = ({ isOpen, onClose }) => {
           <section>
             <h3 className="text-xl font-bold text-blue-300 mb-3">Contact</h3>
             <p className="text-white/90">
-              For privacy-related questions, contact: <a href="mailto:contact@whitewitch.game" className="text-blue-300 underline hover:text-blue-200">contact@whitewitch.game</a>
+              For privacy-related questions, contact: <span className="text-blue-300">whitewitchgame [at] gmail [dot] com</span>
             </p>
           </section>
 
