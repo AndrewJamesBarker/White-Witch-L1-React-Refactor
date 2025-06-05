@@ -52,8 +52,9 @@ export const loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // Set HttpOnly cookie
-    res.cookie('token', token, {
+    // Set HttpOnly cookie with environment-specific name
+    const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
+    res.cookie(cookieName, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
@@ -75,9 +76,13 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = (req, res) => {
-  // console.log(req.cookies.token)
-  // console.log(req.headers.authorization)
-  res.clearCookie('token'); // Clear the authentication cookie
+  // Clear the environment-specific cookie
+  const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
+  res.clearCookie(cookieName, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict'
+  });
   res.json({ message: 'Logged out successfully' });
 };
 
@@ -174,7 +179,12 @@ export const deleteUser = async (req, res) => {
     await UserGameState.findByIdAndDelete(userId);
     
     // Clear any authentication cookies
-    res.clearCookie('token');
+    const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
+    res.clearCookie(cookieName, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict'
+    });
     
     res.json({ message: 'Account permanently deleted' });
   } catch (err) {

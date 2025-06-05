@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 
 const authenticate = (req, res, next) => {
   try {
-    const token = req.cookies.token; 
+    // Use environment-specific cookie name
+    const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
+    const token = req.cookies[cookieName]; 
     if (!token) {
       throw new Error('Authentication failed');
     }

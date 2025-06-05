@@ -19,6 +19,8 @@ import RegisterForm from "./components/forms/RegisterForm";
 import SignInForm from "./components/forms/SignInForm";
 import VerifyEmail from "./components/pages/VerifyEmail";
 import PrivacyPolicyPage from "./components/pages/PrivacyPolicyPage";
+import AccountPage from "./components/pages/AccountPage";
+import DeleteAccount from "./components/account/DeleteAccount";
 import { GameStateProvider } from "./context/GameStateContext";
 
 const AppContent = () => {
@@ -120,6 +122,8 @@ const AppContent = () => {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/delete-account" element={<DeleteAccount />} />
           </Route>
         </Routes>
       </main>

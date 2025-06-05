@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { isAuthenticated } = useAuth();
   
   return (
     <footer className="custom-footer">
@@ -12,8 +14,16 @@ const Footer = () => {
           <span>White Witch © {currentYear}</span>
         </div>
 
-        {/* Right side - Legal links */}
+        {/* Right side - Links */}
         <div className="footer-links">
+          {isAuthenticated && (
+            <Link 
+              to="/account" 
+              className="footer-link"
+            >
+              Account
+            </Link>
+          )}
           <Link 
             to="/privacy-policy" 
             className="footer-link"
