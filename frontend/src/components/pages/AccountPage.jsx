@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Footer from '../layout/Footer';
 
 const AccountPage = () => {
   const { user, logout } = useAuth();
@@ -66,6 +67,7 @@ const AccountPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

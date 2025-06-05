@@ -5,6 +5,7 @@ import validator from "validator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { defaultGameState } from "../../context/GameStateContext";
 import api from "../../services/api";
+import Footer from "../layout/Footer";
 
 const RegisterForm = () => {
   // const apiBaseUrl = import.meta.env.VITE_API_URL;
@@ -162,6 +163,7 @@ const RegisterForm = () => {
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
