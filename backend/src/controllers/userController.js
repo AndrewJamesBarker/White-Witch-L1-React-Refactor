@@ -55,10 +55,8 @@ export const loginUser = async (req, res) => {
     // Set HttpOnly cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'None', // Use 'None' for cross-site cookies
-      // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      // sameSite: 'Strict',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
     });
 
     // Return user data (excluding email)
@@ -165,12 +163,20 @@ export const updateGameState = async (req, res) => {
 // For deleting user
 export const deleteUser = async (req, res) => {
   try {
-    const user = await UserGameState.findById(req.params.id);
+    const { userId } = req.userData; // Use the authenticated user's ID from token
+    
+    const user = await UserGameState.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    await user.remove();
-    res.json({ message: 'User deleted' });
+    
+    // Delete the user using modern Mongoose method
+    await UserGameState.findByIdAndDelete(userId);
+    
+    // Clear any authentication cookies
+    res.clearCookie('token');
+    
+    res.json({ message: 'Account permanently deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
