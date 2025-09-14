@@ -27,6 +27,7 @@ const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
   const { logout, user } = useAuth();
   const location = useLocation();
+  
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -45,14 +46,6 @@ const AppContent = () => {
       fontSize: 16,
     },
   });
-
-
-  // .raleway{
-  //   font-family: "Raleway", sans-serif;
-  //   font-optical-sizing: auto;
-  //   font-weight: 500;
-  //   font-size: 1em;
-  // }
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
