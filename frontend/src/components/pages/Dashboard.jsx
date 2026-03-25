@@ -110,6 +110,8 @@ const Dashboard = () => {
           onTileClick={handleTileClick}
           selectedPiece={`piece${viewingChapter}`} // Highlight the viewingChapter by default
           tempHighlight={tempHighlight}
+          currentChapter={currentChapter}
+          chaptersCompleted={chaptersCompleted}
         />
       </div>
       <Footer />
