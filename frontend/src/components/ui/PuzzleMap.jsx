@@ -201,7 +201,7 @@ const PuzzleMap = ({
                 style={{
                   width: "100%",
                   height: "100%",
-                  color: "#DDFBEF",
+                  color: "White",
                   fontFamily: '"Cinzel Decorative", "Times New Roman", serif',
                   fontSize: "31px",
                   fontWeight: "900",
