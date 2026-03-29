@@ -28,15 +28,6 @@
   display: none !important;
 }
 
-/* Modern App Container */
-.app {
-  padding-top: 1.5rem;
-  min-height: 80vh;
-  position: relative;
-  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-  padding-bottom: 0; /* Remove conflicting padding - let body handle footer spacing */
-}
-
 /* Light Ball Animation (for special effects) */
 .lightBall {
   position: absolute;
@@ -242,21 +233,13 @@
 .dynamic-scenes {
   border-radius: 1rem;
   padding: 2rem;
-  margin: 2rem;
+  margin: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 255, 255, 0.2);
   color: #f3f4f6;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   transition: all 0.4s ease-in-out;
-}
-
-/* Position Classes */
-.position-bottom {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  bottom: 10%;   
 }
 
 .chapter-info {
@@ -282,10 +265,6 @@
 
 .margin-left-1 {
   margin-left: 0.5rem;
-}
-
-.margin-left-2 {
-  margin-left: 1rem;
 }
 
 .padding-all-1 {

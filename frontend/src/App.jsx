@@ -84,7 +84,7 @@ const AppContent = () => {
       {/* Invisible header for accessibility */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-      <main>
+      <main className="app-main">
         <Routes>
           <Route
             path="/"

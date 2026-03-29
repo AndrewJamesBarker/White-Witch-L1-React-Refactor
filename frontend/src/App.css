@@ -9,11 +9,20 @@
 
 /* Add a subtle gradient overlay for modern feel */
 .app {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
   position: relative;
   background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 1rem;
   margin: 1rem;
+  padding: 1rem;
+}
+
+/* Route content inset lives here (not on child card margins) */
+.app-main {
+  display: flow-root;
   padding: 1rem;
 }
 
