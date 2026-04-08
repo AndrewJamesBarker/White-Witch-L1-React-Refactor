@@ -37,7 +37,8 @@ export const GameStateProvider = ({ children }) => {
 
   // State variables
   const [currentChapter, setCurrentChapter] = useState(defaultGameState.currentChapter.level);
-  const [viewingChapter, setViewingChapter] = useState(defaultGameState.currentChapter.level);
+  const [viewingChapter, setViewingChapterState] = useState(defaultGameState.currentChapter.level);
+  const [hasManualViewingChapter, setHasManualViewingChapter] = useState(false);
   const [livesLeft, setLivesLeft] = useState(defaultGameState.livesLeft);
   const [items, setItems] = useState(defaultGameState.items);
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
@@ -76,24 +77,50 @@ export const GameStateProvider = ({ children }) => {
   const updateLife = useUpdateLife();
   const removeItem = useRemoveItem();
 
+  const setViewingChapter = (chapter) => {
+    setHasManualViewingChapter(true);
+    setViewingChapterState(chapter);
+  };
+
+  useEffect(() => {
+    setHasManualViewingChapter(false);
+  }, [user?.userId]);
+
   // Initialize state from user or guest game state
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
+    // Temporary Chapter 2 development lock:
+    // keep Chapter 2/3 completion false and prevent loading beyond Chapter 2.
+    // Remove this block once Chapter 2 completion flow is ready.
 
     if (user && user.gameState) {
-      setCurrentChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level);
-      setViewingChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
+      const loadedLevel = user.gameState.currentChapter.level || defaultGameState.currentChapter.level;
+      const safeLevel = Math.min(loadedLevel, 2);
+      setCurrentChapter(safeLevel);
+      setViewingChapterState((prev) => (hasManualViewingChapter ? prev : safeLevel));
       setLivesLeft(user.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(user.gameState.items || [])])]);
-      setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...user.gameState.chaptersCompleted });
+      setChaptersCompleted({
+        ...defaultGameState.chaptersCompleted,
+        ...user.gameState.chaptersCompleted,
+        chapterTwo: false,
+        chapterThree: false,
+      });
     } else if (guestUser?.gameState) {
-      setCurrentChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level);
-      setViewingChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
+      const loadedLevel = guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level;
+      const safeLevel = Math.min(loadedLevel, 2);
+      setCurrentChapter(safeLevel);
+      setViewingChapterState((prev) => (hasManualViewingChapter ? prev : safeLevel));
       setLivesLeft(guestUser.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
-      setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...guestUser.gameState.chaptersCompleted });
+      setChaptersCompleted({
+        ...defaultGameState.chaptersCompleted,
+        ...guestUser.gameState.chaptersCompleted,
+        chapterTwo: false,
+        chapterThree: false,
+      });
     }
-  }, [user]);
+  }, [user, hasManualViewingChapter]);
 
   // Context value
   return (

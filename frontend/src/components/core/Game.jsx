@@ -272,7 +272,7 @@ const Game = () => {
     switch (viewingChapter) {
       case 1:
         return chaptersCompleted.chapterOne ? (
-          <ChapOneAltState />
+          <ChapOneAltState obtainItem={obtainItem} />
         ) : (
           <ChapterOne
             onComplete={() => completeChapter(1)}
@@ -300,7 +300,6 @@ const Game = () => {
       case 2:
         return (
           <ChapterTwo
-            onComplete={() => completeChapter(2)}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}
@@ -313,7 +312,8 @@ const Game = () => {
             showHelp={showHelp}
             showInventory={showInventory}
             currentStep={currentStep}
-            changeStep={changeStep}
+            setCurrentStep={setCurrentStep}
+            nextStep={nextStep}
             previousStep={previousStep}
             currentChapter={currentChapter}
             setCurrentChapter={setCurrentChapter}

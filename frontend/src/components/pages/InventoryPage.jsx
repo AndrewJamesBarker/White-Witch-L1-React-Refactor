@@ -4,6 +4,11 @@ import InventoryItem from "../items/InventoryItem";
 import Conch from "../../assets/images/inventory-items/Conch-Good.webp";
 import Pearl from "../../assets/images/inventory-items/pearlOfTheMoon.webp";
 import Laser from "../../assets/images/inventory-items/Laser-pistol.webp";
+import InsectPouch from "../../assets/images/inventory-items/insect-pouch.png";
+import {
+  LEATHER_INSECT_POUCH,
+  LEGACY_LEATHER_DRAWSTRING_POUCH,
+} from "../utilities/itemKeys";
 
 const itemsData = [
   {
@@ -26,6 +31,14 @@ const itemsData = [
     description: "A masterpiece of engineering harkening from the days of old. Your aim is always true with your trusty laser-pistol (even despite your lack of conventional sight.)",
     src: Laser,
     alt: "laser pistol",
+  },
+  {
+    key: LEATHER_INSECT_POUCH,
+    aliases: [LEGACY_LEATHER_DRAWSTRING_POUCH],
+    title: "Leather Insect Pouch",
+    description: "A weathered leather drawstring pouch crawling with live, wriggling centipedes and other strange mutated insects. Whatever put this here wanted it to be found.",
+    src: InsectPouch,
+    alt: "leather insect pouch full of strange insects",
   }
 ];
 
@@ -36,8 +49,13 @@ const InventoryPage = forwardRef((props, ref) => {
     <div ref={ref} className="dynamic-scenes standard-text width-control center">
       <h2 className="center-text underline-text blue-text">Inventory</h2>
       <p>Press <span className="blue-text bold-text">'i'</span> at anytime to open or close this page.</p>
-      {itemsData.map(item => 
-        items.includes(item.key) && (
+      {itemsData.map(item => {
+        const itemMatches =
+          items.includes(item.key) ||
+          (item.aliases || []).some((alias) => items.includes(alias));
+
+        return (
+          itemMatches && (
           <InventoryItem 
             key={item.title}
             title={item.title}
@@ -45,8 +63,9 @@ const InventoryPage = forwardRef((props, ref) => {
             src={item.src}
             alt={item.alt}
           />
-        )
-      )}
+          )
+        );
+      })}
     </div>
   );
 });
