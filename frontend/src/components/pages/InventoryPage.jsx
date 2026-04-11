@@ -36,7 +36,7 @@ const itemsData = [
     key: LEATHER_INSECT_POUCH,
     aliases: [LEGACY_LEATHER_DRAWSTRING_POUCH],
     title: "Leather Insect Pouch",
-    description: "A weathered leather drawstring pouch crawling with live, wriggling centipedes and other strange mutated insects. Whatever put this here wanted it to be found.",
+    description: "A weathered leather drawstring pouch crawling with live, wriggling centipedes and other strange mutated insects.",
     src: InsectPouch,
     alt: "leather insect pouch full of strange insects",
   }

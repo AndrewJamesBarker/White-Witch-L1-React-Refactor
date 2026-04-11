@@ -54,9 +54,9 @@ function ChapOneAltState({ obtainItem }) {
         remains. Make haste, time is of the essence!
       </Typography>
       {enteredWithoutAltStatePouch && (
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold", color: "#00d4aa" }}>
           In the sand, you discover a leather drawstring pouch full of live,
-          wriggling centipedes and other strange mutated insects. It is now in
+          wriggling centipedes and other strange mutated insects. It has been added to
           your inventory.
         </Typography>
       )}

@@ -18,7 +18,7 @@ export const chapterTwoSteps = [
     id: "approach-choice",
     type: "choice",
     title: "Choose Your Approach",
-    body: "How do you respond to Grinn?",
+    body: "How do you interact with Grinn?",
     choices: [
       {
         id: "listen",
@@ -27,30 +27,32 @@ export const chapterTwoSteps = [
       },
       {
         id: "charge",
-        label: "Charge through the reeds.",
+        label: "Capture it!",
         outcome: "lose-life",
         cause: "marshCharge",
-      },
-      {
-        id: "wait",
-        label: "Stay still and observe.",
-        outcome: "no-progress",
       },
     ],
   },
   {
+    id: "grinn-guidance",
+    type: "narrative",
+    title: "Grinn Speaks",
+    body: '"Grinn hungry. You feed Grinn. Grinn show you safe."',
+    scene: "grinn",
+  },
+  {
     id: "reed-path",
     type: "sequence",
-    title: "Trace The Safe Path",
+    title: "The Safe Path",
     body:
-      "Use arrow keys to follow Grinn's route through the reed maze in order: Up, Right, Down.",
-    requiredKeys: ["ArrowUp", "ArrowRight", "ArrowDown"],
+      "'The wind lifts, the reeds shift. Enantiodromia.'",
+    requiredKeys: Array.from({ length: 25 }, (_, index) => `safe-square-${index + 1}`),
     penaltyCause: "wrongMarshPath",
   },
   {
     id: "handoff",
     type: "narrative",
-    title: "Path Secured",
+    title: "You survived!",
     body:
       "You prove your discipline, and Grinn nods toward the deeper marsh. Press C to finish this scaffolded sequence.",
     scene: "marsh",

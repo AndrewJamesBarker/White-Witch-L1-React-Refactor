@@ -33,12 +33,15 @@ const useKeyboardStepNavigation = ({
       const activeStep = steps[currentStep];
       const handledByStep = onStepKeyDown?.(event, activeStep, currentStep);
       if (handledByStep) {
+        event.preventDefault();
+        event.stopPropagation();
         return;
       }
 
       const key = event.key.toLowerCase();
 
       if (key === "c") {
+        event.preventDefault();
         if (!canContinue(activeStep, currentStep)) {
           return;
         }
@@ -52,6 +55,7 @@ const useKeyboardStepNavigation = ({
       }
 
       if (key === "b" && currentStep > 0) {
+        event.preventDefault();
         const canMoveBack = canGoBack ? canGoBack(activeStep, currentStep) : true;
         if (canMoveBack) {
           setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));

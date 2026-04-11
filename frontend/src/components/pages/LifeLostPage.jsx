@@ -8,7 +8,10 @@ const LifeLostPage =  forwardRef(({ livesLeft, onClose, resetGame, deathCause },
 const deathTexts = {
   sirenAttack: "As you take aim at her, the siren's eyes flash a deep, ominous red. In an instant, the serene cove transforms into a whirlpool of chaos. The siren's song, once indecipherable, becomes a piercing shriek, summoning the wrath of the sea. Your vision fades to black as a towering wave draws you into the abyss.",
   ignoreSoldiers: "You ignore the soldiers and push your way through them. As you walk, a piercing noise focuses into a splitting headache dead center of your forehead. Before you can turn to see it's too late. One of the Sirens generals leisurely approaches your corpse, and with a flick of his wrist, your body is flung into the mouth of an eagerly awaiting sea serpent.",
-  // ... other death causes
+  marshCharge: "You lunge for Grinn, but it slips into the reeds and leads you straight into a hidden sink. The marsh floor vanishes beneath you, and deep water closes over your head.",
+  wrongMarshPath: "You misread Grinn's route and step off the safe line. A cold undertow drags you into deep marsh water before you can recover.",
+  grinnUnfed: "Grinn waits for the next bug, but you hesitate too long. It pivots away and guides you into deep water, where the marsh swallows you whole.",
+  grinnOutOfBugs: "Your insect pouch runs dry. Without food, Grinn abandons the safe path and leads you into deep water that swallows you whole.",
 };
 
 // Get the death message
