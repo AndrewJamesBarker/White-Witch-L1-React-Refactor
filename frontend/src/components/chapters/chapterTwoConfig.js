@@ -54,8 +54,8 @@ export const chapterTwoSteps = [
     type: "narrative",
     title: "You survived!",
     body:
-      "You prove your discipline, and Grinn nods toward the deeper marsh.",
-    scene: "marsh",
+      "cYou're elated, but your new friend Grinn can only shake his head, casting a disparaging look upon the small town up ahead.",
+    scene: "arkra-distance2",
   },
   {
     id: "find-e-crystal",
@@ -63,7 +63,7 @@ export const chapterTwoSteps = [
     title: "You Found A Strange Crystal",
     body:
       "Half-buried in the mud, you notice a pale shard not much bigger than a little pebble or tiny gem. Its etched face resembles the letter E. You tuck it away with care into your satchel.",
-    scene: "marsh",
+    scene: "arkra-distance2",
   },
 ];
 

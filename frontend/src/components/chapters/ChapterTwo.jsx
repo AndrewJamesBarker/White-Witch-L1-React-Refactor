@@ -17,6 +17,7 @@ import {
   LEGACY_LEATHER_DRAWSTRING_POUCH,
 } from "../utilities/itemKeys";
 import Marsh from "../../assets/images/environment/Marsh1.webp";
+import ArkraDistance2 from "../../assets/images/environment/Arkra-distance2.webp";
 import Grinn from "../../assets/images/portraits/Grinn.webp";
 import Caballero from "../../assets/images/ui-elements/Caballero.webp";
 import ECrystal from "../../assets/images/inventory-items/Elitrye-Crystals/E-Crystal.png";
@@ -417,9 +418,15 @@ function ChapterTwo({
   });
 
   const renderScene = (scene) => {
-    if (scene !== "marsh" && scene !== "grinn") {
+    if (scene !== "marsh" && scene !== "grinn" && scene !== "arkra-distance2") {
       return null;
     }
+
+    const backgroundImage = scene === "arkra-distance2" ? ArkraDistance2 : Marsh;
+    const backgroundAlt =
+      scene === "arkra-distance2"
+        ? "A distant view of Arkra on the horizon."
+        : "A labyrinthine marshland vista.";
 
     return (
       <div
@@ -432,8 +439,8 @@ function ChapterTwo({
       >
         <img
           className="environImage"
-          src={Marsh}
-          alt="A labyrinthine marshland vista."
+          src={backgroundImage}
+          alt={backgroundAlt}
           width="500"
           height="500"
           loading="eager"
