@@ -54,7 +54,7 @@ export const chapterTwoSteps = [
     type: "narrative",
     title: "You survived!",
     body:
-      "cYou're elated, but your new friend Grinn can only shake his head, casting a disparaging look upon the small town up ahead.",
+      "You're elated, but your new friend Grinn can only shake his head, casting a disparaging look upon the small village up ahead.",
     scene: "arkra-distance2",
   },
   {
