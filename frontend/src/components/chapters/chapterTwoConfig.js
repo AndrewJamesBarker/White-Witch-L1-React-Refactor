@@ -46,7 +46,7 @@ export const chapterTwoSteps = [
     title: "The Safe Path",
     body:
       "'The wind lifts, the reeds shift. Enantiodromia.'",
-    requiredKeys: Array.from({ length: 25 }, (_, index) => `safe-square-${index + 1}`),
+    requiredKeys: Array.from({ length: 27 }, (_, index) => `safe-square-${index + 1}`),
     penaltyCause: "wrongMarshPath",
   },
   {
@@ -54,7 +54,15 @@ export const chapterTwoSteps = [
     type: "narrative",
     title: "You survived!",
     body:
-      "You prove your discipline, and Grinn nods toward the deeper marsh. Press C to finish this scaffolded sequence.",
+      "You prove your discipline, and Grinn nods toward the deeper marsh.",
+    scene: "marsh",
+  },
+  {
+    id: "find-e-crystal",
+    type: "narrative",
+    title: "You Found A Strange Crystal",
+    body:
+      "Half-buried in the mud, you notice a pale shard not much bigger than a little pebble or tiny gem. Its etched face resembles the letter E. You tuck it away with care into your satchel.",
     scene: "marsh",
   },
 ];

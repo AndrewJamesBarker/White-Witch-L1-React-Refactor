@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
       completed: { type: Boolean, default: false }
     },
     items: [{ type: String }],
+    gems: {
+      collected: { type: [String], default: [] },
+    },
     livesLeft: { type: Number, default: 3 },
     chaptersCompleted: {
       chapterOne: { type: Boolean, default: false },

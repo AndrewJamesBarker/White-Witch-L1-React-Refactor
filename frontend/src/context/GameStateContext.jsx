@@ -9,6 +9,9 @@ import useRemoveItem from "../components/hooks/useRemoveItem";
 const defaultGameState = {
   currentChapter: { level: 1, completed: false },
   items: ["Laser Pistol"], // Starting item
+  gems: {
+    collected: [],
+  },
   livesLeft: 3,
   chaptersCompleted: {
     chapterOne: false,

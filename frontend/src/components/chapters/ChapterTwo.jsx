@@ -12,12 +12,14 @@ import {
 } from "./chapterTwoConfig";
 import { useGameState } from "../../context/GameStateContext";
 import {
+  E_CRYSTAL,
   LEATHER_INSECT_POUCH,
   LEGACY_LEATHER_DRAWSTRING_POUCH,
 } from "../utilities/itemKeys";
 import Marsh from "../../assets/images/environment/Marsh1.webp";
 import Grinn from "../../assets/images/portraits/Grinn.webp";
 import Caballero from "../../assets/images/ui-elements/Caballero.webp";
+import ECrystal from "../../assets/images/inventory-items/Elitrye-Crystals/E-Crystal.png";
 
 // Single-tile-wide snake path verified by backtracking search.
 // 26 positions = 25 moves. 20 bugs → Grinn guides positions 0–20.
@@ -37,9 +39,8 @@ import Caballero from "../../assets/images/ui-elements/Caballero.webp";
 // Section A – Teaching  (0–9):  path climbs col 2, turns left to col 1, rises to row 1
 // Section B – Learning  (10–19): crosses top, descends col 4, sweeps right to col 6–7 edge
 // Section C – Solo      (20–25): right-edge climb from [6,7] up to goal [2,6]
-const STARTING_BUG_COUNT = 20;
-const FEED_WINDOW_MS = 10000;
-const ENABLE_GRINN_FEED_TIMER = false;
+const STARTING_BUG_COUNT = 10;
+const MAZE_TIME_LIMIT_MS = 60000;
 // Developer test flag: set true to reveal the full correct maze route.
 const SHOW_FULL_ROUTE_DEBUG = false;
 const REED_MAZE_GRID = [
@@ -75,13 +76,15 @@ const REED_ROUTE_POSITIONS = [
   [5, 5], // 17 ↓
   [6, 5], // 18 ↓
   [6, 6], // 19 → (last Grinn-guided position)
-  // --- Section C: Solo (20–25) — player must reason from revealed path ---
+  // --- Section C: Solo (20–27) — player must reason from revealed path ---
   [6, 7], // 20 → (fork: up [5,7] or continue — player saw path trending upward)
   [5, 7], // 21 ↑
   [4, 7], // 22 ↑
   [3, 7], // 23 ↑
   [3, 6], // 24 ← (fork: continue up [2,7] looks obvious — wrong)
-  [2, 6], // 25 ↑ GOAL
+  [2, 6], // 25 ↑
+  [1, 6], // 26 ↑ (g7)
+  [0, 6], // 27 ↑ GOAL (g8)
 ];
 
 const POSITION_BY_ARROW = {
@@ -105,6 +108,7 @@ function ChapterTwo({
   currentStep,
   setCurrentStep,
   loseLife,
+  obtainItem,
   setShowLifeLost,
   showHelp,
   showInventory,
@@ -124,8 +128,8 @@ function ChapterTwo({
   const [bugCount, setBugCount] = useState(
     hasInsectPouch ? STARTING_BUG_COUNT : 0
   );
-  const [nextFeedDeadline, setNextFeedDeadline] = useState(null);
-  const [feedTimeLeftMs, setFeedTimeLeftMs] = useState(FEED_WINDOW_MS);
+  const [mazeDeadline, setMazeDeadline] = useState(null);
+  const [mazeTimeLeftMs, setMazeTimeLeftMs] = useState(MAZE_TIME_LIMIT_MS);
   const [grinnFeedFailed, setGrinnFeedFailed] = useState(false);
   const [playerPosition, setPlayerPosition] = useState(REED_ROUTE_POSITIONS[0]);
   const [grinnTargetIndex, setGrinnTargetIndex] = useState(0);
@@ -187,8 +191,8 @@ function ChapterTwo({
       setChoiceResults({});
       setSequenceProgress({});
       setBugCount(hasInsectPouch ? STARTING_BUG_COUNT : 0);
-      setNextFeedDeadline(null);
-      setFeedTimeLeftMs(FEED_WINDOW_MS);
+      setMazeDeadline(null);
+      setMazeTimeLeftMs(MAZE_TIME_LIMIT_MS);
       setGrinnFeedFailed(false);
       setPlayerPosition(REED_ROUTE_POSITIONS[0]);
       setGrinnTargetIndex(0);
@@ -218,12 +222,21 @@ function ChapterTwo({
   ]);
 
   useEffect(() => {
+    if (
+      activeStep?.id === "find-e-crystal" &&
+      typeof obtainItem === "function"
+    ) {
+      obtainItem(E_CRYSTAL);
+    }
+  }, [activeStep?.id, obtainItem]);
+
+  useEffect(() => {
     const isReedPathSequence =
       activeStep?.type === "sequence" && activeStep?.id === "reed-path";
 
     if (!isReedPathSequence) {
-      setNextFeedDeadline(null);
-      setFeedTimeLeftMs(FEED_WINDOW_MS);
+      setMazeDeadline(null);
+      setMazeTimeLeftMs(MAZE_TIME_LIMIT_MS);
       setGrinnFeedFailed(false);
       setPlayerPosition(REED_ROUTE_POSITIONS[0]);
       setGrinnTargetIndex(0);
@@ -231,8 +244,8 @@ function ChapterTwo({
     }
 
     setBugCount(hasInsectPouch ? STARTING_BUG_COUNT : 0);
-    setNextFeedDeadline(Date.now() + FEED_WINDOW_MS);
-    setFeedTimeLeftMs(FEED_WINDOW_MS);
+    setMazeDeadline(Date.now() + MAZE_TIME_LIMIT_MS);
+    setMazeTimeLeftMs(MAZE_TIME_LIMIT_MS);
     setGrinnFeedFailed(false);
     setPlayerPosition(REED_ROUTE_POSITIONS[0]);
     setGrinnTargetIndex(0);
@@ -245,8 +258,7 @@ function ChapterTwo({
 
     if (
       !isReedPathSequence ||
-      !ENABLE_GRINN_FEED_TIMER ||
-      !nextFeedDeadline ||
+      !mazeDeadline ||
       showHelp ||
       showInventory ||
       showLifeLost ||
@@ -256,13 +268,13 @@ function ChapterTwo({
     }
 
     const interval = window.setInterval(() => {
-      const remaining = Math.max(0, nextFeedDeadline - Date.now());
-      setFeedTimeLeftMs(remaining);
+      const remaining = Math.max(0, mazeDeadline - Date.now());
+      setMazeTimeLeftMs(remaining);
 
       if (remaining <= 0) {
         setGrinnFeedFailed(true);
         setShowLifeLost(true);
-        loseLife("grinnUnfed");
+        loseLife("mazeTimeout");
       }
     }, 100);
 
@@ -274,7 +286,7 @@ function ChapterTwo({
     activeStep?.type,
     grinnFeedFailed,
     loseLife,
-    nextFeedDeadline,
+    mazeDeadline,
     setShowLifeLost,
     showHelp,
     showInventory,
@@ -344,8 +356,6 @@ function ChapterTwo({
       const nextGuidedIndex = Math.min(playerRouteIndex + 1, finalSafeIndex);
 
       setBugCount(updatedBugCount);
-      setNextFeedDeadline(Date.now() + FEED_WINDOW_MS);
-      setFeedTimeLeftMs(FEED_WINDOW_MS);
       setGrinnTargetIndex(nextGuidedIndex);
 
       if (updatedBugCount <= 0) {
@@ -497,6 +507,7 @@ function ChapterTwo({
     if (activeStep.type === "sequence") {
       const progress = sequenceProgress[activeStep.id] || 0;
       const total = activeStep.requiredKeys.length;
+      const secondsLeft = Math.ceil(mazeTimeLeftMs / 1000);
       const grinnPosition =
         REED_ROUTE_POSITIONS[Math.min(grinnTargetIndex, REED_ROUTE_POSITIONS.length - 1)];
       const goalPosition = REED_ROUTE_POSITIONS[REED_ROUTE_POSITIONS.length - 1];
@@ -587,6 +598,10 @@ function ChapterTwo({
                 <span>{progress}/{total}</span>
               </p>
               <p className="reed-maze__control-line" role="listitem">
+                <span className="reed-maze__keycap">Time Left</span>
+                <span>{secondsLeft}s</span>
+              </p>
+              <p className="reed-maze__control-line" role="listitem">
                 <span className="reed-maze__keycap">Arrow Keys</span>
                 <span>Move</span>
               </p>
@@ -612,6 +627,18 @@ function ChapterTwo({
         <p id="bodyText" className="standard-text">
           {activeStep?.body}
         </p>
+
+        {activeStep?.id === "find-e-crystal" && (
+          <img
+            src={ECrystal}
+            alt="A tiny E crystal, no bigger than a small pebble"
+            width="160"
+            height="160"
+            loading="eager"
+            decoding="async"
+            className="center imageMaterialize"
+          />
+        )}
 
         {activeStep?.type === "choice" && (
           <MultipleChoiceButtons
