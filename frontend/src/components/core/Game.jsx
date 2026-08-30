@@ -299,7 +299,7 @@ const Game = () => {
   const chapterNames = {
     1: 'The Cove',
     2: 'The Fields',
-    3: 'The Ark',
+    3: 'Arkra',
   };
 
   const loseLife = (cause) => {
