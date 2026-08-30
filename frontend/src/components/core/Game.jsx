@@ -4,6 +4,7 @@ import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
+import ChapterTwoAltState from "../chapters/altStateChapters/ChapterTwoAltState";
 import ChapterThree from '../chapters/ChapterThree';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
@@ -12,6 +13,7 @@ import InventoryPage from '../pages/InventoryPage';
 import RegisterForm from '../forms/RegisterForm';
 import { useAuth } from '../../context/AuthContext';
 import { useGameState } from "../../context/GameStateContext";
+import api from '../../services/api';
 import { E_CRYSTAL } from '../utilities/itemKeys';
 
 const Game = () => {
@@ -48,12 +50,14 @@ const Game = () => {
   const [showCrystal, setShowCrystal] = useState(true);
   const [currentScene, setCurrentScene] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
+  const [showChapterTwoCompletionScreen, setShowChapterTwoCompletionScreen] = useState(false);
+  const [isChapterOneEarlyReturnActive, setIsChapterOneEarlyReturnActive] = useState(false);
   const helpRef = useRef(null);
   const inventoryRef = useRef(null);
   const lifeLostRef = useRef(null);
   const lifeGainRef = useRef(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, setUser } = useAuth();
   
 
   useEffect(() => {
@@ -115,14 +119,133 @@ const Game = () => {
   };
 
   const handleChapterTwoComplete = async () => {
+    setShowChapterTwoCompletionScreen(true);
     setViewingChapter(2);
     await completeChapter(2);
     setChaptersCompleted((previous) => ({
       ...previous,
+      chapterOne: false,
       chapterTwo: true,
     }));
     setCurrentChapter(3);
   };
+
+  const unlockChapterOneAfterChapterTwoAltState = async () => {
+    setChaptersCompleted((previous) => ({
+      ...previous,
+      chapterOne: true,
+    }));
+
+    if (isAuthenticated) {
+      const currentUser = JSON.parse(sessionStorage.getItem('user')) || user;
+      const updatedGameState = {
+        ...currentUser?.gameState,
+        chaptersCompleted: {
+          ...currentUser?.gameState?.chaptersCompleted,
+          chapterOne: true,
+        },
+      };
+
+      try {
+        const response = await api.patch(
+          '/auth/gamestate',
+          { gameState: updatedGameState },
+          { withCredentials: true }
+        );
+        const updatedUser = { ...currentUser, gameState: response.data.gameState };
+        setUser(updatedUser);
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      } catch (err) {
+        console.error('Error restoring Chapter One access', err);
+      }
+
+      return;
+    }
+
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || {};
+    const updatedGuestUser = {
+      ...guestUser,
+      gameState: {
+        ...guestUser.gameState,
+        chaptersCompleted: {
+          ...guestUser.gameState?.chaptersCompleted,
+          chapterOne: true,
+        },
+      },
+    };
+
+    sessionStorage.setItem('guestUser', JSON.stringify(updatedGuestUser));
+  };
+
+  const relockChapterOneAfterEarlyReturn = async () => {
+    setChaptersCompleted((previous) => ({
+      ...previous,
+      chapterOne: false,
+    }));
+
+    if (isAuthenticated) {
+      const currentUser = JSON.parse(sessionStorage.getItem('user')) || user;
+      const updatedGameState = {
+        ...currentUser?.gameState,
+        chaptersCompleted: {
+          ...currentUser?.gameState?.chaptersCompleted,
+          chapterOne: false,
+        },
+      };
+
+      try {
+        const response = await api.patch(
+          '/auth/gamestate',
+          { gameState: updatedGameState },
+          { withCredentials: true }
+        );
+        const updatedUser = { ...currentUser, gameState: response.data.gameState };
+        setUser(updatedUser);
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      } catch (err) {
+        console.error('Error relocking Chapter One access', err);
+      }
+
+      return;
+    }
+
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || {};
+    const updatedGuestUser = {
+      ...guestUser,
+      gameState: {
+        ...guestUser.gameState,
+        chaptersCompleted: {
+          ...guestUser.gameState?.chaptersCompleted,
+          chapterOne: false,
+        },
+      },
+    };
+
+    sessionStorage.setItem('guestUser', JSON.stringify(updatedGuestUser));
+  };
+
+  useEffect(() => {
+    if (viewingChapter !== 2 && showChapterTwoCompletionScreen) {
+      setShowChapterTwoCompletionScreen(false);
+    }
+  }, [showChapterTwoCompletionScreen, viewingChapter]);
+
+  useEffect(() => {
+    if (viewingChapter === 1 || !isChapterOneEarlyReturnActive) {
+      return;
+    }
+
+    setIsChapterOneEarlyReturnActive(false);
+    relockChapterOneAfterEarlyReturn();
+  }, [isChapterOneEarlyReturnActive, viewingChapter]);
+
+  useEffect(() => {
+    return () => {
+      if (isChapterOneEarlyReturnActive) {
+        relockChapterOneAfterEarlyReturn();
+      }
+    };
+  }, [isChapterOneEarlyReturnActive]);
 
 
   const obtainItem = async (itemName) => {
@@ -306,7 +429,10 @@ const Game = () => {
     switch (viewingChapter) {
       case 1:
         return chaptersCompleted.chapterOne ? (
-          <ChapOneAltState obtainItem={obtainItem} />
+          <ChapOneAltState
+            obtainItem={obtainItem}
+            onEarlyReturnStateChange={setIsChapterOneEarlyReturnActive}
+          />
         ) : (
           <ChapterOne
             onComplete={() => completeChapter(1)}
@@ -332,7 +458,17 @@ const Game = () => {
         );
 
       case 2:
-        return (
+        return chaptersCompleted.chapterTwo && !showChapterTwoCompletionScreen ? (
+          <ChapterTwoAltState
+            loseLife={loseLife}
+            onComplete={unlockChapterOneAfterChapterTwoAltState}
+            setShowLifeLost={setShowLifeLost}
+            showLifeLost={showLifeLost}
+            showHelp={showHelp}
+            showInventory={showInventory}
+            resetSignal={resetSignal}
+          />
+        ) : (
           <ChapterTwo
             onComplete={handleChapterTwoComplete}
             loseLife={loseLife}

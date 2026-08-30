@@ -23,12 +23,14 @@ const useCompleteChapter = () => {
 
     const currentUser = JSON.parse(sessionStorage.getItem('user')) || user;
     const currentGuestUser = JSON.parse(sessionStorage.getItem('guestUser'));
+    const chapterCompletionOverrides = chapter === 2 ? { chapterOne: false } : {};
 
     const updatedGameState = {
       ...currentUser?.gameState,
       currentChapter: { level: chapter + 1, completed: false },
       chaptersCompleted: {
         ...currentUser?.gameState?.chaptersCompleted,
+        ...chapterCompletionOverrides,
         [chapterName]: true,
       },
     };
@@ -40,6 +42,7 @@ const useCompleteChapter = () => {
         currentChapter: { level: chapter + 1, completed: false },
         chaptersCompleted: {
           ...currentGuestUser?.gameState?.chaptersCompleted,
+          ...chapterCompletionOverrides,
           [chapterName]: true,
         },
       }
