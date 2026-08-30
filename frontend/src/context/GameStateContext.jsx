@@ -4,11 +4,15 @@ import useCompleteChapter from "../components/hooks/useCompleteChapter";
 import useUpdateItem from "../components/hooks/useUpdateItem";
 import useUpdateLife from "../components/hooks/useUpdateLife";
 import useRemoveItem from "../components/hooks/useRemoveItem";
+import api from "../services/api";
 
 // Default game state for new users or guests
 const defaultGameState = {
   currentChapter: { level: 1, completed: false },
   items: ["Laser Pistol"], // Starting item
+  gems: {
+    collected: [],
+  },
   livesLeft: 3,
   chaptersCompleted: {
     chapterOne: false,
@@ -33,11 +37,12 @@ const GameStateContext = createContext();
 export const useGameState = () => useContext(GameStateContext);
 
 export const GameStateProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
 
   // State variables
   const [currentChapter, setCurrentChapter] = useState(defaultGameState.currentChapter.level);
-  const [viewingChapter, setViewingChapter] = useState(defaultGameState.currentChapter.level);
+  const [viewingChapter, setViewingChapterState] = useState(defaultGameState.currentChapter.level);
+  const [hasManualViewingChapter, setHasManualViewingChapter] = useState(false);
   const [livesLeft, setLivesLeft] = useState(defaultGameState.livesLeft);
   const [items, setItems] = useState(defaultGameState.items);
   const [chaptersCompleted, setChaptersCompleted] = useState(defaultGameState.chaptersCompleted);
@@ -76,24 +81,80 @@ export const GameStateProvider = ({ children }) => {
   const updateLife = useUpdateLife();
   const removeItem = useRemoveItem();
 
+  const setViewingChapter = (chapter) => {
+    setHasManualViewingChapter(true);
+    setViewingChapterState(chapter);
+  };
+
+  const resetProgressForTesting = async () => {
+    const resetGameState = {
+      currentChapter: { ...defaultGameState.currentChapter },
+      items: [...defaultGameState.items],
+      gems: { collected: [] },
+      livesLeft: defaultGameState.livesLeft,
+      chaptersCompleted: { ...defaultGameState.chaptersCompleted },
+    };
+
+    if (user) {
+      try {
+        const response = await api.patch(
+          "/auth/gamestate",
+          { gameState: resetGameState },
+          { withCredentials: true }
+        );
+        const updatedUser = { ...user, gameState: response.data.gameState };
+        setUser(updatedUser);
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
+      } catch (error) {
+        console.error("Error resetting game state for testing", error);
+        return false;
+      }
+    } else {
+      const guestUser = JSON.parse(sessionStorage.getItem("guestUser")) || {};
+      sessionStorage.setItem(
+        "guestUser",
+        JSON.stringify({ ...guestUser, gameState: resetGameState })
+      );
+    }
+
+    setCurrentChapter(1);
+    setViewingChapter(1);
+    setLivesLeft(defaultGameState.livesLeft);
+    setItems([...defaultGameState.items]);
+    setChaptersCompleted({ ...defaultGameState.chaptersCompleted });
+    return true;
+  };
+
+  useEffect(() => {
+    setHasManualViewingChapter(false);
+  }, [user?.userId]);
+
   // Initialize state from user or guest game state
   useEffect(() => {
     const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
 
     if (user && user.gameState) {
-      setCurrentChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level);
-      setViewingChapter(user.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
+      const loadedLevel = user.gameState.currentChapter.level || defaultGameState.currentChapter.level;
+      setCurrentChapter(loadedLevel);
+      setViewingChapterState((prev) => (hasManualViewingChapter ? prev : loadedLevel));
       setLivesLeft(user.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(user.gameState.items || [])])]);
-      setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...user.gameState.chaptersCompleted });
+      setChaptersCompleted({
+        ...defaultGameState.chaptersCompleted,
+        ...user.gameState.chaptersCompleted,
+      });
     } else if (guestUser?.gameState) {
-      setCurrentChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level);
-      setViewingChapter(guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level); 
+      const loadedLevel = guestUser.gameState.currentChapter.level || defaultGameState.currentChapter.level;
+      setCurrentChapter(loadedLevel);
+      setViewingChapterState((prev) => (hasManualViewingChapter ? prev : loadedLevel));
       setLivesLeft(guestUser.gameState.livesLeft ?? defaultGameState.livesLeft);
       setItems([...new Set([...defaultGameState.items, ...(guestUser.gameState.items || [])])]);
-      setChaptersCompleted({ ...defaultGameState.chaptersCompleted, ...guestUser.gameState.chaptersCompleted });
+      setChaptersCompleted({
+        ...defaultGameState.chaptersCompleted,
+        ...guestUser.gameState.chaptersCompleted,
+      });
     }
-  }, [user]);
+  }, [user, hasManualViewingChapter]);
 
   // Context value
   return (
@@ -109,6 +170,7 @@ export const GameStateProvider = ({ children }) => {
         setItems,
         chaptersCompleted,
         setChaptersCompleted,
+        resetProgressForTesting,
         completeChapter, 
         updateItem, 
         updateLife,

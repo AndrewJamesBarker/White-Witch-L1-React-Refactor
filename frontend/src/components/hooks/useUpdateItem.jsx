@@ -4,18 +4,34 @@ import api from '../../services/api';
 const useUpdateItem = () => {
   const { user, setUser } = useAuth();
 
-  const updateItem = async (item) => {
+  const updateItem = async (item, options = {}) => {
+    const { gemName } = options;
     const guestUser = JSON.parse(sessionStorage.getItem('guestUser'));
 
     // Check if the item already exists in the items array
     if (user) {
-      if (user.gameState.items.includes(item)) {
+      const itemAlreadyExists = user.gameState.items.includes(item);
+      const gemAlreadyExists = gemName
+        ? (user.gameState.gems?.collected || []).includes(gemName)
+        : true;
+
+      if (itemAlreadyExists && gemAlreadyExists) {
         return; 
       }
 
       const updatedGameState = {
         ...user.gameState,
-        items: [...user.gameState.items, item], // Add the new item to the items array
+        items: itemAlreadyExists
+          ? user.gameState.items
+          : [...user.gameState.items, item],
+        gems: gemName
+          ? {
+              ...(user.gameState.gems || {}),
+              collected: [
+                ...new Set([...(user.gameState.gems?.collected || []), gemName]),
+              ],
+            }
+          : user.gameState.gems,
       };
 
       try {
@@ -28,7 +44,12 @@ const useUpdateItem = () => {
         console.error('Error updating game state', err);
       }
     } else {
-      if (guestUser?.gameState?.items.includes(item)) {
+      const itemAlreadyExists = guestUser?.gameState?.items.includes(item);
+      const gemAlreadyExists = gemName
+        ? (guestUser?.gameState?.gems?.collected || []).includes(gemName)
+        : true;
+
+      if (itemAlreadyExists && gemAlreadyExists) {
         return;
       }
 
@@ -36,7 +57,17 @@ const useUpdateItem = () => {
         ...guestUser,
         gameState: {
           ...guestUser?.gameState,
-          items: [...guestUser?.gameState?.items, item],
+          items: itemAlreadyExists
+            ? guestUser?.gameState?.items
+            : [...(guestUser?.gameState?.items || []), item],
+          gems: gemName
+            ? {
+                ...(guestUser?.gameState?.gems || {}),
+                collected: [
+                  ...new Set([...(guestUser?.gameState?.gems?.collected || []), gemName]),
+                ],
+              }
+            : guestUser?.gameState?.gems,
         }
       };
 

@@ -3,9 +3,9 @@ import React from "react";
 
 const InventoryItem = ({ title, description, src, alt }) => (
   <div className="width-control">
-    <h2 className="center-text bold-text blue-text">{title}</h2>
+    {title ? <h2 className="center-text bold-text blue-text">{title}</h2> : null}
     <img className="inventoryItem" src={src} alt={alt} />
-    <p className="standard-text">{description}</p>
+    {description ? <p className="standard-text">{description}</p> : null}
   </div>
 );
 

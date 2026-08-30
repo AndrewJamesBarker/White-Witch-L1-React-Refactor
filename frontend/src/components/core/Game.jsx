@@ -4,6 +4,7 @@ import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
+import ChapterThree from '../chapters/ChapterThree';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
@@ -11,6 +12,7 @@ import InventoryPage from '../pages/InventoryPage';
 import RegisterForm from '../forms/RegisterForm';
 import { useAuth } from '../../context/AuthContext';
 import { useGameState } from "../../context/GameStateContext";
+import { E_CRYSTAL } from '../utilities/itemKeys';
 
 const Game = () => {
 
@@ -112,25 +114,57 @@ const Game = () => {
     setShowRegisterForm(true);
   };
 
+  const handleChapterTwoComplete = async () => {
+    await completeChapter(2);
+    setChaptersCompleted((previous) => ({
+      ...previous,
+      chapterTwo: true,
+    }));
+    setCurrentChapter(3);
+  };
 
-  const obtainItem = (itemName) => {
-    if (!items.includes(itemName)) {
-      // Update the items array in the database or session storage
-      const updatedItems = [...items, itemName];
-      setItems(updatedItems); // Update state immediately
-  
-      if (isAuthenticated) {
-        updateItem(itemName); // Update backend for authenticated users
-      } else {
-        const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || { 
-          gameState: { items: [], chaptersCompleted: {}, currentChapter: { level: 1, completed: false } } 
-        };
-  
-        // Add the item to guestUser's items array
-        guestUser.gameState.items.push(itemName);
-        sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
-      }
+
+  const obtainItem = async (itemName) => {
+    const gemName = itemName === E_CRYSTAL ? "E Crystal" : null;
+    const itemAlreadyExists = items.includes(itemName);
+
+    // Keep local context state in sync for newly found items.
+    if (!itemAlreadyExists) {
+      setItems([...items, itemName]);
     }
+
+    if (isAuthenticated) {
+      // For gems, always attempt sync so nested gem data can be backfilled.
+      if (!itemAlreadyExists || gemName) {
+        await updateItem(itemName, gemName ? { gemName } : undefined);
+      }
+      return;
+    }
+
+    const guestUser = JSON.parse(sessionStorage.getItem('guestUser')) || {
+      gameState: {
+        items: [],
+        gems: { collected: [] },
+        chaptersCompleted: {},
+        currentChapter: { level: 1, completed: false }
+      }
+    };
+
+    const guestItems = guestUser.gameState.items || [];
+    if (!guestItems.includes(itemName)) {
+      guestUser.gameState.items = [...guestItems, itemName];
+    }
+
+    if (gemName) {
+      guestUser.gameState.gems = {
+        ...(guestUser.gameState.gems || {}),
+        collected: [
+          ...new Set([...(guestUser.gameState.gems?.collected || []), gemName]),
+        ],
+      };
+    }
+
+    sessionStorage.setItem('guestUser', JSON.stringify(guestUser));
   };
     
 
@@ -272,7 +306,7 @@ const Game = () => {
     switch (viewingChapter) {
       case 1:
         return chaptersCompleted.chapterOne ? (
-          <ChapOneAltState />
+          <ChapOneAltState obtainItem={obtainItem} />
         ) : (
           <ChapterOne
             onComplete={() => completeChapter(1)}
@@ -300,7 +334,7 @@ const Game = () => {
       case 2:
         return (
           <ChapterTwo
-            onComplete={() => completeChapter(2)}
+            onComplete={handleChapterTwoComplete}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}
@@ -313,12 +347,16 @@ const Game = () => {
             showHelp={showHelp}
             showInventory={showInventory}
             currentStep={currentStep}
-            changeStep={changeStep}
+            setCurrentStep={setCurrentStep}
+            nextStep={nextStep}
             previousStep={previousStep}
             currentChapter={currentChapter}
             setCurrentChapter={setCurrentChapter}
           />
         );
+
+      case 3:
+        return <ChapterThree />;
 
       default:
         return <div>Game Completed!</div>;

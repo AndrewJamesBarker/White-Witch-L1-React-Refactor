@@ -1,0 +1,255 @@
+.reed-maze__panel {
+  margin-top: 4px;
+}
+
+.reed-maze__frame {
+  width: min(640px, 96vw);
+  margin: 10px auto 12px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(84, 146, 162, 0.25) 0%, rgba(84, 146, 162, 0) 45%),
+    linear-gradient(180deg, rgba(11, 27, 34, 0.95) 0%, rgba(7, 17, 22, 0.95) 100%);
+  border: 1px solid rgba(123, 193, 210, 0.48);
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(191, 239, 250, 0.16),
+    inset 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.reed-maze {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 236, 210, 0.045) 0px,
+      rgba(255, 236, 210, 0.045) 2px,
+      rgba(102, 70, 46, 0.04) 2px,
+      rgba(102, 70, 46, 0.04) 5px
+    ),
+    linear-gradient(180deg, #6b4a33 0%, #5d3f2b 42%, #513726 100%);
+  border: 1px solid rgba(177, 136, 94, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(226, 193, 152, 0.1);
+}
+
+.reed-maze__cell {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 180ms ease,
+    box-shadow 220ms ease,
+    filter 240ms ease,
+    border-color 220ms ease;
+}
+
+.reed-maze__cell--wall {
+  background: linear-gradient(160deg, #1e3a42 0%, #10242b 100%);
+  border: 1px solid rgba(90, 152, 166, 0.25);
+}
+
+.reed-maze__cell--path {
+  background:
+    linear-gradient(160deg, #7f9f5c 0%, #5f8740 100%),
+    radial-gradient(circle at 20% 18%, rgba(213, 240, 165, 0.18) 0%, rgba(213, 240, 165, 0) 55%);
+  border: 1px solid rgba(219, 244, 186, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(224, 248, 193, 0.2),
+    inset 0 -6px 10px rgba(30, 49, 24, 0.22);
+}
+
+.reed-maze__cell--hidden {
+  filter: saturate(0.82) brightness(0.8);
+}
+
+.reed-maze__cell--revealed {
+  border-color: rgba(188, 236, 158, 0.8);
+  box-shadow:
+    inset 0 1px 0 rgba(238, 255, 203, 0.46),
+    inset 0 -6px 10px rgba(24, 45, 24, 0.2),
+    0 0 0 1px rgba(151, 214, 112, 0.22);
+}
+
+.reed-maze__cell--visited {
+  filter: saturate(0.7) brightness(0.94);
+}
+
+.reed-maze__cell--goal {
+  border-color: rgba(237, 212, 143, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 193, 0.42),
+    0 0 0 1px rgba(255, 228, 153, 0.36),
+    0 0 15px rgba(255, 210, 124, 0.2);
+}
+
+.reed-maze__tile-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(140deg, rgba(247, 255, 224, 0.16) 0%, rgba(247, 255, 224, 0) 55%);
+  pointer-events: none;
+}
+
+.reed-maze__mist {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(12, 31, 36, 0.24) 0%, rgba(12, 31, 36, 0.54) 75%);
+  pointer-events: none;
+}
+
+.reed-maze__rune {
+  position: absolute;
+  width: 46%;
+  height: 46%;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 255, 190, 0.62);
+  box-shadow:
+    0 0 0 1px rgba(170, 237, 126, 0.26),
+    0 0 8px rgba(190, 255, 159, 0.22),
+    inset 0 0 6px rgba(217, 255, 188, 0.26);
+  pointer-events: none;
+}
+
+.reed-maze__goal-glyph {
+  position: absolute;
+  width: 42%;
+  height: 42%;
+  border-radius: 4px;
+  transform: rotate(45deg);
+  border: 1px solid rgba(255, 238, 184, 0.86);
+  box-shadow:
+    0 0 10px rgba(255, 220, 138, 0.45),
+    inset 0 0 8px rgba(255, 232, 165, 0.35);
+  pointer-events: none;
+}
+
+.reed-maze__player {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+  z-index: 3;
+  animation: playerPulse 2.1s ease-in-out infinite;
+}
+
+.reed-maze__grinn {
+  position: absolute;
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+  opacity: 0.86;
+  z-index: 2;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+  animation: grinnFloat 2.3s ease-in-out infinite;
+}
+
+.reed-maze__hud {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(10, 25, 33, 0.88) 0%, rgba(8, 20, 27, 0.88) 100%),
+    radial-gradient(circle at 18% 12%, rgba(83, 160, 177, 0.14) 0%, rgba(83, 160, 177, 0) 45%);
+  border: 1px solid rgba(136, 206, 220, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(187, 236, 247, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.reed-maze__hud-line {
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.reed-maze__hud-line:last-child {
+  margin-bottom: 0;
+}
+
+.reed-maze__bug-count {
+  display: inline-block;
+  min-width: 1.6ch;
+  text-align: left;
+  animation: bugPop 240ms ease-out;
+}
+
+.reed-maze__keycap {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 0 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(173, 227, 239, 0.6);
+  background: linear-gradient(180deg, rgba(24, 57, 67, 0.9) 0%, rgba(11, 32, 39, 0.9) 100%);
+  color: #d7f2ff;
+  font-size: 0.92em;
+  line-height: 1.4;
+  box-shadow: inset 0 1px 0 rgba(209, 245, 255, 0.2);
+}
+
+.reed-maze__control-line {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.reed-maze__control-line + .reed-maze__control-line {
+  margin-top: 6px;
+}
+
+@keyframes bugPop {
+  0% {
+    transform: scale(0.82);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes playerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes grinnFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 600px) {
+  .reed-maze__frame {
+    padding: 8px;
+  }
+
+  .reed-maze {
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .reed-maze__hud {
+    padding: 8px 10px;
+  }
+}
