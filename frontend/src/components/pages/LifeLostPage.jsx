@@ -10,9 +10,9 @@ const deathTexts = {
   ignoreSoldiers: "You ignore the soldiers and push your way through them. As you walk, a piercing noise focuses into a splitting headache dead center of your forehead. Before you can turn to see it's too late. One of the Sirens generals leisurely approaches your corpse, and with a flick of his wrist, your body is flung into the mouth of an eagerly awaiting sea serpent.",
   marshCharge: "You lunge for Grinn, but it slips into the reeds and leads you straight into a hidden sink. The marsh floor vanishes beneath you, and deep water closes over your head.",
   wrongMarshPath: "You misread Grinn's route and step off the safe line. A cold undertow drags you into deep marsh water before you can recover.",
-  grinnUnfed: "Grinn waits for the next bug, but you hesitate too long. It pivots away and guides you into deep water, where the marsh swallows you whole.",
+  grinnUnfed: "Grinn waits for the next bug, but you hesitate too long. He pivots away and guides you into deep water, where the marsh swallows you whole.",
   grinnOutOfBugs: "Your insect pouch runs dry. Without food, Grinn abandons the safe path and leads you into deep water that swallows you whole.",
-  missingInsectPouch: "Grinn finds nothing to eat and slips away into the reeds. Somewhere behind you, a faint skittering suggests the past may still hold what you need.",
+  missingInsectPouch: "Grinn finds nothing to eat and slips away into the reeds. You need to go back and find food for him.",
 };
 
 // Get the death message

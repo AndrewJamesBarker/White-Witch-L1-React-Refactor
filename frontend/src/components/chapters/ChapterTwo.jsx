@@ -285,7 +285,7 @@ function ChapterTwo({
       if (remaining <= 0) {
         setGrinnFeedFailed(true);
         setShowLifeLost(true);
-        loseLife(hasInsectPouch ? "mazeTimeout" : "missingInsectPouch");
+        loseLife("grinnUnfed");
       }
     }, 100);
 
