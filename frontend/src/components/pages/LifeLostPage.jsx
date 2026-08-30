@@ -13,6 +13,8 @@ const deathTexts = {
   grinnUnfed: "Grinn waits for the next bug, but you hesitate too long. He pivots away and guides you into deep water, where the marsh swallows you whole.",
   grinnOutOfBugs: "Your insect pouch runs dry. Without food, Grinn abandons the safe path and leads you into deep water that swallows you whole.",
   missingInsectPouch: "Grinn finds nothing to eat and slips away into the reeds. You need to go back and find food for him.",
+  wrongMarshRetreatPath: "Without Grinn to guide you, you misremember the safe line and step into deep marsh water.",
+  marshRetreatTimeout: "You linger too long retracing your steps, and the rising marsh water closes over your head.",
 };
 
 // Get the death message

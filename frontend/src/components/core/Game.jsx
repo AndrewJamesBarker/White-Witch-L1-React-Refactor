@@ -4,6 +4,7 @@ import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
+import ChapterTwoAltState from "../chapters/altStateChapters/ChapterTwoAltState";
 import ChapterThree from '../chapters/ChapterThree';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
@@ -48,6 +49,7 @@ const Game = () => {
   const [showCrystal, setShowCrystal] = useState(true);
   const [currentScene, setCurrentScene] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
+  const [showChapterTwoCompletionScreen, setShowChapterTwoCompletionScreen] = useState(false);
   const helpRef = useRef(null);
   const inventoryRef = useRef(null);
   const lifeLostRef = useRef(null);
@@ -115,6 +117,7 @@ const Game = () => {
   };
 
   const handleChapterTwoComplete = async () => {
+    setShowChapterTwoCompletionScreen(true);
     setViewingChapter(2);
     await completeChapter(2);
     setChaptersCompleted((previous) => ({
@@ -123,6 +126,12 @@ const Game = () => {
     }));
     setCurrentChapter(3);
   };
+
+  useEffect(() => {
+    if (viewingChapter !== 2 && showChapterTwoCompletionScreen) {
+      setShowChapterTwoCompletionScreen(false);
+    }
+  }, [showChapterTwoCompletionScreen, viewingChapter]);
 
 
   const obtainItem = async (itemName) => {
@@ -332,7 +341,16 @@ const Game = () => {
         );
 
       case 2:
-        return (
+        return chaptersCompleted.chapterTwo && !showChapterTwoCompletionScreen ? (
+          <ChapterTwoAltState
+            loseLife={loseLife}
+            setShowLifeLost={setShowLifeLost}
+            showLifeLost={showLifeLost}
+            showHelp={showHelp}
+            showInventory={showInventory}
+            resetSignal={resetSignal}
+          />
+        ) : (
           <ChapterTwo
             onComplete={handleChapterTwoComplete}
             loseLife={loseLife}

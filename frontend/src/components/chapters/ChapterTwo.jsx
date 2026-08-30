@@ -21,6 +21,15 @@ import ArkraDistance2 from "../../assets/images/environment/Arkra-distance2.webp
 import Grinn from "../../assets/images/portraits/Grinn.webp";
 import Caballero from "../../assets/images/ui-elements/Caballero.webp";
 import ECrystal from "../../assets/images/inventory-items/Elitrye-Crystals/E-Crystal.png";
+import {
+  REED_MAZE_GRID,
+  REED_ROUTE_POSITIONS,
+  POSITION_BY_ARROW,
+  positionsMatch,
+  getPositionKey,
+  getRouteIndexForPosition,
+  REED_ROUTE_KEY_SET,
+} from "./chapterTwoMazeData";
 
 // Single-tile-wide snake path verified by backtracking search.
 // 26 positions = 25 moves. 20 bugs → Grinn guides positions 0–20.
@@ -44,66 +53,6 @@ const STARTING_BUG_COUNT = 10;
 const MAZE_TIME_LIMIT_MS = 60000;
 // Developer test flag: set true to reveal the full correct maze route.
 const SHOW_FULL_ROUTE_DEBUG = false;
-const REED_MAZE_GRID = [
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-];
-const REED_ROUTE_POSITIONS = [
-  // --- Section A: Teaching (0–9) ---
-  [7, 2], // 0  START
-  [6, 2], // 1  ↑
-  [5, 2], // 2  ↑
-  [4, 2], // 3  ↑
-  [4, 1], // 4  ← (fork: continue up [3,2] tempts)
-  [3, 1], // 5  ↑
-  [2, 1], // 6  ↑
-  [1, 1], // 7  ↑
-  [1, 2], // 8  → (fork: continue up [0,2] or right [1,3] tempt)
-  [0, 2], // 9  ↑
-  // --- Section B: Learning (10–19) ---
-  [0, 3], // 10 → (fork: down [1,3] looks natural)
-  [0, 4], // 11 →
-  [1, 4], // 12 ↓ (fork: continue right [0,5] tempts)
-  [2, 4], // 13 ↓
-  [3, 4], // 14 ↓
-  [4, 4], // 15 ↓ (continue vertical descent before turning)
-  [4, 5], // 16 →
-  [5, 5], // 17 ↓
-  [6, 5], // 18 ↓
-  [6, 6], // 19 → (last Grinn-guided position)
-  // --- Section C: Solo (20–27) — player must reason from revealed path ---
-  [6, 7], // 20 → (fork: up [5,7] or continue — player saw path trending upward)
-  [5, 7], // 21 ↑
-  [4, 7], // 22 ↑
-  [3, 7], // 23 ↑
-  [3, 6], // 24 ← (fork: continue up [2,7] looks obvious — wrong)
-  [2, 6], // 25 ↑
-  [1, 6], // 26 ↑ (g7)
-  [0, 6], // 27 ↑ GOAL (g8)
-];
-
-const POSITION_BY_ARROW = {
-  ArrowUp: [-1, 0],
-  ArrowDown: [1, 0],
-  ArrowLeft: [0, -1],
-  ArrowRight: [0, 1],
-};
-
-const positionsMatch = (first, second) =>
-  first[0] === second[0] && first[1] === second[1];
-
-const getPositionKey = (position) => `${position[0]}-${position[1]}`;
-const getRouteIndexForPosition = (position) =>
-  REED_ROUTE_POSITIONS.findIndex((routePosition) =>
-    positionsMatch(routePosition, position)
-  );
-const REED_ROUTE_KEY_SET = new Set(REED_ROUTE_POSITIONS.map(getPositionKey));
 const POST_MAZE_STEP_IDS = new Set(["handoff", "find-e-crystal"]);
 
 function ChapterTwo({
