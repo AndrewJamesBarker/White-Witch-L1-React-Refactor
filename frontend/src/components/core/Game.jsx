@@ -115,6 +115,7 @@ const Game = () => {
   };
 
   const handleChapterTwoComplete = async () => {
+    setViewingChapter(2);
     await completeChapter(2);
     setChaptersCompleted((previous) => ({
       ...previous,
