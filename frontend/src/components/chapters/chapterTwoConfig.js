@@ -61,8 +61,7 @@ export const chapterTwoSteps = [
     id: "find-e-crystal",
     type: "narrative",
     title: "You Found A Strange Crystal",
-    body:
-      "Half-buried in the mud, you notice a pale shard not much bigger than a little pebble or tiny gem. Its etched face resembles the letter E. You tuck it away with care into your satchel.",
+    body: "Half-buried in the mud, you notice a pale, gem-like shard no bigger than a pebble. Its face is etched in the form of the letter E. You tuck it carefully into your satchel.",
     scene: "arkra-distance2",
   },
 ];
