@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useGameState } from "../../context/GameStateContext";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ const Dashboard = () => {
     setViewingChapter,
     currentChapter,
     chaptersCompleted,
+    resetProgressForTesting,
   } = useGameState();
 
   // Get gameState from user and ensure defaults
@@ -29,6 +30,18 @@ const Dashboard = () => {
 
   const [inaccessibleLevel, setInaccessibleLevel] = useState(null);
   const [tempHighlight, setTempHighlight] = useState(null); // State for temporary red highlight
+  const hasInitializedChapterSelection = useRef(false);
+
+  useEffect(() => {
+    if (
+      !hasInitializedChapterSelection.current &&
+      chaptersCompleted.chapterTwo &&
+      currentChapter === 3
+    ) {
+      hasInitializedChapterSelection.current = true;
+      setViewingChapter(3);
+    }
+  }, [chaptersCompleted.chapterTwo, currentChapter, setViewingChapter]);
 
   // Set the default selected piece and chapter name when the viewingChapter changes
   useEffect(() => {
@@ -81,6 +94,17 @@ const Dashboard = () => {
     }
   };
 
+  const handleResetTestProgress = async () => {
+    if (!window.confirm("Reset all game progress for testing?")) {
+      return;
+    }
+
+    const wasReset = await resetProgressForTesting();
+    if (wasReset) {
+      navigate("/");
+    }
+  };
+
   return (
     <div>
       <div>
@@ -105,6 +129,11 @@ const Dashboard = () => {
         <button className="button topRight" onClick={() => logout()}>
           Logout
         </button>
+        {import.meta.env.DEV && (
+          <button className="button" onClick={handleResetTestProgress}>
+            Reset Test Progress
+          </button>
+        )}
 
         <PuzzleMap
           onTileClick={handleTileClick}

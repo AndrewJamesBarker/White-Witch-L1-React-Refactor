@@ -4,6 +4,7 @@ import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
+import ChapterThree from '../chapters/ChapterThree';
 import HelpScreen from '../pages/HelpScreen';
 import LifeLostPage from '../pages/LifeLostPage';
 import LifeGainPage from '../pages/LifeGainPage';
@@ -113,8 +114,17 @@ const Game = () => {
     setShowRegisterForm(true);
   };
 
+  const handleChapterTwoComplete = async () => {
+    await completeChapter(2);
+    setChaptersCompleted((previous) => ({
+      ...previous,
+      chapterTwo: true,
+    }));
+    setCurrentChapter(3);
+  };
 
-  const obtainItem = (itemName) => {
+
+  const obtainItem = async (itemName) => {
     const gemName = itemName === E_CRYSTAL ? "E Crystal" : null;
     const itemAlreadyExists = items.includes(itemName);
 
@@ -126,7 +136,7 @@ const Game = () => {
     if (isAuthenticated) {
       // For gems, always attempt sync so nested gem data can be backfilled.
       if (!itemAlreadyExists || gemName) {
-        updateItem(itemName, gemName ? { gemName } : undefined);
+        await updateItem(itemName, gemName ? { gemName } : undefined);
       }
       return;
     }
@@ -324,6 +334,7 @@ const Game = () => {
       case 2:
         return (
           <ChapterTwo
+            onComplete={handleChapterTwoComplete}
             loseLife={loseLife}
             gainLife={gainLife}
             showLifeLost={showLifeLost}
@@ -343,6 +354,9 @@ const Game = () => {
             setCurrentChapter={setCurrentChapter}
           />
         );
+
+      case 3:
+        return <ChapterThree />;
 
       default:
         return <div>Game Completed!</div>;

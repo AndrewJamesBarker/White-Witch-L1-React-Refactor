@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../assets/CSS/layout.css";
 import "../../assets/CSS/images.css";
 import "./chapterTwoMaze.css";
@@ -108,6 +108,7 @@ const REED_ROUTE_KEY_SET = new Set(REED_ROUTE_POSITIONS.map(getPositionKey));
 function ChapterTwo({
   currentStep,
   setCurrentStep,
+  onComplete,
   loseLife,
   obtainItem,
   setShowLifeLost,
@@ -134,6 +135,7 @@ function ChapterTwo({
   const [grinnFeedFailed, setGrinnFeedFailed] = useState(false);
   const [playerPosition, setPlayerPosition] = useState(REED_ROUTE_POSITIONS[0]);
   const [grinnTargetIndex, setGrinnTargetIndex] = useState(0);
+  const hasSubmittedCompletion = useRef(false);
 
   const activeStep = chapterTwoSteps[currentStep];
 
@@ -197,6 +199,7 @@ function ChapterTwo({
       setGrinnFeedFailed(false);
       setPlayerPosition(REED_ROUTE_POSITIONS[0]);
       setGrinnTargetIndex(0);
+      hasSubmittedCompletion.current = false;
     }
   }, [hasInsectPouch, resetSignal, setCurrentStep]);
 
@@ -225,11 +228,18 @@ function ChapterTwo({
   useEffect(() => {
     if (
       activeStep?.id === "find-e-crystal" &&
-      typeof obtainItem === "function"
+      typeof obtainItem === "function" &&
+      !hasSubmittedCompletion.current
     ) {
-      obtainItem(E_CRYSTAL);
+      hasSubmittedCompletion.current = true;
+      const collectCrystalAndCompleteChapter = async () => {
+        await obtainItem(E_CRYSTAL);
+        await onComplete?.();
+      };
+
+      collectCrystalAndCompleteChapter();
     }
-  }, [activeStep?.id, obtainItem]);
+  }, [activeStep?.id, obtainItem, onComplete]);
 
   useEffect(() => {
     const isReedPathSequence =
@@ -275,7 +285,7 @@ function ChapterTwo({
       if (remaining <= 0) {
         setGrinnFeedFailed(true);
         setShowLifeLost(true);
-        loseLife("mazeTimeout");
+        loseLife(hasInsectPouch ? "mazeTimeout" : "missingInsectPouch");
       }
     }, 100);
 
@@ -286,6 +296,7 @@ function ChapterTwo({
     activeStep?.id,
     activeStep?.type,
     grinnFeedFailed,
+    hasInsectPouch,
     loseLife,
     mazeDeadline,
     setShowLifeLost,
@@ -349,7 +360,7 @@ function ChapterTwo({
       if (bugCount <= 0) {
         setGrinnFeedFailed(true);
         setShowLifeLost(true);
-        loseLife("grinnOutOfBugs");
+        loseLife(hasInsectPouch ? "grinnOutOfBugs" : "missingInsectPouch");
         return true;
       }
 
@@ -362,7 +373,7 @@ function ChapterTwo({
       if (updatedBugCount <= 0) {
         setGrinnFeedFailed(true);
         setShowLifeLost(true);
-        loseLife("grinnOutOfBugs");
+        loseLife(hasInsectPouch ? "grinnOutOfBugs" : "missingInsectPouch");
       }
 
       return true;
@@ -392,7 +403,9 @@ function ChapterTwo({
     if (!isWalkable || !isRouteSquare) {
       setSequenceProgress((prev) => ({ ...prev, [step.id]: 0 }));
       setShowLifeLost(true);
-      loseLife(step.penaltyCause || "wrongSequence");
+      loseLife(
+        hasInsectPouch ? step.penaltyCause || "wrongSequence" : "missingInsectPouch"
+      );
       return true;
     }
 
@@ -660,7 +673,11 @@ function ChapterTwo({
 
         {renderStepStatus()}
 
-        {activeStep?.id !== "reed-path" && (
+        {activeStep?.id === "find-e-crystal" ? (
+          <p className="bold-text white-text">
+            Return to the <span className="blue-text">Dashboard</span> to begin Chapter Three.
+          </p>
+        ) : activeStep?.id !== "reed-path" && (
           <p className="bold-text white-text">
             Press <span className="blue-text">C</span> to continue
             {currentStep > 0 && (
