@@ -173,11 +173,10 @@ const Game = () => {
     setShowInventory((prev) => !prev);
   };
 
-  // Displays the chapter name with the user's username if authenticated
   const chapterNames = {
-    1: user ? `The Cove - ${user.username}` : 'The Cove',
-    2: user ? `The Fields - ${user.username}` : 'The Fields',
-    3: user ? `The Ark  ${user.username}` : 'The Ark',
+    1: 'The Cove',
+    2: 'The Fields',
+    3: 'The Ark',
   };
 
   const loseLife = (cause) => {
@@ -369,7 +368,8 @@ const Game = () => {
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapter-info blue-text">
-        {chapterNames[viewingChapter] || 'Unknown'}
+        <div>Chapter: {chapterNames[viewingChapter] || 'Unknown'}</div>
+        {user && <div>Player: {user.username}</div>}
       </div>
     </div>
   );

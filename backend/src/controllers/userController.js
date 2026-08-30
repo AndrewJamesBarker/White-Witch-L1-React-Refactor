@@ -16,9 +16,73 @@ const verifyRecaptcha = async (recaptchaToken) => {
   return response.data;
 };
 
+// Issues the auth cookie/token and sends the login response for a given user
+const issueLoginResponse = (res, user) => {
+  const token = jwt.sign(
+    { userId: user._id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
+  res.cookie(cookieName, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
+  });
+
+  res.json({
+    user: {
+      userId: user._id,
+      username: user.username,
+      gameState: user.gameState,
+      notes: user.notes,
+      token
+    }
+  });
+};
+
+// Finds (or lazily creates) the fixed local dev/test account, pre-verified so it skips email verification
+const getOrCreateDevTestUser = async () => {
+  const email = process.env.DEV_TEST_EMAIL;
+  const password = process.env.DEV_TEST_PASSWORD || 'devpassword123';
+
+  let user = await UserGameState.findOne({ email });
+  if (!user) {
+    user = new UserGameState({
+      username: process.env.DEV_TEST_USERNAME || 'devtester',
+      email,
+      password,
+      isVerified: true,
+    });
+    await user.save();
+  }
+
+  return user;
+};
+
 // For logging in
 export const loginUser = async (req, res) => {
   const { email, password, 'g-recaptcha-response': recaptchaToken } = req.body;
+
+  // Dev-only shortcut: bypasses reCAPTCHA/verification for a fixed local test account, never active in production
+  const isDevTestLogin =
+    process.env.NODE_ENV !== 'production' &&
+    process.env.DEV_TEST_EMAIL &&
+    email === process.env.DEV_TEST_EMAIL;
+
+  if (isDevTestLogin) {
+    try {
+      const devUser = await getOrCreateDevTestUser();
+      const isPasswordMatch = await bcrypt.compare(password, devUser.password);
+      if (!isPasswordMatch) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+      return issueLoginResponse(res, devUser);
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
 
   // Verify reCAPTCHA
   if (!recaptchaToken) {
@@ -45,31 +109,7 @@ export const loginUser = async (req, res) => {
       return res.status(403).json({ message: 'Account not verified. Please check your email for the verification link.' });
     }
 
-    // Generate a token
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    // Set HttpOnly cookie with environment-specific name
-    const cookieName = process.env.NODE_ENV === 'production' ? 'token' : 'token_dev';
-    res.cookie(cookieName, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
-    });
-
-    // Return user data (excluding email)
-    res.json({
-      user: {
-        userId: user._id,
-        username: user.username,
-        gameState: user.gameState,
-        notes: user.notes,
-        token 
-      }
-    });
+    issueLoginResponse(res, user);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

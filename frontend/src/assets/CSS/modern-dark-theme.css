@@ -250,6 +250,7 @@
   z-index: 10;
   color: #00d4aa;
   border: none;
+  text-align: left;
   /* Transparent chapter info with no border or background */
 }
 
