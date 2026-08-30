@@ -20,6 +20,7 @@ function ChapterTwoAltState({
   showLifeLost,
   showHelp,
   showInventory,
+  onComplete,
   resetSignal,
 }) {
   const [playerPosition, setPlayerPosition] = useState(
@@ -32,6 +33,7 @@ function ChapterTwoAltState({
   const [hasFailed, setHasFailed] = useState(false);
   const [hasArrivedHome, setHasArrivedHome] = useState(false);
   const failureHandledRef = useRef(false);
+  const hasUnlockedChapterOneRef = useRef(false);
 
   useEffect(() => {
     if (!resetSignal) {
@@ -45,6 +47,19 @@ function ChapterTwoAltState({
     setHasArrivedHome(false);
     failureHandledRef.current = false;
   }, [resetSignal]);
+
+  useEffect(() => {
+    if (
+      !hasArrivedHome ||
+      typeof onComplete !== "function" ||
+      hasUnlockedChapterOneRef.current
+    ) {
+      return;
+    }
+
+    hasUnlockedChapterOneRef.current = true;
+    onComplete();
+  }, [hasArrivedHome, onComplete]);
 
   useEffect(() => {
     if (hasFailed || hasArrivedHome || showHelp || showInventory || showLifeLost) {
@@ -134,8 +149,8 @@ function ChapterTwoAltState({
       <div className="cursorBox">
         <p id="bodyText" className="standard-text">
           {hasArrivedHome
-            ? "You retrace your steps out of the marsh, alone this time — Grinn is nowhere to be seen."
-            : "The marsh looks different from this side. Find your way back out the way you came, in reverse."}
+            ? "You retrace your steps out of the marsh, alone this time. Grinn is nowhere to be seen."
+            : "The marsh looks different from this side. Find your way back out the way you came, without Grinn's help this time."}
         </p>
 
         {!hasArrivedHome && (

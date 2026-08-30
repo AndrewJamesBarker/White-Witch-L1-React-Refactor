@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Sundial from "../../../assets/images/environment/Sundial.webp";
 import ChapterNames from "../../utilities/ChapterNames"; // Added as per your note
+import { useAuth } from "../../../context/AuthContext";
 import { useGameState } from "../../../context/GameStateContext";
 import {
   LEATHER_INSECT_POUCH,
@@ -8,21 +9,37 @@ import {
 } from "../../utilities/itemKeys";
 import { Typography, Box, Card, CardMedia } from "@mui/material";
 
-function ChapOneAltState({ obtainItem }) {
+const TOTAL_LETTER_GEMS = 7;
+
+function ChapOneAltState({ obtainItem, onEarlyReturnStateChange }) {
   const {
     viewingChapter,
+    currentChapter,
     items,
   } = useGameState();
+  const { user } = useAuth();
   const hasAltStatePouch =
     items.includes(LEATHER_INSECT_POUCH) ||
     items.includes(LEGACY_LEATHER_DRAWSTRING_POUCH);
   const [enteredWithoutAltStatePouch] = React.useState(() => !hasAltStatePouch);
+  const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
+  const collectedGems =
+    user?.gameState?.gems?.collected ||
+    guestUser?.gameState?.gems?.collected ||
+    [];
+  const isChapterThreeUnlocked = currentChapter >= 3;
+  const isMissingLetterGems = collectedGems.length < TOTAL_LETTER_GEMS;
+  const showEarlyReturnState = isChapterThreeUnlocked && isMissingLetterGems;
 
   useEffect(() => {
     if (enteredWithoutAltStatePouch && typeof obtainItem === "function") {
       obtainItem(LEATHER_INSECT_POUCH);
     }
   }, [enteredWithoutAltStatePouch, obtainItem]);
+
+  useEffect(() => {
+    onEarlyReturnStateChange?.(showEarlyReturnState);
+  }, [onEarlyReturnStateChange, showEarlyReturnState]);
 
   return (
     <Box
@@ -50,8 +67,9 @@ function ChapOneAltState({ obtainItem }) {
       </Card>
 
       <Typography variant="body1" gutterBottom>
-        There is a foreboding atmosphere. The Siren is gone, and only a sundial
-        remains. Make haste, time is of the essence!
+        {showEarlyReturnState
+          ? "You're back early! There is still much to be done, be on your way, and stop lollygagging!"
+          : "There is a foreboding atmosphere. The Siren is gone, and only a sundial remains. Make haste, time is of the essence!"}
       </Typography>
       {enteredWithoutAltStatePouch && (
         <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold", color: "#00d4aa" }}>
@@ -61,7 +79,7 @@ function ChapOneAltState({ obtainItem }) {
         </Typography>
       )}
       <Typography variant="body1">
-        You have already completed this chapter.
+        {!showEarlyReturnState && "You have already completed this chapter."}
       </Typography>
     </Box>
   );
