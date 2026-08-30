@@ -73,7 +73,7 @@ const InventoryPage = forwardRef((props, ref) => {
 
     return (
       <>
-        <h3 className="center-text blue-text">{title}</h3>
+        {/* <h3 className="center-text blue-text">{title}</h3> */}
         {visibleItems.map((item) => (
           <InventoryItem
             key={item.title}
@@ -96,7 +96,7 @@ const InventoryPage = forwardRef((props, ref) => {
 
   return (
     <div ref={ref} className="dynamic-scenes standard-text width-control center">
-      <h2 className="center-text underline-text blue-text">Inventory</h2>
+      <h2 className="center-text underline-text blue-text text-2xl">Inventory</h2>
       <p>Press <span className="blue-text bold-text">'i'</span> at anytime to open or close this page.</p>
       {renderSection("Core Items", coreItemsData)}
 
