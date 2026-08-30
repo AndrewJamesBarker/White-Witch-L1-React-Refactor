@@ -104,6 +104,7 @@ const getRouteIndexForPosition = (position) =>
     positionsMatch(routePosition, position)
   );
 const REED_ROUTE_KEY_SET = new Set(REED_ROUTE_POSITIONS.map(getPositionKey));
+const POST_MAZE_STEP_IDS = new Set(["handoff", "find-e-crystal"]);
 
 function ChapterTwo({
   currentStep,
@@ -428,6 +429,7 @@ function ChapterTwo({
     onStepKeyDown: handleStepKeyDown,
     blockNavigation: () => showHelp || showInventory || showLifeLost,
     canContinue: (step) => isStepComplete(step, progressionState),
+    canGoBack: (step) => !POST_MAZE_STEP_IDS.has(step?.id),
   });
 
   const renderScene = (scene) => {
@@ -680,7 +682,7 @@ function ChapterTwo({
         ) : activeStep?.id !== "reed-path" && (
           <p className="bold-text white-text">
             Press <span className="blue-text">C</span> to continue
-            {currentStep > 0 && (
+            {currentStep > 0 && !POST_MAZE_STEP_IDS.has(activeStep?.id) && (
               <>
                 {" "}and <span className="blue-text">B</span> to go back
               </>
