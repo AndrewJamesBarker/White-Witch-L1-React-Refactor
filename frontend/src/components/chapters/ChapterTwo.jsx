@@ -31,24 +31,6 @@ import {
   REED_ROUTE_KEY_SET,
 } from "./chapterTwoMazeData";
 
-// Single-tile-wide snake path verified by backtracking search.
-// 26 positions = 25 moves. 20 bugs → Grinn guides positions 0–20.
-// Player solos positions 21–25 (5 moves alone).
-//
-// Grid visualisation (row 0 = top, row 7 = bottom):
-//   col: 0  1  2  3  4  5  6  7
-//   r0:  .  .  o  o  o  .  .  .
-//   r1:  .  o  o  .  o  .  .  .
-//   r2:  .  o  .  .  o  .  E  .
-//   r3:  .  o  .  .  o  o  o  o
-//   r4:  .  o  o  .  .  o  .  o
-//   r5:  .  .  o  .  .  o  .  o
-//   r6:  .  .  o  .  .  o  o  o
-//   r7:  .  .  S  .  .  .  .  .
-//
-// Section A – Teaching  (0–9):  path climbs col 2, turns left to col 1, rises to row 1
-// Section B – Learning  (10–19): crosses top, descends col 4, sweeps right to col 6–7 edge
-// Section C – Solo      (20–25): right-edge climb from [6,7] up to goal [2,6]
 const STARTING_BUG_COUNT = 10;
 const MAZE_TIME_LIMIT_MS = 60000;
 // Developer test flag: set true to reveal the full correct maze route.
