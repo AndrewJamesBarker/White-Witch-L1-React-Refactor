@@ -12,13 +12,16 @@ const deathTexts = {
   wrongMarshPath: "You misread Grinn's route and step off the safe line. A cold undertow drags you into deep marsh water before you can recover.",
   grinnUnfed: "Grinn waits for the next bug, but you hesitate too long. He pivots away and guides you into deep water, where the marsh swallows you whole.",
   grinnOutOfBugs: "Your insect pouch runs dry. Without food, Grinn abandons the safe path and leads you into deep water that swallows you whole.",
-  missingInsectPouch: "Grinn finds nothing to eat and slips away into the reeds. You need to go back and find food for him.",
+  missingInsectPouch: "Grinn finds nothing to eat and slips away into the reeds.",
   wrongMarshRetreatPath: "Without Grinn to guide you, you misremember the safe line and step into deep marsh water.",
   marshRetreatTimeout: "You linger too long retracing your steps, and the rising marsh water closes over your head.",
 };
 
+const missingInsectPouchFollowup = "YOU NEED TO GO BACK AND SEARCH FOR FOOD FOR HIM!";
+
 // Get the death message
 const deathMessage = deathTexts[deathCause] || "An unknown force has claimed your life.";
+const shouldHighlightMissingInsectPouch = deathCause === "missingInsectPouch";
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -45,6 +48,9 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
           <p className="bold-text blue-text">Oh no! You lost a life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async" className="center"/>
           <p className="standard-text">{deathMessage}</p>
+          {shouldHighlightMissingInsectPouch && (
+            <p className="bold-text blue-text">{missingInsectPouchFollowup}</p>
+          )}
           <p>You now have {livesLeft} {livesLeft > 1 ? 'lives' : 'life' } left.</p>
           <p className="bold-text">Press Escape to continue.</p>
           <p>Good luck!</p>
@@ -54,6 +60,9 @@ const deathMessage = deathTexts[deathCause] || "An unknown force has claimed you
           <p className="bold-text blue-text">Oh no! You lost your last life!</p>
           <img alt="skull and crossbones" src={skullCrossBones} width="200" height="200" loading="eager" decoding="async" className="center"/>
           <p className="standard-text">{deathMessage}</p>
+          {shouldHighlightMissingInsectPouch && (
+            <p className="bold-text blue-text">{missingInsectPouchFollowup}</p>
+          )}
           <p>You now have 0 lives left.</p>
           <p className="bold-text">Press Escape to start again.</p>
           <p>Good luck!</p>

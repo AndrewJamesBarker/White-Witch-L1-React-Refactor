@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sundial from "../../../assets/images/environment/Sundial.webp";
+import InsectPouch from "../../../assets/images/inventory-items/insect-pouch.png";
 import ChapterNames from "../../utilities/ChapterNames"; // Added as per your note
 import { useAuth } from "../../../context/AuthContext";
 import { useGameState } from "../../../context/GameStateContext";
@@ -11,17 +12,17 @@ import { Typography, Box, Card, CardMedia } from "@mui/material";
 
 const TOTAL_LETTER_GEMS = 7;
 
-function ChapOneAltState({ obtainItem, onEarlyReturnStateChange }) {
+function ChapOneAltState({ obtainItem, onEarlyReturnStateChange, showRewardPopup }) {
   const {
     viewingChapter,
     currentChapter,
     items,
   } = useGameState();
   const { user } = useAuth();
+  const [isClaimingPouch, setIsClaimingPouch] = useState(false);
   const hasAltStatePouch =
     items.includes(LEATHER_INSECT_POUCH) ||
     items.includes(LEGACY_LEATHER_DRAWSTRING_POUCH);
-  const [enteredWithoutAltStatePouch] = React.useState(() => !hasAltStatePouch);
   const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
   const collectedGems =
     user?.gameState?.gems?.collected ||
@@ -32,14 +33,27 @@ function ChapOneAltState({ obtainItem, onEarlyReturnStateChange }) {
   const showEarlyReturnState = isChapterThreeUnlocked && isMissingLetterGems;
 
   useEffect(() => {
-    if (enteredWithoutAltStatePouch && typeof obtainItem === "function") {
-      obtainItem(LEATHER_INSECT_POUCH);
-    }
-  }, [enteredWithoutAltStatePouch, obtainItem]);
-
-  useEffect(() => {
     onEarlyReturnStateChange?.(showEarlyReturnState);
   }, [onEarlyReturnStateChange, showEarlyReturnState]);
+
+  const handlePouchClick = async () => {
+    if (
+      isClaimingPouch ||
+      hasAltStatePouch ||
+      typeof obtainItem !== "function"
+    ) {
+      return;
+    }
+
+    setIsClaimingPouch(true);
+
+    try {
+      showRewardPopup?.("findInsectPouch");
+      await obtainItem(LEATHER_INSECT_POUCH);
+    } finally {
+      setIsClaimingPouch(false);
+    }
+  };
 
   return (
     <Box
@@ -71,12 +85,34 @@ function ChapOneAltState({ obtainItem, onEarlyReturnStateChange }) {
           ? "You're back early! There is still much to be done, be on your way, and stop lollygagging!"
           : "There is a foreboding atmosphere. The Siren is gone, and only a sundial remains. Make haste, time is of the essence!"}
       </Typography>
-      {enteredWithoutAltStatePouch && (
-        <Typography variant="body1" gutterBottom sx={{ fontWeight: "bold", color: "#00d4aa" }}>
-          In the sand, you discover a leather drawstring pouch full of live,
-          wriggling centipedes and other strange mutated insects. It has been added to
-          your inventory.
-        </Typography>
+      {!hasAltStatePouch && (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body1" gutterBottom sx={{ color: "#00d4aa", fontWeight: "bold" }}>
+            Something wriggles in the sand. Click it to pick it up.
+          </Typography>
+          <button
+            type="button"
+            onClick={handlePouchClick}
+            disabled={isClaimingPouch}
+            style={{
+              background: "transparent",
+              border: "none",
+              padding: 0,
+              cursor: isClaimingPouch ? "default" : "pointer",
+            }}
+            aria-label="Pick up the leather insect pouch"
+          >
+            <img
+              className="objectPulse imageMaterialize"
+              src={InsectPouch}
+              alt="A leather insect pouch wriggling in the sand"
+              width="140"
+              height="140"
+              loading="eager"
+              decoding="async"
+            />
+          </button>
+        </Box>
       )}
       <Typography variant="body1">
         {!showEarlyReturnState && "You have already completed this chapter."}

@@ -57,6 +57,7 @@ const Game = () => {
   const inventoryRef = useRef(null);
   const lifeLostRef = useRef(null);
   const lifeGainRef = useRef(null);
+  const rewardPopupTimeoutRef = useRef(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const { isAuthenticated, user, setUser } = useAuth();
   
@@ -332,6 +333,46 @@ const Game = () => {
     setCurrentScene(scene);
   };
 
+  const showRewardPopup = (cause, delayMs = 0) => {
+    if (rewardPopupTimeoutRef.current) {
+      window.clearTimeout(rewardPopupTimeoutRef.current);
+      rewardPopupTimeoutRef.current = null;
+    }
+
+    if (delayMs > 0) {
+      rewardPopupTimeoutRef.current = window.setTimeout(() => {
+        setLifeCause(cause);
+        setShowLifeGain(true);
+        rewardPopupTimeoutRef.current = null;
+      }, delayMs);
+      return;
+    }
+
+    setLifeCause(cause);
+    setShowLifeGain(true);
+  };
+
+  useEffect(() => {
+    if (viewingChapter === 1) {
+      return undefined;
+    }
+
+    if (rewardPopupTimeoutRef.current) {
+      window.clearTimeout(rewardPopupTimeoutRef.current);
+      rewardPopupTimeoutRef.current = null;
+    }
+
+    return undefined;
+  }, [viewingChapter]);
+
+  useEffect(() => {
+    return () => {
+      if (rewardPopupTimeoutRef.current) {
+        window.clearTimeout(rewardPopupTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const gainLife = (cause) => {
     if (livesLeft < 3) {
       const newLives = livesLeft + 1;
@@ -346,8 +387,7 @@ const Game = () => {
         updateLife(newLives);
       }
     }
-    setLifeCause(cause);
-    setShowLifeGain(true);
+    showRewardPopup(cause);
   };
 
   const resetGame = async () => {
@@ -433,6 +473,7 @@ const Game = () => {
           <ChapOneAltState
             obtainItem={obtainItem}
             onEarlyReturnStateChange={setIsChapterOneEarlyReturnActive}
+            showRewardPopup={showRewardPopup}
           />
         ) : (
           <ChapterOne
