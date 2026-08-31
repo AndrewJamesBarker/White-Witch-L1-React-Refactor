@@ -9,6 +9,16 @@ const AudioPlayer = ({ src, autoplay = true, loop = false, muted = false }) => {
     if (audio) {
       audio.volume = 0.3; // Set initial volume to 30%
 
+      if (autoplay) {
+        const playPromise = audio.play();
+
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {
+            // Autoplay can be blocked until the user has interacted with the page.
+          });
+        }
+      }
+
       const handleVolumeChange = () => {
           audio.blur(); // Optionally blur if volume is 0
       };
@@ -25,6 +35,8 @@ const AudioPlayer = ({ src, autoplay = true, loop = false, muted = false }) => {
 
       // Cleanup function to remove event listeners
       return () => {
+        audio.pause();
+        audio.currentTime = 0;
         audio.removeEventListener('volumechange', handleVolumeChange);
         audio.removeEventListener('play', handleInteractionEnd);
         audio.removeEventListener('pause', handleInteractionEnd);
@@ -42,6 +54,7 @@ const AudioPlayer = ({ src, autoplay = true, loop = false, muted = false }) => {
       autoPlay={autoplay}
       loop={loop}
       muted={muted}
+      preload="auto"
       className="w-3/4 max-w-md shadow-lg mx-auto my-6 block"
     />
   );

@@ -571,6 +571,11 @@ function ChapterTwo({
     return null;
   };
 
+  const shouldShowNavigationPrompt =
+    activeStep?.id !== "find-e-crystal" &&
+    activeStep?.id !== "reed-path" &&
+    activeStep?.type !== "choice";
+
   return (
     <div id="ChapterTwoPage" className="width-control">
       <h2 id="headLine" className="bold-text">{activeStep?.title || "Chapter Two"}</h2>
@@ -610,7 +615,7 @@ function ChapterTwo({
           <p className="bold-text white-text">
             Return to the <span className="blue-text">Dashboard</span> to begin Chapter Three.
           </p>
-        ) : activeStep?.id !== "reed-path" && (
+        ) : shouldShowNavigationPrompt && (
           <p className="bold-text white-text">
             Press <span className="blue-text">C</span> to continue
             {currentStep > 0 && !POST_MAZE_STEP_IDS.has(activeStep?.id) && (

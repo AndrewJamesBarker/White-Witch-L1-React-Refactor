@@ -4,6 +4,7 @@ import LevelItemsMap from '../utilities/levelItemsMap';
 import ChapterOne from '../chapters/ChapterOne';
 import ChapOneAltState from "../chapters/altStateChapters/ChapOneAltState";
 import ChapterTwo from '../chapters/ChapterTwo';
+import ChapterTwoMusicPlayer from '../chapters/ChapterTwoMusicPlayer';
 import ChapterTwoAltState from "../chapters/altStateChapters/ChapterTwoAltState";
 import ChapterThree from '../chapters/ChapterThree';
 import HelpScreen from '../pages/HelpScreen';
@@ -499,8 +500,11 @@ const Game = () => {
     }
   };
 
+  const shouldShowChapterTwoMusic = viewingChapter === 2;
+
   return (
     <div className='font-raleway '>
+      {shouldShowChapterTwoMusic && <ChapterTwoMusicPlayer />}
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapter-info blue-text">
