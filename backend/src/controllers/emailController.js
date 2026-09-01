@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import UserGameState from '../models/User.js';
 
 dotenv.config();
 
@@ -31,6 +30,19 @@ const sendVerificationEmail = async (user) => {
   } catch (error) {
     console.error('Error sending verification email:', error);
   }
+};
+
+export const sendPasswordResetEmail = async (user, token) => {
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: 'White Witch Password Reset',
+    text: `Reset your White Witch password by visiting the following link: ${resetUrl}`,
+  };
+
+  await transporter.sendMail(mailOptions);
 };
 
 export default sendVerificationEmail;

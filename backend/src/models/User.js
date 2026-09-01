@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false }, // email verification
+  passwordResetTokenHash: { type: String, default: null },
+  passwordResetExpiresAt: { type: Date, default: null },
   registrationDate: { type: Date, default: Date.now }, // Add this field
   gameState: {
     currentChapter: {

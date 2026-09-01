@@ -3,8 +3,12 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const PrivateRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
   // console.log('PrivateRoute isAuthenticated:', isAuthenticated);
+
+  if (isAuthLoading) {
+    return null;
+  }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/signin" />;
 };

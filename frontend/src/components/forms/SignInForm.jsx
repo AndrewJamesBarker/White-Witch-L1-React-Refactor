@@ -97,6 +97,13 @@ const SignInForm = () => {
             <button className="margin-btm-1" type="submit">
               Login
             </button>
+            <button
+              className="margin-btm-1"
+              type="button"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </button>
             <p className="bold-text padding-margin-reset">
               Don't have an account yet?
             </p>

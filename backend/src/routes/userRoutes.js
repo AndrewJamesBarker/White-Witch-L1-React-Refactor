@@ -1,11 +1,14 @@
 import express from 'express';
-import { loginUser, createUser, updateUserInfo, updateGameState, logoutUser, deleteUser, verifyEmailToken, resendVerificationEmail } from '../controllers/userController.js';
+import { loginUser, createUser, updateUserInfo, updateGameState, logoutUser, deleteUser, verifyEmailToken, resendVerificationEmail, getCurrentUser, requestPasswordReset, resetPassword } from '../controllers/userController.js';
 import authenticate from '../middleware/authenticate.js';
 
 const router = express.Router();
 
 // Routes for user authentication and registration
 router.post('/auth/login', loginUser);
+router.get('/auth/me', authenticate, getCurrentUser);
+router.post('/auth/forgot-password', requestPasswordReset);
+router.post('/auth/reset-password', resetPassword);
 router.post('/register', createUser); // Registration
 router.post('/auth/logout', authenticate, logoutUser); // Logout user
 

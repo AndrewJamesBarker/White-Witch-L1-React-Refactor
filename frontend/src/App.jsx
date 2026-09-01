@@ -17,6 +17,8 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import RegisterForm from "./components/forms/RegisterForm";
 import SignInForm from "./components/forms/SignInForm";
+import ForgotPassword from "./components/pages/ForgotPassword";
+import ResetPassword from "./components/pages/ResetPassword";
 import VerifyEmail from "./components/pages/VerifyEmail";
 import PrivacyPolicyPage from "./components/pages/PrivacyPolicyPage";
 import AccountPage from "./components/pages/AccountPage";
@@ -25,7 +27,7 @@ import { GameStateProvider } from "./context/GameStateContext";
 
 const AppContent = () => {
   const [startGame, setStartGame] = useState(null);
-  const { logout, user } = useAuth();
+  const { user, isAuthLoading } = useAuth();
   const location = useLocation();
   
   const theme = createTheme({
@@ -48,14 +50,17 @@ const AppContent = () => {
   });
 
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (isAuthLoading) {
+      return;
+    }
+
     const guestUser = JSON.parse(sessionStorage.getItem("guestUser"));
     if (user || guestUser) {
       setStartGame(true);
     } else {
       setStartGame(null);
     }
-  }, []);
+  }, [isAuthLoading, user]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -111,6 +116,8 @@ const AppContent = () => {
                 <RegisterForm />
             }
           />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route element={<PrivateRoute />}>

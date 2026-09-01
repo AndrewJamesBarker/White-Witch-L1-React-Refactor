@@ -1,13 +1,27 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { createHash, randomBytes } from 'crypto';
 import UserGameState from '../models/User.js';
-import sendVerificationEmail from './emailController.js';
+import sendVerificationEmail, { sendPasswordResetEmail } from './emailController.js';
 import dotenv from 'dotenv';
 import axios from 'axios';
 
 
 dotenv.config();
 const  RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
+const PASSWORD_RESET_EXPIRY_MS = 1000 * 60 * 60;
+const PASSWORD_RESET_GENERIC_MESSAGE = 'If an account exists for that email, a password reset link has been sent.';
+
+const buildSafeUserPayload = (user) => ({
+  userId: user._id,
+  username: user.username,
+  email: user.email,
+  gameState: user.gameState,
+  notes: user.notes,
+});
+
+const buildPasswordResetTokenHash = (token) =>
+  createHash('sha256').update(token).digest('hex');
 
 // Helper function to verify reCAPTCHA using axios
 const verifyRecaptcha = async (recaptchaToken) => {
@@ -32,13 +46,7 @@ const issueLoginResponse = (res, user) => {
   });
 
   res.json({
-    user: {
-      userId: user._id,
-      username: user.username,
-      gameState: user.gameState,
-      notes: user.notes,
-      token
-    }
+    user: buildSafeUserPayload(user)
   });
 };
 
@@ -126,6 +134,19 @@ export const logoutUser = (req, res) => {
   res.json({ message: 'Logged out successfully' });
 };
 
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await UserGameState.findById(req.userData.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ user: buildSafeUserPayload(user) });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // For registering
 export const createUser = async (req, res) => {
   const { username, email, password, gameState, notes, 'g-recaptcha-response': recaptchaToken } = req.body;  
@@ -154,7 +175,10 @@ export const createUser = async (req, res) => {
     await newUser.save();
     // Send verification email
     await sendVerificationEmail(newUser);
-    res.status(201).json(newUser);
+    res.status(201).json({
+      message: 'Registration successful. Please verify your email.',
+      user: buildSafeUserPayload(newUser),
+    });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -173,8 +197,7 @@ export const updateUserInfo = async (req, res) => {
     if (username) user.username = username;
     if (email) user.email = email;
     if (password) {
-      // Ensure password changes are hashed
-      user.password = await bcrypt.hash(password, 8);
+      user.password = password;
     }
 
     await user.save();
@@ -273,6 +296,61 @@ export const resendVerificationEmail = async (req, res) => {
 
     await sendVerificationEmail(user);
     res.status(200).json({ message: 'Verification email sent successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    const user = await UserGameState.findOne({ email });
+
+    if (!user) {
+      return res.status(200).json({ message: PASSWORD_RESET_GENERIC_MESSAGE });
+    }
+
+    const passwordResetToken = randomBytes(32).toString('hex');
+    user.passwordResetTokenHash = buildPasswordResetTokenHash(passwordResetToken);
+    user.passwordResetExpiresAt = new Date(Date.now() + PASSWORD_RESET_EXPIRY_MS);
+    await user.save();
+
+    await sendPasswordResetEmail(user, passwordResetToken);
+
+    res.status(200).json({ message: PASSWORD_RESET_GENERIC_MESSAGE });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res.status(400).json({ message: 'Token and password are required' });
+  }
+
+  try {
+    const user = await UserGameState.findOne({
+      passwordResetTokenHash: buildPasswordResetTokenHash(token),
+      passwordResetExpiresAt: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
+    }
+
+    user.password = password;
+    user.passwordResetTokenHash = null;
+    user.passwordResetExpiresAt = null;
+    await user.save();
+
+    res.status(200).json({ message: 'Password reset successful. You can now sign in.' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

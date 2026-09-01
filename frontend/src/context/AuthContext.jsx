@@ -4,66 +4,79 @@ import api from '../services/api';
 
 const AuthContext = createContext(null);
 
-// Helper function to get cookie options based on environment
-const getCookieOptions = () => {
-  const isDevelopment = import.meta.env.VITE_API_URL?.includes('localhost');
-  return {
-    secure: !isDevelopment, // false for localhost, true for production
-    sameSite: isDevelopment ? 'Strict' : 'None' // Strict for dev, None for production
-  };
+const clearLegacyClientAuth = () => {
+  Cookies.remove('token');
+  Cookies.remove('email');
+  delete api.defaults.headers.common['Authorization'];
 };
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const login = (userData) => {
-    const { email, token, ...userSafeData } = userData;
-    const cookieOptions = getCookieOptions();
-    
     setIsAuthenticated(true);
-    setUser(userSafeData);
-    sessionStorage.setItem('user', JSON.stringify(userSafeData));
-    Cookies.set('token', token, cookieOptions);
-    Cookies.set('email', email, cookieOptions);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-    // console.log('User logged in and stored in sessionStorage and cookies:', userSafeData);
+    setUser(userData);
+    sessionStorage.setItem('user', JSON.stringify(userData));
+    clearLegacyClientAuth();
   };
 
-const logout = async () => {
-  try {
-    await api.post('/auth/logout', {}, { withCredentials: true });
-    console.log('Logout API call succeeded.');
-  } catch (err) {
-    // console.error('Error during logout:', err);
-  }
+  const logout = async () => {
+    try {
+      await api.post('/auth/logout', {}, { withCredentials: true });
+      console.log('Logout API call succeeded.');
+    } catch (err) {
+      // console.error('Error during logout:', err);
+    }
 
-  // Now clear frontend state
-  setIsAuthenticated(false);
-  setUser(null);
-  sessionStorage.removeItem('user');
-  Cookies.remove('token');
-  Cookies.remove('email');
-  delete api.defaults.headers.common['Authorization'];
-
-  // console.log('User logged out and removed from sessionStorage and cookies');
-};
+    setIsAuthenticated(false);
+    setUser(null);
+    sessionStorage.removeItem('user');
+    clearLegacyClientAuth();
+  };
 
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem('user');
-    const token = Cookies.get('token');
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // console.log('User loaded from sessionStorage:', JSON.parse(storedUser));
-    }
+    let isMounted = true;
+
+    const restoreSession = async () => {
+      try {
+        const response = await api.get('/auth/me', { withCredentials: true });
+
+        if (!isMounted) {
+          return;
+        }
+
+        setUser(response.data.user);
+        setIsAuthenticated(true);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        clearLegacyClientAuth();
+      } catch (err) {
+        if (!isMounted) {
+          return;
+        }
+
+        setIsAuthenticated(false);
+        setUser(null);
+        sessionStorage.removeItem('user');
+        clearLegacyClientAuth();
+      } finally {
+        if (isMounted) {
+          setIsAuthLoading(false);
+        }
+      }
+    };
+
+    restoreSession();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, isAuthLoading, user, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );
