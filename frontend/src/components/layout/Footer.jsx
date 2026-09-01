@@ -16,6 +16,12 @@ const Footer = () => {
 
         {/* Right side - Links */}
         <div className="footer-links">
+          <Link 
+            to="/about" 
+            className="footer-link"
+          >
+            About
+          </Link>
           {isAuthenticated && (
             <Link 
               to="/account" 

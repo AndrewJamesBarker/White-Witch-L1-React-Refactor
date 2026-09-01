@@ -20,6 +20,7 @@ import SignInForm from "./components/forms/SignInForm";
 import ForgotPassword from "./components/pages/ForgotPassword";
 import ResetPassword from "./components/pages/ResetPassword";
 import VerifyEmail from "./components/pages/VerifyEmail";
+import AboutPage from "./components/pages/AboutPage";
 import PrivacyPolicyPage from "./components/pages/PrivacyPolicyPage";
 import AccountPage from "./components/pages/AccountPage";
 import DeleteAccount from "./components/account/DeleteAccount";
@@ -119,6 +120,7 @@ const AppContent = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
