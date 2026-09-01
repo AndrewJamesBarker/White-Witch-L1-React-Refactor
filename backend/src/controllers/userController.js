@@ -4,11 +4,10 @@ import { createHash, randomBytes } from 'crypto';
 import UserGameState from '../models/User.js';
 import sendVerificationEmail, { sendPasswordResetEmail } from './emailController.js';
 import dotenv from 'dotenv';
-import axios from 'axios';
+import { passwordPolicyMessage, validatePasswordPolicy, verifyRecaptcha } from '../utils/authSecurity.js';
 
 
 dotenv.config();
-const  RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 const PASSWORD_RESET_EXPIRY_MS = 1000 * 60 * 60;
 const PASSWORD_RESET_GENERIC_MESSAGE = 'If an account exists for that email, a password reset link has been sent.';
 
@@ -22,13 +21,6 @@ const buildSafeUserPayload = (user) => ({
 
 const buildPasswordResetTokenHash = (token) =>
   createHash('sha256').update(token).digest('hex');
-
-// Helper function to verify reCAPTCHA using axios
-const verifyRecaptcha = async (recaptchaToken) => {
-  const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
-  const response = await axios.post(verifyURL);
-  return response.data;
-};
 
 // Issues the auth cookie/token and sends the login response for a given user
 const issueLoginResponse = (res, user) => {
@@ -53,7 +45,7 @@ const issueLoginResponse = (res, user) => {
 // Finds (or lazily creates) the fixed local dev/test account, pre-verified so it skips email verification
 const getOrCreateDevTestUser = async () => {
   const email = process.env.DEV_TEST_EMAIL;
-  const password = process.env.DEV_TEST_PASSWORD || 'devpassword123';
+  const password = process.env.DEV_TEST_PASSWORD || 'Devpassword123!';
 
   let user = await UserGameState.findOne({ email });
   if (!user) {
@@ -98,9 +90,13 @@ export const loginUser = async (req, res) => {
   }
 
   try {
-    const recaptchaResponse = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaResponse.success) {
-      return res.status(400).json({ message: 'reCAPTCHA verification failed' });
+    const recaptchaResult = await verifyRecaptcha({
+      token: recaptchaToken,
+      expectedAction: 'login',
+    });
+
+    if (!recaptchaResult.ok) {
+      return res.status(400).json({ message: recaptchaResult.message });
     }
   
     const user = await UserGameState.findOne({ email });
@@ -154,11 +150,20 @@ export const createUser = async (req, res) => {
     return res.status(400).json({ message: 'reCAPTCHA token is required' });
   }
 
+  const passwordPolicyError = validatePasswordPolicy(password);
+  if (passwordPolicyError) {
+    return res.status(400).json({ message: passwordPolicyError });
+  }
+
   try {
 
-    const recaptchaResponse = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaResponse.success) {
-      return res.status(400).json({ message: 'reCAPTCHA verification failed' });
+    const recaptchaResult = await verifyRecaptcha({
+      token: recaptchaToken,
+      expectedAction: 'register',
+    });
+
+    if (!recaptchaResult.ok) {
+      return res.status(400).json({ message: recaptchaResult.message });
     }
 
     const newUser = new UserGameState({
@@ -188,6 +193,14 @@ export const createUser = async (req, res) => {
 export const updateUserInfo = async (req, res) => {
   const { userId } = req.userData; // Extract userId from the token data
   const { username, email, password } = req.body; // Only accept personal info changes
+
+  if (password) {
+    const passwordPolicyError = validatePasswordPolicy(password);
+    if (passwordPolicyError) {
+      return res.status(400).json({ message: passwordPolicyError });
+    }
+  }
+
   try {
     const user = await UserGameState.findById(userId);
     if (!user) {
@@ -302,13 +315,26 @@ export const resendVerificationEmail = async (req, res) => {
 };
 
 export const requestPasswordReset = async (req, res) => {
-  const { email } = req.body;
+  const { email, 'g-recaptcha-response': recaptchaToken } = req.body;
 
   if (!email) {
     return res.status(400).json({ message: 'Email is required' });
   }
 
+  if (!recaptchaToken) {
+    return res.status(400).json({ message: 'reCAPTCHA token is required' });
+  }
+
   try {
+    const recaptchaResult = await verifyRecaptcha({
+      token: recaptchaToken,
+      expectedAction: 'forgot_password',
+    });
+
+    if (!recaptchaResult.ok) {
+      return res.status(400).json({ message: recaptchaResult.message });
+    }
+
     const user = await UserGameState.findOne({ email });
 
     if (!user) {
@@ -333,6 +359,11 @@ export const resetPassword = async (req, res) => {
 
   if (!token || !password) {
     return res.status(400).json({ message: 'Token and password are required' });
+  }
+
+  const passwordPolicyError = validatePasswordPolicy(password);
+  if (passwordPolicyError) {
+    return res.status(400).json({ message: passwordPolicyError });
   }
 
   try {

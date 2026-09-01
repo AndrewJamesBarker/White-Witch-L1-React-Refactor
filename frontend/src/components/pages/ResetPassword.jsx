@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/api';
 import Footer from '../layout/Footer';
+import {
+  isPasswordPolicyValid,
+  passwordPolicyMessage,
+} from '../utilities/passwordPolicy';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -25,6 +29,11 @@ const ResetPassword = () => {
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      return;
+    }
+
+    if (!isPasswordPolicyValid(password)) {
+      setError(passwordPolicyMessage);
       return;
     }
 
@@ -68,8 +77,10 @@ const ResetPassword = () => {
                   autoComplete="new-password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
+                  minLength={12}
                   required
                 />
+                <small>{passwordPolicyMessage}</small>
               </div>
               <div className="input-group">
                 <label htmlFor="reset-password-confirm">Confirm New Password</label>

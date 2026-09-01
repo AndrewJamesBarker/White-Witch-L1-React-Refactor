@@ -6,6 +6,10 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { defaultGameState } from "../../context/GameStateContext";
 import api from "../../services/api";
 import Footer from "../layout/Footer";
+import {
+  isPasswordPolicyValid,
+  passwordPolicyMessage,
+} from "../utilities/passwordPolicy";
 
 const RegisterForm = () => {
   // const apiBaseUrl = import.meta.env.VITE_API_URL;
@@ -44,6 +48,11 @@ const RegisterForm = () => {
     const lowerCaseEmail = email.toLowerCase();
     if (!isValidEmail(lowerCaseEmail)) {
       setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isPasswordPolicyValid(password)) {
+      setError(passwordPolicyMessage);
       return;
     }
 
@@ -140,8 +149,10 @@ const RegisterForm = () => {
                 autoComplete="new-password"
                 value={password}
                 onChange={handleInputChange(setPassword)}
+                minLength={12}
                 required
               />
+              <small>{passwordPolicyMessage}</small>
               <small>
                 This site is protected by reCAPTCHA and the Google{" "}
                 <a href="https://policies.google.com/privacy">Privacy Policy</a>{" "}

@@ -12,6 +12,8 @@ dotenv.config();
 // Initialize express app
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
