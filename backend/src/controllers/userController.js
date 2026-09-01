@@ -24,10 +24,17 @@ const buildSafeUserPayload = (user) => ({
 const buildPasswordResetTokenHash = (token) =>
   createHash('sha256').update(token).digest('hex');
 
-// Issues the auth cookie/token and sends the login response for a given user
-const issueLoginResponse = (res, user) => {
+const generateCsrfToken = () => randomBytes(32).toString('hex');
+
+const buildAuthTokenPayload = (user, csrfToken) => ({
+  userId: user._id,
+  email: user.email,
+  csrfToken,
+});
+
+const setAuthCookie = (res, user, csrfToken) => {
   const token = jwt.sign(
-    { userId: user._id, email: user.email },
+    buildAuthTokenPayload(user, csrfToken),
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );
@@ -38,9 +45,16 @@ const issueLoginResponse = (res, user) => {
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
   });
+};
+
+// Issues the auth cookie/token and sends the login response for a given user
+const issueLoginResponse = (res, user) => {
+  const csrfToken = generateCsrfToken();
+  setAuthCookie(res, user, csrfToken);
 
   res.json({
-    user: buildSafeUserPayload(user)
+    user: buildSafeUserPayload(user),
+    csrfToken,
   });
 };
 
@@ -139,7 +153,17 @@ export const getCurrentUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json({ user: buildSafeUserPayload(user) });
+    const csrfToken = req.userData.csrfToken || generateCsrfToken();
+    const shouldRefreshSession = !req.userData.csrfToken || req.userData.email !== user.email;
+
+    if (shouldRefreshSession) {
+      setAuthCookie(res, user, csrfToken);
+    }
+
+    res.json({
+      user: buildSafeUserPayload(user),
+      csrfToken,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

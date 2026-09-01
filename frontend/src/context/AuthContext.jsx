@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import api from '../services/api';
+import api, { clearCsrfToken, setCsrfToken } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -20,9 +20,10 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const login = (userData) => {
+  const login = (userData, nextCsrfToken) => {
     setIsAuthenticated(true);
     persistUser(userData);
+    setCsrfToken(nextCsrfToken);
     clearLegacyClientAuth();
   };
 
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUser(null);
     sessionStorage.removeItem('user');
+    clearCsrfToken();
     clearLegacyClientAuth();
   };
 
@@ -58,6 +60,7 @@ export const AuthProvider = ({ children }) => {
 
         persistUser(response.data.user);
         setIsAuthenticated(true);
+        setCsrfToken(response.data.csrfToken);
         clearLegacyClientAuth();
       } catch (err) {
         if (!isMounted) {
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         setUser(null);
         sessionStorage.removeItem('user');
+        clearCsrfToken();
         clearLegacyClientAuth();
       } finally {
         if (isMounted) {

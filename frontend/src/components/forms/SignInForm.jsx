@@ -47,9 +47,9 @@ const SignInForm = () => {
         password,
         "g-recaptcha-response": recaptchaToken,
       });
-      const { user } = response.data;
+      const { user, csrfToken } = response.data;
       // console.log("User data received:", user); // Log the user data for debugging
-      login(user); // Call the login function with the user data
+      login(user, csrfToken); // Call the login function with the user data
       navigate("/dashboard");
     } catch (err) {
       const errorMessage =
