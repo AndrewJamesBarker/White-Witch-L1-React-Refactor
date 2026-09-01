@@ -15,11 +15,19 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  const login = (userData) => {
-    setIsAuthenticated(true);
+  const persistUser = (userData) => {
     setUser(userData);
     sessionStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  const login = (userData) => {
+    setIsAuthenticated(true);
+    persistUser(userData);
     clearLegacyClientAuth();
+  };
+
+  const updateUser = (userData) => {
+    persistUser(userData);
   };
 
   const logout = async () => {
@@ -48,9 +56,8 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        setUser(response.data.user);
+        persistUser(response.data.user);
         setIsAuthenticated(true);
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
         clearLegacyClientAuth();
       } catch (err) {
         if (!isMounted) {
@@ -76,7 +83,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isAuthLoading, user, login, logout, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, isAuthLoading, user, login, logout, setUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

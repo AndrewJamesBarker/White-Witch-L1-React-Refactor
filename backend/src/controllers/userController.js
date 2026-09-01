@@ -15,6 +15,8 @@ const buildSafeUserPayload = (user) => ({
   userId: user._id,
   username: user.username,
   email: user.email,
+  pendingEmail: user.pendingEmail,
+  isVerified: user.isVerified,
   gameState: user.gameState,
   notes: user.notes,
 });
@@ -192,7 +194,11 @@ export const createUser = async (req, res) => {
 // For updating user personal information
 export const updateUserInfo = async (req, res) => {
   const { userId } = req.userData; // Extract userId from the token data
-  const { username, email, password } = req.body; // Only accept personal info changes
+  const { username, email, password, currentPassword } = req.body; // Only accept personal info changes
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  const normalizedUsername = typeof username === 'string' ? username.trim() : '';
+  const isPasswordChangeRequested = Boolean(password);
+  const isEmailChangeRequested = Boolean(normalizedEmail);
 
   if (password) {
     const passwordPolicyError = validatePasswordPolicy(password);
@@ -207,14 +213,61 @@ export const updateUserInfo = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (username) user.username = username;
-    if (email) user.email = email;
+    const requiresCurrentPassword = isPasswordChangeRequested || isEmailChangeRequested;
+    if (requiresCurrentPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Current password is required to change your email or password.' });
+      }
+
+      const isCurrentPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isCurrentPasswordMatch) {
+        return res.status(401).json({ message: 'Current password is incorrect.' });
+      }
+    }
+
+    if (normalizedUsername && normalizedUsername !== user.username) {
+      user.username = normalizedUsername;
+    }
+
+    let verificationEmailSent = false;
+    if (normalizedEmail && normalizedEmail !== user.email) {
+      const existingUser = await UserGameState.findOne({
+        _id: { $ne: userId },
+        $or: [
+          { email: normalizedEmail },
+          { pendingEmail: normalizedEmail },
+        ],
+      });
+
+      if (existingUser) {
+        return res.status(400).json({ message: 'That email address is already in use.' });
+      }
+
+      user.pendingEmail = normalizedEmail;
+      verificationEmailSent = true;
+    }
+
     if (password) {
       user.password = password;
     }
 
     await user.save();
-    res.json({ message: 'User information updated successfully' });
+
+    if (verificationEmailSent) {
+      await sendVerificationEmail(user, {
+        email: user.pendingEmail,
+        purpose: 'email-change',
+      });
+    }
+
+    const successMessage = verificationEmailSent
+      ? 'Your profile was updated. Verify the link sent to your new email address before the login email changes.'
+      : 'User information updated successfully';
+
+    res.json({
+      message: successMessage,
+      user: buildSafeUserPayload(user),
+    });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -278,10 +331,46 @@ export const verifyEmailToken = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await UserGameState.findOne({ email: decoded.email });
+    const user = decoded.userId
+      ? await UserGameState.findById(decoded.userId)
+      : await UserGameState.findOne({ email: decoded.email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (decoded.purpose === 'email-change') {
+      if (!user.pendingEmail) {
+        if (user.email === decoded.email) {
+          return res.status(200).json({
+            message: 'Email already verified. Your login email has been updated.',
+          });
+        }
+
+        return res.status(400).json({ message: 'Invalid token' });
+      }
+
+      if (user.pendingEmail !== decoded.email) {
+        return res.status(400).json({ message: 'Invalid token' });
+      }
+
+      const conflictingUser = await UserGameState.findOne({
+        _id: { $ne: user._id },
+        email: decoded.email,
+      });
+
+      if (conflictingUser) {
+        return res.status(400).json({ message: 'That email address is already in use.' });
+      }
+
+      user.email = decoded.email;
+      user.pendingEmail = null;
+      user.isVerified = true;
+      await user.save();
+
+      return res.status(200).json({
+        message: 'Email verified successfully. Your login email has been updated.',
+      });
     }
 
     user.isVerified = true; // Update isVerified field
@@ -295,12 +384,31 @@ export const verifyEmailToken = async (req, res) => {
 
 // For resending verification email
 export const resendVerificationEmail = async (req, res) => {
-  const { email } = req.body;
+  const normalizedEmail = typeof req.body.email === 'string'
+    ? req.body.email.trim().toLowerCase()
+    : '';
+
+  if (!normalizedEmail) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
 
   try {
-    const user = await UserGameState.findOne({ email });
+    const user = await UserGameState.findOne({
+      $or: [
+        { email: normalizedEmail },
+        { pendingEmail: normalizedEmail },
+      ],
+    });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.pendingEmail === normalizedEmail) {
+      await sendVerificationEmail(user, {
+        email: user.pendingEmail,
+        purpose: 'email-change',
+      });
+      return res.status(200).json({ message: 'Verification email sent successfully' });
     }
 
     if (user.isVerified) {
