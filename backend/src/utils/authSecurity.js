@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const PASSWORD_MIN_LENGTH = 12;
 const PASSWORD_POLICY_MESSAGE =
-  'Password must be at least 12 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.';
+  'Password must be at least 12 characters long and include an uppercase letter, a lowercase letter, and a number.';
 
 const deriveAllowedRecaptchaHostnames = () => {
   const configuredHostnames = (process.env.RECAPTCHA_ALLOWED_HOSTNAMES || '')
@@ -38,14 +38,12 @@ export const validatePasswordPolicy = (password) => {
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
   const hasNumber = /\d/.test(password);
-  const hasSpecialCharacter = /[^A-Za-z0-9]/.test(password);
 
   if (
     hasMinimumLength &&
     hasUppercase &&
     hasLowercase &&
-    hasNumber &&
-    hasSpecialCharacter
+    hasNumber
   ) {
     return null;
   }
