@@ -536,8 +536,8 @@ function ChapterOne({
           ) : currentStep === 0 && isIntroComplete ? (
             <div>
               <h2 id="headLine">
-                Chapter One:{" "}
-                <span className="blue-text">The Siren In The Cove</span>
+                Region:{" "}
+                <span className="blue-text">The Cove</span>
               </h2>
               <h3>
                 Press <span className="blue-text">C</span> to continue. You can

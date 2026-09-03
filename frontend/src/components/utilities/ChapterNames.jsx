@@ -1,5 +1,5 @@
 const chapterNames = {
-  1: "The Siren in The Cove",
+  1: "The Cove",
   2: "The Fields",
   3: "Arkra",
   4: "The Woods",

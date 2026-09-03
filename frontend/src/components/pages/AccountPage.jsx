@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import Footer from '../layout/Footer';
+import ChapterNames from '../utilities/ChapterNames';
 import {
   isPasswordPolicyValid,
   passwordPolicyMessage,
@@ -141,8 +142,10 @@ const AccountPage = () => {
               )}
               
               <div className="flex items-center py-2 border-b border-white/10">
-                <span className="font-medium">Current Chapter:</span>
-                <span className="text-blue-200 margin-left-1">Level {user.gameState?.currentChapter?.level || 1}</span>
+                <span className="font-medium">Current Region:</span>
+                <span className="text-blue-200 margin-left-1">
+                  {ChapterNames[user.gameState?.currentChapter?.level || 1] || 'Unknown'}
+                </span>
               </div>
               
               <div className="flex items-center py-2 border-b border-white/10">

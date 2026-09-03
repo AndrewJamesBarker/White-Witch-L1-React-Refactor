@@ -549,7 +549,7 @@ const Game = () => {
       {renderChapterContent()}
       <ItemsAndLives onSatchelClick={handleSatchelClick} livesLeft={livesLeft} />
       <div className="chapter-info blue-text">
-        <div>Chapter: {chapterNames[viewingChapter] || 'Unknown'}</div>
+        <div>Region: {chapterNames[viewingChapter] || 'Unknown'}</div>
         {user && <div>Player: {user.username}</div>}
       </div>
     </div>

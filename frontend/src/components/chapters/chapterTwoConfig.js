@@ -2,7 +2,7 @@ export const chapterTwoSteps = [
   {
     id: "intro",
     type: "narrative",
-    title: "Chapter Two: The Fields",
+    title: "Region: The Fields",
     body:
       "The marsh breathes in quiet pulses around you.",
     scene: "marsh",

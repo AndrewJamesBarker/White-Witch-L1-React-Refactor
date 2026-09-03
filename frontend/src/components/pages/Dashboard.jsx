@@ -111,14 +111,13 @@ const Dashboard = () => {
         <h1>Greetings {user.username}</h1>
         {/* Display the selected level */}
         <h2>
-          Selected Level: {selectedLevel ? `Chapter ${selectedLevel}` : "None"}
+          Selected Region: {selectedLevel ? chapterName : "None"}
         </h2>
-        <h3 className="blue-text">"{chapterName}"</h3>
 
         {inaccessibleLevel && (
           <div className="inaccessible-level" aria-live="polite">
             <p className="errorMessage">
-              Chapter {inaccessibleLevel} is currently locked.
+              {ChapterNames[inaccessibleLevel] || inaccessibleLevel} region is currently locked.
             </p>
           </div>
         )}
